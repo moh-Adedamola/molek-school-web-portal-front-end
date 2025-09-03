@@ -1,332 +1,383 @@
-// data/mockStaff.js
-// Nigerian school staff directory with authentic names and positions
+// File Location: src/data/mockStaff.js
 
-import { generateAvatar } from '../utils/imageHelpers';
+/**
+ * Mock Staff Data for Nigerian Secondary School
+ * Teaching and non-teaching staff with roles and subject assignments
+ */
 
-export const STAFF_DEPARTMENTS = {
-  ADMINISTRATION: 'Administration',
-  TEACHING: 'Teaching Staff',
-  NON_TEACHING: 'Non-Teaching Staff',
-  SECURITY: 'Security',
-  SUPPORT: 'Support Staff'
-};
-
-export const mockStaffData = [
-  // ADMINISTRATION
+export const mockStaff = [
+  // Senior Management
   {
-    id: 'staff-001',
-    employeeId: 'MOL/ADM/001',
-    firstName: 'Adebayo',
-    lastName: 'Olumide',
-    middleName: 'Kehinde',
-    fullName: 'Dr. Adebayo Kehinde Olumide',
-    position: 'Principal',
-    department: STAFF_DEPARTMENTS.ADMINISTRATION,
-    qualification: 'Ph.D. Educational Administration',
-    email: 'principal@molekschool.edu.ng',
-    phone: '+234 803 123 4567',
-    address: '23 Victoria Avenue, Lagos State',
-    dateOfBirth: '1975-08-15',
-    dateOfEmployment: '2010-09-01',
-    gender: 'Male',
-    maritalStatus: 'Married',
-    stateOfOrigin: 'Lagos',
-    salary: 850000,
-    avatar: generateAvatar('Adebayo Olumide', 'admin'),
-    bio: 'Experienced educator with over 15 years in school administration.',
-    subjects: [],
-    classes: [],
-    isActive: true
-  },
-  
-  {
-    id: 'staff-002', 
-    employeeId: 'MOL/ADM/002',
-    firstName: 'Chinelo',
+    id: 'ST001',
+    staffNumber: 'GVS/STAFF/001',
+    firstName: 'Dr. Funmilayo',
     lastName: 'Okafor',
-    middleName: 'Ngozi',
-    fullName: 'Mrs. Chinelo Ngozi Okafor',
-    position: 'Vice Principal (Academics)',
-    department: STAFF_DEPARTMENTS.ADMINISTRATION,
-    qualification: 'M.Ed. Curriculum Studies',
-    email: 'vp.academics@molekschool.edu.ng',
-    phone: '+234 803 234 5678',
-    address: '45 Allen Avenue, Ikeja, Lagos',
-    dateOfBirth: '1978-12-03',
-    dateOfEmployment: '2012-01-15',
-    gender: 'Female',
-    maritalStatus: 'Married',
-    stateOfOrigin: 'Anambra',
-    salary: 720000,
-    avatar: generateAvatar('Chinelo Okafor', 'admin'),
-    bio: 'Passionate about curriculum development and academic excellence.',
-    subjects: [],
-    classes: [],
+    fullName: 'Dr. Funmilayo Okafor',
+    title: 'Principal',
+    department: 'Management',
+    category: 'Management',
+    isTeaching: false,
+    email: 'principal@greenviewsecondary.edu.ng',
+    phone: '+2348023456789',
+    qualification: 'Ph.D Educational Administration, M.Ed, B.Ed',
+    yearsExperience: 20,
+    dateJoined: '2020-01-15',
+    address: 'Victoria Island, Lagos',
+    profileImage: '/images/staff/principal-okafor.jpg',
+    isActive: true
+  },
+  {
+    id: 'ST002',
+    staffNumber: 'GVS/STAFF/002',
+    firstName: 'Prof. Chukwuemeka',
+    lastName: 'Igwe',
+    fullName: 'Prof. Chukwuemeka Igwe',
+    title: 'Vice Principal (Academic)',
+    department: 'Management',
+    category: 'Management',
+    isTeaching: true,
+    subjects: ['Mathematics'],
+    classes: ['SSS 3A'],
+    email: 'vp.academic@greenviewsecondary.edu.ng',
+    phone: '+2348034567890',
+    qualification: 'Ph.D Mathematics, M.Sc, B.Sc',
+    yearsExperience: 18,
+    dateJoined: '2020-02-01',
+    address: 'Ikeja, Lagos',
+    profileImage: '/images/staff/vp-igwe.jpg',
+    isActive: true
+  },
+  {
+    id: 'ST003',
+    staffNumber: 'GVS/STAFF/003',
+    firstName: 'Mrs. Folake',
+    lastName: 'Adeya',
+    fullName: 'Mrs. Folake Adeya',
+    title: 'Vice Principal (Administration)',
+    department: 'Management',
+    category: 'Management',
+    isTeaching: false,
+    email: 'vp.admin@greenviewsecondary.edu.ng',
+    phone: '+2348045678901',
+    qualification: 'M.Ed Educational Administration, B.Ed',
+    yearsExperience: 15,
+    dateJoined: '2021-01-10',
+    address: 'Surulere, Lagos',
+    profileImage: '/images/staff/vp-adeya.jpg',
     isActive: true
   },
 
+  // Teaching Staff - Mathematics Department
   {
-    id: 'staff-003',
-    employeeId: 'MOL/ADM/003', 
-    firstName: 'Ibrahim',
-    lastName: 'Musa',
-    middleName: 'Sani',
-    fullName: 'Mr. Ibrahim Sani Musa',
-    position: 'Vice Principal (Administration)',
-    department: STAFF_DEPARTMENTS.ADMINISTRATION,
-    qualification: 'M.Sc. Educational Management',
-    email: 'vp.admin@molekschool.edu.ng',
-    phone: '+234 803 345 6789',
-    address: '12 Ahmadu Bello Way, Lagos',
-    dateOfBirth: '1980-05-22',
-    dateOfEmployment: '2013-08-01',
-    gender: 'Male',
-    maritalStatus: 'Married',
-    stateOfOrigin: 'Kaduna',
-    salary: 720000,
-    avatar: generateAvatar('Ibrahim Musa', 'admin'),
-    bio: 'Expert in school administration and student welfare management.',
-    subjects: [],
-    classes: [],
-    isActive: true
-  },
-
-  // SENIOR TEACHING STAFF
-  {
-    id: 'staff-004',
-    employeeId: 'MOL/TCH/001',
-    firstName: 'Folakemi',
-    lastName: 'Adebisi',
-    middleName: 'Oluwatoyin',
-    fullName: 'Mrs. Folakemi Oluwatoyin Adebisi',
-    position: 'HOD Mathematics',
-    department: STAFF_DEPARTMENTS.TEACHING,
-    qualification: 'M.Sc. Mathematics Education',
-    email: 'f.adebisi@molekschool.edu.ng',
-    phone: '+234 803 456 7890',
-    address: '8 Ikorodu Road, Maryland, Lagos',
-    dateOfBirth: '1982-03-18',
-    dateOfEmployment: '2014-09-01',
-    gender: 'Female',
-    maritalStatus: 'Married',
-    stateOfOrigin: 'Ogun',
-    salary: 450000,
-    avatar: generateAvatar('Folakemi Adebisi', 'teacher'),
-    bio: 'Mathematics specialist with passion for problem-solving skills.',
+    id: 'ST004',
+    staffNumber: 'GVS/STAFF/004',
+    firstName: 'Mrs. Amaka',
+    lastName: 'Nwosu',
+    fullName: 'Mrs. Amaka Nwosu',
+    title: 'Mathematics Teacher/HOD',
+    department: 'Mathematics',
+    category: 'Teaching',
+    isTeaching: true,
     subjects: ['Mathematics', 'Further Mathematics'],
-    classes: ['SSS 3A', 'SSS 3B'],
+    classes: ['SSS 1A', 'SSS 2A', 'SSS 3A'],
+    email: 'amaka.nwosu@greenviewsecondary.edu.ng',
+    phone: '+2348045678901',
+    qualification: 'B.Sc Mathematics, M.Ed, PGDE',
+    yearsExperience: 8,
+    dateJoined: '2022-02-01',
+    address: 'Ikeja, Lagos',
+    profileImage: '/images/staff/teacher-amaka.jpg',
+    isActive: true
+  },
+  {
+    id: 'ST005',
+    staffNumber: 'GVS/STAFF/005',
+    firstName: 'Mr. Segun',
+    lastName: 'Alabi',
+    fullName: 'Mr. Segun Alabi',
+    title: 'Mathematics Teacher',
+    department: 'Mathematics',
+    category: 'Teaching',
+    isTeaching: true,
+    subjects: ['Mathematics', 'Basic Science'],
+    classes: ['JSS 1A', 'JSS 2A', 'JSS 3A'],
+    email: 'segun.alabi@greenviewsecondary.edu.ng',
+    phone: '+2348056789012',
+    qualification: 'B.Sc Mathematics, B.Ed',
+    yearsExperience: 6,
+    dateJoined: '2023-01-15',
+    address: 'Agege, Lagos',
+    profileImage: '/images/staff/teacher-segun.jpg',
     isActive: true
   },
 
+  // English Department
   {
-    id: 'staff-005',
-    employeeId: 'MOL/TCH/002',
-    firstName: 'Emeka',
-    lastName: 'Okwu',
-    middleName: 'Chinedu',
-    fullName: 'Mr. Emeka Chinedu Okwu',
-    position: 'HOD Sciences',
-    department: STAFF_DEPARTMENTS.TEACHING,
-    qualification: 'M.Sc. Physics Education',
-    email: 'e.okwu@molekschool.edu.ng',
-    phone: '+234 803 567 8901',
-    address: '34 Surulere Street, Lagos',
-    dateOfBirth: '1979-11-12',
-    dateOfEmployment: '2011-01-10',
-    gender: 'Male',
-    maritalStatus: 'Married',
-    stateOfOrigin: 'Imo',
-    salary: 480000,
-    avatar: generateAvatar('Emeka Okwu', 'teacher'),
-    bio: 'Physics teacher dedicated to making science accessible to all students.',
-    subjects: ['Physics', 'Basic Science'],
-    classes: ['SSS 2A', 'JSS 3B'],
-    isActive: true
-  },
-
-  {
-    id: 'staff-006',
-    employeeId: 'MOL/TCH/003',
-    firstName: 'Aisha',
-    lastName: 'Bello',
-    middleName: 'Fatima',
-    fullName: 'Mrs. Aisha Fatima Bello',
-    position: 'English Language Teacher',
-    department: STAFF_DEPARTMENTS.TEACHING,
-    qualification: 'B.A. English Language',
-    email: 'a.bello@molekschool.edu.ng',
-    phone: '+234 803 678 9012',
-    address: '56 Festac Town, Lagos',
-    dateOfBirth: '1985-07-25',
-    dateOfEmployment: '2016-09-01',
-    gender: 'Female',
-    maritalStatus: 'Single',
-    stateOfOrigin: 'Kano',
-    salary: 380000,
-    avatar: generateAvatar('Aisha Bello', 'teacher'),
-    bio: 'English language enthusiast focused on communication skills development.',
+    id: 'ST006',
+    staffNumber: 'GVS/STAFF/006',
+    firstName: 'Mr. Ibrahim',
+    lastName: 'Yusuf',
+    fullName: 'Mr. Ibrahim Yusuf',
+    title: 'English Language Teacher/HOD',
+    department: 'English',
+    category: 'Teaching',
+    isTeaching: true,
     subjects: ['English Language', 'Literature in English'],
-    classes: ['JSS 2A', 'SSS 1C'],
+    classes: ['JSS 1A', 'JSS 2A', 'SSS 1B'],
+    email: 'ibrahim.yusuf@greenviewsecondary.edu.ng',
+    phone: '+2348056789012',
+    qualification: 'B.A English Language, M.A Literature, PGDE',
+    yearsExperience: 12,
+    dateJoined: '2021-02-05',
+    address: 'Mushin, Lagos',
+    profileImage: '/images/staff/teacher-ibrahim.jpg',
     isActive: true
   },
 
+  // Sciences Department
   {
-    id: 'staff-007',
-    employeeId: 'MOL/TCH/004',
-    firstName: 'Adunni',
-    lastName: 'Ogundimu',
-    middleName: 'Bukola',
-    fullName: 'Miss Adunni Bukola Ogundimu',
-    position: 'Biology Teacher',
-    department: STAFF_DEPARTMENTS.TEACHING,
-    qualification: 'B.Sc. Biology Education',
-    email: 'a.ogundimu@molekschool.edu.ng',
-    phone: '+234 803 789 0123',
-    address: '22 Agege Motor Road, Lagos',
-    dateOfBirth: '1988-01-14',
-    dateOfEmployment: '2018-01-08',
-    gender: 'Female',
-    maritalStatus: 'Single',
-    stateOfOrigin: 'Osun',
-    salary: 350000,
-    avatar: generateAvatar('Adunni Ogundimu', 'teacher'),
-    bio: 'Young and dynamic biology teacher passionate about life sciences.',
-    subjects: ['Biology', 'Agricultural Science'],
-    classes: ['SSS 1A', 'SSS 2B'],
+    id: 'ST007',
+    staffNumber: 'GVS/STAFF/007',
+    firstName: 'Miss Blessing',
+    lastName: 'Okoro',
+    fullName: 'Miss Blessing Okoro',
+    title: 'Physics Teacher/Science HOD',
+    department: 'Sciences',
+    category: 'Teaching',
+    isTeaching: true,
+    subjects: ['Physics', 'Basic Science'],
+    classes: ['JSS 3A', 'SSS 2A', 'SSS 3A'],
+    email: 'blessing.okoro@greenviewsecondary.edu.ng',
+    phone: '+2348067890123',
+    qualification: 'B.Sc Physics, B.Ed, M.Sc Physics',
+    yearsExperience: 5,
+    dateJoined: '2023-02-10',
+    address: 'Yaba, Lagos',
+    profileImage: '/images/staff/teacher-blessing.jpg',
     isActive: true
   },
-
   {
-    id: 'staff-008',
-    employeeId: 'MOL/TCH/005',
-    firstName: 'Yakubu',
-    lastName: 'Garba',
-    middleName: 'Ahmed',
-    fullName: 'Malam Yakubu Ahmed Garba',
-    position: 'Chemistry Teacher',
-    department: STAFF_DEPARTMENTS.TEACHING,
-    qualification: 'B.Sc. Chemistry',
-    email: 'y.garba@molekschool.edu.ng',
-    phone: '+234 803 890 1234',
-    address: '67 Dopemu Road, Agege, Lagos',
-    dateOfBirth: '1983-09-30',
-    dateOfEmployment: '2015-09-01',
-    gender: 'Male',
-    maritalStatus: 'Married',
-    stateOfOrigin: 'Sokoto',
-    salary: 420000,
-    avatar: generateAvatar('Yakubu Garba', 'teacher'),
-    bio: 'Chemistry expert with focus on practical laboratory work.',
+    id: 'ST008',
+    staffNumber: 'GVS/STAFF/008',
+    firstName: 'Dr. Kemi',
+    lastName: 'Adeoye',
+    fullName: 'Dr. Kemi Adeoye',
+    title: 'Chemistry Teacher',
+    department: 'Sciences',
+    category: 'Teaching',
+    isTeaching: true,
     subjects: ['Chemistry', 'Basic Science'],
-    classes: ['SSS 3C', 'JSS 1A'],
+    classes: ['SSS 1A', 'SSS 2A', 'SSS 3A'],
+    email: 'kemi.adeoye@greenviewsecondary.edu.ng',
+    phone: '+2348078901234',
+    qualification: 'Ph.D Chemistry, B.Sc Chemistry, B.Ed',
+    yearsExperience: 10,
+    dateJoined: '2022-03-01',
+    address: 'Maryland, Lagos',
+    profileImage: '/images/staff/teacher-kemi.jpg',
+    isActive: true
+  },
+  {
+    id: 'ST009',
+    staffNumber: 'GVS/STAFF/009',
+    firstName: 'Mr. Tunde',
+    lastName: 'Bakare',
+    fullName: 'Mr. Tunde Bakare',
+    title: 'Biology Teacher',
+    department: 'Sciences',
+    category: 'Teaching',
+    isTeaching: true,
+    subjects: ['Biology', 'Agricultural Science'],
+    classes: ['SSS 1A', 'SSS 2A', 'SSS 3A'],
+    email: 'tunde.bakare@greenviewsecondary.edu.ng',
+    phone: '+2348089012345',
+    qualification: 'B.Sc Biology, M.Sc Botany, PGDE',
+    yearsExperience: 7,
+    dateJoined: '2022-08-15',
+    address: 'Gbagada, Lagos',
+    profileImage: '/images/staff/teacher-tunde.jpg',
     isActive: true
   },
 
-  // NON-TEACHING STAFF
+  // Social Sciences Department
   {
-    id: 'staff-009',
-    employeeId: 'MOL/NTS/001',
-    firstName: 'Funmi',
-    lastName: 'Adeyemi',
-    middleName: 'Opeyemi',
-    fullName: 'Mrs. Funmi Opeyemi Adeyemi',
-    position: 'School Secretary',
-    department: STAFF_DEPARTMENTS.NON_TEACHING,
+    id: 'ST010',
+    staffNumber: 'GVS/STAFF/010',
+    firstName: 'Mallam Ahmed',
+    lastName: 'Bello',
+    fullName: 'Mallam Ahmed Bello',
+    title: 'Government Teacher/Social Sciences HOD',
+    department: 'Social Sciences',
+    category: 'Teaching',
+    isTeaching: true,
+    subjects: ['Government', 'History', 'Civic Education'],
+    classes: ['JSS 2B', 'SSS 1C', 'SSS 2B'],
+    email: 'ahmed.bello@greenviewsecondary.edu.ng',
+    phone: '+2348078901234',
+    qualification: 'B.Sc Political Science, M.Sc International Relations, PGDE',
+    yearsExperience: 10,
+    dateJoined: '2021-02-12',
+    address: 'Ikorodu, Lagos',
+    profileImage: '/images/staff/teacher-ahmed.jpg',
+    isActive: true
+  },
+
+  // Commercial Department
+  {
+    id: 'ST011',
+    staffNumber: 'GVS/STAFF/011',
+    firstName: 'Mrs. Grace',
+    lastName: 'Okafor',
+    fullName: 'Mrs. Grace Okafor',
+    title: 'Accounting Teacher/Commercial HOD',
+    department: 'Commercial',
+    category: 'Teaching',
+    isTeaching: true,
+    subjects: ['Accounting', 'Economics', 'Commerce'],
+    classes: ['SSS 1B', 'SSS 2B', 'SSS 3B'],
+    email: 'grace.okafor@greenviewsecondary.edu.ng',
+    phone: '+2348090123456',
+    qualification: 'B.Sc Accounting, M.Sc Economics, PGDE',
+    yearsExperience: 9,
+    dateJoined: '2022-01-20',
+    address: 'Ojodu, Lagos',
+    profileImage: '/images/staff/teacher-grace.jpg',
+    isActive: true
+  },
+
+  // Non-Teaching Staff
+  {
+    id: 'ST012',
+    staffNumber: 'GVS/STAFF/012',
+    firstName: 'Mr. Sunday',
+    lastName: 'Ogundimu',
+    fullName: 'Mr. Sunday Ogundimu',
+    title: 'School Secretary',
+    department: 'Administration',
+    category: 'Non-Teaching',
+    isTeaching: false,
+    email: 'secretary@greenviewsecondary.edu.ng',
+    phone: '+2348101234567',
     qualification: 'HND Business Administration',
-    email: 'secretary@molekschool.edu.ng',
-    phone: '+234 803 901 2345',
-    address: '15 Palmgrove Estate, Lagos',
-    dateOfBirth: '1986-04-12',
-    dateOfEmployment: '2017-03-01',
-    gender: 'Female',
-    maritalStatus: 'Married',
-    stateOfOrigin: 'Ekiti',
-    salary: 280000,
-    avatar: generateAvatar('Funmi Adeyemi', 'admin'),
-    bio: 'Efficient administrative support with excellent organizational skills.',
-    subjects: [],
-    classes: [],
+    yearsExperience: 12,
+    dateJoined: '2020-03-01',
+    address: 'Ketu, Lagos',
+    profileImage: '/images/staff/secretary-sunday.jpg',
     isActive: true
   },
-
   {
-    id: 'staff-010',
-    employeeId: 'MOL/NTS/002',
-    firstName: 'Chukwuma',
-    lastName: 'Eze',
-    middleName: 'Patrick',
-    fullName: 'Mr. Chukwuma Patrick Eze',
-    position: 'Librarian',
-    department: STAFF_DEPARTMENTS.NON_TEACHING,
-    qualification: 'B.Sc. Library and Information Science',
-    email: 'librarian@molekschool.edu.ng',
-    phone: '+234 803 012 3456',
-    address: '78 Oshodi Road, Lagos',
-    dateOfBirth: '1984-02-28',
-    dateOfEmployment: '2016-06-01',
-    gender: 'Male',
-    maritalStatus: 'Married',
-    stateOfOrigin: 'Enugu',
-    salary: 320000,
-    avatar: generateAvatar('Chukwuma Eze', 'admin'),
-    bio: 'Dedicated librarian promoting reading culture among students.',
-    subjects: [],
-    classes: [],
+    id: 'ST013',
+    staffNumber: 'GVS/STAFF/013',
+    firstName: 'Mrs. Ngozi',
+    lastName: 'Okpara',
+    fullName: 'Mrs. Ngozi Okpara',
+    title: 'School Nurse',
+    department: 'Health Services',
+    category: 'Non-Teaching',
+    isTeaching: false,
+    email: 'nurse@greenviewsecondary.edu.ng',
+    phone: '+2348112345678',
+    qualification: 'B.Sc Nursing, RN',
+    yearsExperience: 8,
+    dateJoined: '2021-05-15',
+    address: 'Bariga, Lagos',
+    profileImage: '/images/staff/nurse-ngozi.jpg',
     isActive: true
   },
-
   {
-    id: 'staff-011',
-    employeeId: 'MOL/SEC/001',
-    firstName: 'Bello',
-    lastName: 'Mohammed',
-    middleName: 'Usman',
-    fullName: 'Mr. Bello Usman Mohammed',
-    position: 'Head of Security',
-    department: STAFF_DEPARTMENTS.SECURITY,
-    qualification: 'SSCE',
-    email: 'security@molekschool.edu.ng',
-    phone: '+234 803 123 4567',
-    address: '45 Alakuko Area, Lagos',
-    dateOfBirth: '1972-06-10',
-    dateOfEmployment: '2008-01-15',
-    gender: 'Male',
-    maritalStatus: 'Married',
-    stateOfOrigin: 'Niger',
-    salary: 180000,
-    avatar: generateAvatar('Bello Mohammed', 'admin'),
-    bio: 'Experienced security officer ensuring safe learning environment.',
-    subjects: [],
-    classes: [],
+    id: 'ST014',
+    staffNumber: 'GVS/STAFF/014',
+    firstName: 'Mr. Joseph',
+    lastName: 'Adamu',
+    fullName: 'Mr. Joseph Adamu',
+    title: 'Laboratory Technician',
+    department: 'Sciences',
+    category: 'Non-Teaching',
+    isTeaching: false,
+    email: 'lab.tech@greenviewsecondary.edu.ng',
+    phone: '+2348123456789',
+    qualification: 'OND Science Laboratory Technology',
+    yearsExperience: 6,
+    dateJoined: '2022-06-01',
+    address: 'Palmgrove, Lagos',
+    profileImage: '/images/staff/lab-tech-joseph.jpg',
+    isActive: true
+  },
+  {
+    id: 'ST015',
+    staffNumber: 'GVS/STAFF/015',
+    firstName: 'Mr. Emeka',
+    lastName: 'Chijioke',
+    fullName: 'Mr. Emeka Chijioke',
+    title: 'ICT Coordinator',
+    department: 'ICT',
+    category: 'Non-Teaching',
+    isTeaching: false,
+    email: 'ict@greenviewsecondary.edu.ng',
+    phone: '+2348134567890',
+    qualification: 'B.Sc Computer Science',
+    yearsExperience: 4,
+    dateJoined: '2023-03-15',
+    address: 'Alimosho, Lagos',
+    profileImage: '/images/staff/ict-emeka.jpg',
     isActive: true
   }
 ];
 
-// Helper functions for staff management
-export const getStaffByDepartment = (department) => {
-  return mockStaffData.filter(staff => staff.department === department);
-};
-
+// Helper functions for staff data
 export const getTeachingStaff = () => {
-  return mockStaffData.filter(staff => staff.department === STAFF_DEPARTMENTS.TEACHING);
+  return mockStaff.filter(staff => staff.isTeaching);
 };
 
-export const getAdministrativeStaff = () => {
-  return mockStaffData.filter(staff => staff.department === STAFF_DEPARTMENTS.ADMINISTRATION);
+export const getNonTeachingStaff = () => {
+  return mockStaff.filter(staff => !staff.isTeaching);
 };
 
-export const getStaffBySubject = (subject) => {
-  return mockStaffData.filter(staff => staff.subjects.includes(subject));
+export const getStaffByDepartment = (department) => {
+  return mockStaff.filter(staff => staff.department === department);
 };
 
-export const getStaffByClass = (className) => {
-  return mockStaffData.filter(staff => staff.classes.includes(className));
+export const getTeachersBySubject = (subject) => {
+  return mockStaff.filter(staff => 
+    staff.isTeaching && staff.subjects?.includes(subject)
+  );
 };
 
-export const getTotalStaffCount = () => mockStaffData.length;
-
-export const getActiveStaffCount = () => {
-  return mockStaffData.filter(staff => staff.isActive).length;
+export const getTeachersByClass = (className) => {
+  return mockStaff.filter(staff => 
+    staff.isTeaching && staff.classes?.includes(className)
+  );
 };
 
-export default mockStaffData;
+export const getStaffById = (staffId) => {
+  return mockStaff.find(staff => staff.id === staffId);
+};
+
+// Get all departments
+export const getAllDepartments = () => {
+  return [...new Set(mockStaff.map(staff => staff.department))];
+};
+
+// Get all subjects taught
+export const getAllSubjectsTaught = () => {
+  const subjects = mockStaff
+    .filter(staff => staff.subjects)
+    .flatMap(staff => staff.subjects);
+  return [...new Set(subjects)].sort();
+};
+
+// Staff statistics
+export const getStaffStatistics = () => {
+  const total = mockStaff.length;
+  const teaching = mockStaff.filter(s => s.isTeaching).length;
+  const nonTeaching = mockStaff.filter(s => !s.isTeaching).length;
+  const management = mockStaff.filter(s => s.category === 'Management').length;
+  
+  return {
+    total,
+    teaching,
+    nonTeaching,
+    management,
+    departments: getAllDepartments().length
+  };
+};

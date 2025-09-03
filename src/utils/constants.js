@@ -1,236 +1,232 @@
-// utils/constants.js
-// Nigerian School Management System Constants
+// File Location: src/utils/constants.js
 
-export const SCHOOL_INFO = {
-  NAME: 'Molek Secondary School',
-  MOTTO: 'Excellence Through Knowledge',
-  ESTABLISHED: '1995',
-  LOCATION: 'Lagos, Nigeria',
-  PHONE: '+234 803 123 4567',
-  EMAIL: 'info@molekschool.edu.ng',
-  ADDRESS: '15 Education Avenue, Victoria Island, Lagos State',
-  PRINCIPAL: 'Dr. Adebayo Olumide',
-  VICE_PRINCIPAL: 'Mrs. Chinelo Okafor'
-};
+/**
+ * Nigerian School Management System Constants
+ * Role permissions and system-wide configuration
+ */
 
-// Professional Color System
-export const COLORS = {
-  // Primary Colors - Deep Academic Blue
-  PRIMARY: {
-    50: '#eff6ff',
-    100: '#dbeafe', 
-    200: '#bfdbfe',
-    300: '#93c5fd',
-    400: '#60a5fa',
-    500: '#3b82f6',
-    600: '#2563eb', // Main primary
-    700: '#1d4ed8',
-    800: '#1e40af',
-    900: '#1e3a8a'
-  },
-  
-  // Secondary Colors - Forest Green
-  SECONDARY: {
-    50: '#ecfdf5',
-    100: '#d1fae5',
-    200: '#a7f3d0', 
-    300: '#6ee7b7',
-    400: '#34d399',
-    500: '#10b981',
-    600: '#059669', // Main secondary
-    700: '#047857',
-    800: '#065f46',
-    900: '#064e3b'
-  },
-  
-  // Accent Colors - Warm Gold/Orange
-  ACCENT: {
-    50: '#fffbeb',
-    100: '#fef3c7',
-    200: '#fde68a',
-    300: '#fcd34d', 
-    400: '#fbbf24',
-    500: '#f59e0b',
-    600: '#d97706', // Main accent
-    700: '#b45309',
-    800: '#92400e',
-    900: '#78350f'
-  },
-  
-  // Status Colors
-  STATUS: {
-    SUCCESS: '#059669',
-    WARNING: '#d97706', 
-    ERROR: '#dc2626',
-    INFO: '#2563eb'
-  }
-};
-
-// Grade Performance Color Coding
-export const GRADE_COLORS = {
-  EXCELLENT: COLORS.SECONDARY[600], // Green
-  GOOD: COLORS.PRIMARY[600],        // Blue  
-  AVERAGE: COLORS.ACCENT[600],      // Gold
-  POOR: COLORS.STATUS.ERROR,        // Red
-  FAIL: '#7f1d1d'                   // Dark red
-};
-
-// Attendance Status Colors
-export const ATTENDANCE_COLORS = {
-  PRESENT: COLORS.SECONDARY[600],   // Green
-  ABSENT: COLORS.STATUS.ERROR,      // Red
-  LATE: COLORS.ACCENT[600],         // Gold
-  EXCUSED: COLORS.PRIMARY[600]      // Blue
-};
-
-// User Roles & Permissions
+// User Role Definitions
 export const USER_ROLES = {
-  SUPER_ADMIN: { 
-    id: 'super_admin', 
-    name: 'Super Administrator',
-    color: COLORS.PRIMARY[800],
-    permissions: ['all']
+  SUPER_ADMIN: 'super_admin',
+  ADMIN: 'admin', 
+  TEACHER: 'teacher',
+  PARENT: 'parent'
+};
+
+// Role Permissions Matrix
+export const ROLE_PERMISSIONS = {
+  [USER_ROLES.SUPER_ADMIN]: {
+    canManageUsers: true,
+    canManageSchoolSettings: true,
+    canViewSystemReports: true,
+    canBackupRestore: true,
+    canAccessAllData: true,
+    canDeleteData: true,
+    dashboardRoute: '/super-admin/dashboard'
   },
-  ADMIN: { 
-    id: 'admin', 
-    name: 'Administrator',
-    color: COLORS.PRIMARY[600],
-    permissions: ['manage_users', 'manage_content', 'view_reports']
+  [USER_ROLES.ADMIN]: {
+    canManageWebsite: true,
+    canManageStudents: true,
+    canManageTeachers: true,
+    canManageParents: true,
+    canManageClasses: true,
+    canViewReports: true,
+    canExportData: true,
+    dashboardRoute: '/admin/dashboard'
   },
-  TEACHER: { 
-    id: 'teacher', 
-    name: 'Teacher',
-    color: COLORS.SECONDARY[600], 
-    permissions: ['manage_grades', 'mark_attendance', 'view_students']
+  [USER_ROLES.TEACHER]: {
+    canMarkAttendance: true,
+    canEnterGrades: true,
+    canViewStudents: true,
+    canGenerateReports: true,
+    canCommunicateParents: true,
+    dashboardRoute: '/teacher/dashboard'
   },
-  PARENT: { 
-    id: 'parent', 
-    name: 'Parent/Guardian',
-    color: COLORS.ACCENT[600],
-    permissions: ['view_child_progress', 'receive_notifications']
+  [USER_ROLES.PARENT]: {
+    canViewChildren: true,
+    canViewAttendance: true,
+    canViewGrades: true,
+    canCommunicateTeachers: true,
+    dashboardRoute: '/parent/dashboard'
   }
 };
 
-// Academic Year Settings
-export const ACADEMIC_SETTINGS = {
-  CURRENT_YEAR: '2024/2025',
-  NEXT_YEAR: '2025/2026',
-  TERM_DURATION_WEEKS: 12,
-  HOLIDAY_WEEKS: 2,
-  SUBJECTS_PER_TERM: 9,
-  MAX_STUDENTS_PER_CLASS: 35
+// Nigerian School Configuration
+export const SCHOOL_CONFIG = {
+  ACADEMIC_YEAR_START: 'September',
+  ACADEMIC_YEAR_END: 'July',
+  TERMS_PER_YEAR: 3,
+  WEEKS_PER_TERM: 13,
+  CURRENCY: '₦',
+  CURRENCY_SYMBOL: '₦',
+  COUNTRY: 'Nigeria',
+  EDUCATION_SYSTEM: 'Nigerian 6-3-3-4 System'
 };
 
-// Notification Types
-export const NOTIFICATION_TYPES = {
-  SUCCESS: { color: COLORS.STATUS.SUCCESS, icon: '✅' },
-  ERROR: { color: COLORS.STATUS.ERROR, icon: '❌' },
-  WARNING: { color: COLORS.STATUS.WARNING, icon: '⚠️' },
-  INFO: { color: COLORS.STATUS.INFO, icon: 'ℹ️' },
-  ANNOUNCEMENT: { color: COLORS.PRIMARY[600], icon: '📢' }
+// Class Size Limits
+export const CLASS_LIMITS = {
+  JSS: {
+    MIN_STUDENTS: 25,
+    MAX_STUDENTS: 40,
+    RECOMMENDED: 35
+  },
+  SSS: {
+    MIN_STUDENTS: 20,
+    MAX_STUDENTS: 35,
+    RECOMMENDED: 30
+  }
+};
+
+// Attendance Status
+export const ATTENDANCE_STATUS = {
+  PRESENT: 'present',
+  ABSENT: 'absent',
+  LATE: 'late',
+  EXCUSED: 'excused'
+};
+
+// Grade Status for Progress Tracking
+export const GRADE_STATUS = {
+  EXCELLENT: 'excellent', // 80-100
+  GOOD: 'good',          // 70-79
+  AVERAGE: 'average',    // 60-69
+  BELOW_AVERAGE: 'below_average', // 50-59
+  POOR: 'poor'           // 0-49
 };
 
 // Payment Status
 export const PAYMENT_STATUS = {
-  PAID: { 
-    status: 'paid', 
-    color: COLORS.SECONDARY[600], 
-    text: 'Paid',
-    bgColor: 'bg-secondary-50'
+  PAID: 'paid',
+  PENDING: 'pending',
+  OVERDUE: 'overdue',
+  PARTIAL: 'partial'
+};
+
+// School Fee Structure (in Naira)
+export const SCHOOL_FEES = {
+  JSS: {
+    TUITION: 50000,
+    BOOKS: 15000,
+    UNIFORM: 12000,
+    FEEDING: 25000,
+    TOTAL_PER_TERM: 102000
   },
-  PENDING: { 
-    status: 'pending', 
-    color: COLORS.ACCENT[600], 
-    text: 'Pending',
-    bgColor: 'bg-accent-50'
-  },
-  OVERDUE: { 
-    status: 'overdue', 
-    color: COLORS.STATUS.ERROR, 
-    text: 'Overdue',
-    bgColor: 'bg-red-50'
-  },
-  PARTIAL: { 
-    status: 'partial', 
-    color: COLORS.PRIMARY[600], 
-    text: 'Partial',
-    bgColor: 'bg-primary-50'
+  SSS: {
+    TUITION: 65000,
+    BOOKS: 20000,
+    UNIFORM: 15000,
+    FEEDING: 30000,
+    WAEC_FEE: 45000,
+    TOTAL_PER_TERM: 175000
   }
 };
 
-// Table Pagination
-export const PAGINATION = {
-  DEFAULT_PAGE_SIZE: 10,
-  PAGE_SIZE_OPTIONS: [5, 10, 25, 50, 100],
-  MAX_PAGE_BUTTONS: 5
+// Nigerian Public Holidays
+export const NIGERIAN_HOLIDAYS = [
+  { date: '2024-01-01', name: 'New Year Day' },
+  { date: '2024-04-01', name: 'Easter Monday' },
+  { date: '2024-05-01', name: 'Workers Day' },
+  { date: '2024-06-12', name: 'Democracy Day' },
+  { date: '2024-10-01', name: 'Independence Day' },
+  { date: '2024-12-25', name: 'Christmas Day' },
+  { date: '2024-12-26', name: 'Boxing Day' }
+];
+
+// School Schedule
+export const SCHOOL_SCHEDULE = {
+  START_TIME: '08:00',
+  END_TIME: '14:30',
+  BREAK_TIME: '10:30',
+  LUNCH_TIME: '12:30',
+  PERIODS_PER_DAY: 8,
+  PERIOD_DURATION: 40, // minutes
+  DAYS_PER_WEEK: 5
 };
 
-// File Upload Settings  
-export const FILE_UPLOAD = {
-  MAX_SIZE: 5 * 1024 * 1024, // 5MB
-  ALLOWED_TYPES: ['image/jpeg', 'image/png', 'image/jpg', 'application/pdf'],
-  ALLOWED_EXTENSIONS: ['.jpg', '.jpeg', '.png', '.pdf']
+// Report Card Configuration
+export const REPORT_CONFIG = {
+  MIN_GRADE_FOR_PROMOTION: 50,
+  SUBJECTS_REQUIRED_FOR_PROMOTION: 5,
+  ATTENDANCE_THRESHOLD: 75, // percentage
+  CONDUCT_GRADES: ['Excellent', 'Very Good', 'Good', 'Fair', 'Poor']
 };
 
-// Dashboard Card Types
-export const DASHBOARD_CARDS = {
-  STATS: { icon: '📊', color: COLORS.PRIMARY[600] },
-  STUDENTS: { icon: '👥', color: COLORS.SECONDARY[600] },
-  TEACHERS: { icon: '👨‍🏫', color: COLORS.ACCENT[600] },
-  CLASSES: { icon: '🏫', color: COLORS.PRIMARY[700] },
-  ATTENDANCE: { icon: '📝', color: COLORS.SECONDARY[700] },
-  GRADES: { icon: '🎓', color: COLORS.ACCENT[700] }
+// Website Content Types
+export const CONTENT_TYPES = {
+  NEWS: 'news',
+  EVENT: 'event',
+  ANNOUNCEMENT: 'announcement',
+  GALLERY: 'gallery',
+  STAFF_PROFILE: 'staff_profile',
+  ACADEMIC_INFO: 'academic_info'
 };
 
-// Animation Durations
-export const ANIMATIONS = {
-  FAST: 150,
-  NORMAL: 200, 
-  SLOW: 300,
-  VERY_SLOW: 500
+// File Upload Limits
+export const UPLOAD_LIMITS = {
+  MAX_FILE_SIZE: 5 * 1024 * 1024, // 5MB
+  ALLOWED_IMAGE_TYPES: ['image/jpeg', 'image/png', 'image/webp'],
+  ALLOWED_DOCUMENT_TYPES: ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']
 };
 
-// Breakpoints (matching Tailwind defaults)
-export const BREAKPOINTS = {
-  SM: '640px',
-  MD: '768px', 
-  LG: '1024px',
-  XL: '1280px',
-  '2XL': '1536px'
+// Dashboard Widget Configuration
+export const DASHBOARD_WIDGETS = {
+  [USER_ROLES.SUPER_ADMIN]: [
+    'total_schools',
+    'total_users', 
+    'system_performance',
+    'recent_activities'
+  ],
+  [USER_ROLES.ADMIN]: [
+    'total_students',
+    'total_teachers',
+    'attendance_summary',
+    'recent_grades',
+    'fee_collection'
+  ],
+  [USER_ROLES.TEACHER]: [
+    'my_classes',
+    'pending_attendance',
+    'pending_grades',
+    'student_performance'
+  ],
+  [USER_ROLES.PARENT]: [
+    'my_children',
+    'attendance_alerts',
+    'grade_updates',
+    'school_announcements'
+  ]
 };
 
-// Nigerian Specific Settings
-export const NIGERIAN_CONTEXT = {
-  CURRENCY: '₦',
-  PHONE_FORMAT: '+234',
-  TIME_ZONE: 'Africa/Lagos',
-  LANGUAGE: 'English',
-  LOCAL_LANGUAGES: ['Yoruba', 'Hausa', 'Igbo'],
-  WORKING_DAYS: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-  SCHOOL_HOURS: {
-    START: '7:30 AM',
-    END: '3:00 PM', 
-    BREAK_START: '10:30 AM',
-    BREAK_END: '11:00 AM',
-    LUNCH_START: '1:00 PM',
-    LUNCH_END: '2:00 PM'
-  }
+// API Endpoints Configuration
+export const API_ENDPOINTS = {
+  AUTH: '/auth',
+  USERS: '/users',
+  STUDENTS: '/students',
+  TEACHERS: '/teachers',
+  PARENTS: '/parents',
+  CLASSES: '/classes',
+  SUBJECTS: '/subjects',
+  ATTENDANCE: '/attendance',
+  GRADES: '/grades',
+  REPORTS: '/reports',
+  CONTENT: '/content'
 };
 
-// Export default configuration
-export default {
-  SCHOOL_INFO,
-  COLORS,
-  GRADE_COLORS,
-  ATTENDANCE_COLORS,
-  USER_ROLES,
-  ACADEMIC_SETTINGS,
-  NOTIFICATION_TYPES,
-  PAYMENT_STATUS,
-  PAGINATION,
-  FILE_UPLOAD,
-  DASHBOARD_CARDS,
-  ANIMATIONS,
-  BREAKPOINTS,
-  NIGERIAN_CONTEXT
+// Validation Rules
+export const VALIDATION_RULES = {
+  PASSWORD_MIN_LENGTH: 8,
+  NAME_MIN_LENGTH: 2,
+  NAME_MAX_LENGTH: 50,
+  EMAIL_REGEX: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+  PHONE_REGEX: /^(\+234|0)[0-9]{10}$/, // Nigerian phone format
+  STUDENT_ID_LENGTH: 8
+};
+
+// Export utility function to check permissions
+export const checkPermission = (userRole, permission) => {
+  return ROLE_PERMISSIONS[userRole]?.[permission] || false;
+};
+
+export const getDashboardRoute = (userRole) => {
+  return ROLE_PERMISSIONS[userRole]?.dashboardRoute || '/';
 };

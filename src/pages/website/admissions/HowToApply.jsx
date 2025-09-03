@@ -1,179 +1,295 @@
-// pages/website/admissions/HowToApply.jsx
-import { User, FileText, CreditCard, CheckCircle, Clock, Phone } from 'lucide-react';
+// File location: src/pages/website/admissions/HowToApply.jsx
+
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Download, AlertCircle, Clock, MapPin, Phone } from 'lucide-react';
+import AdmissionInquiryForm from '../../../components/forms/AdmissionInquiryForm';
 
 const HowToApply = () => {
-  const steps = [
-    {
-      step: 1,
-      title: "Create Account",
-      desc: "Register online with parent/guardian email",
-      icon: <User className="w-8 h-8" />,
-      color: "blue",
-      details: ["Valid email address", "Phone number", "Basic information"]
-    },
-    {
-      step: 2, 
-      title: "Complete Application",
-      desc: "Fill out student information and upload documents",
-      icon: <FileText className="w-8 h-8" />,
-      color: "green",
-      details: ["Student personal details", "Academic history", "Document uploads", "Stream preference (SSS only)"]
-    },
-    {
-      step: 3,
-      title: "Pay Application Fee", 
-      desc: "Secure online payment or bank transfer",
-      icon: <CreditCard className="w-8 h-8" />,
-      color: "orange",
-      details: ["JSS 1: ₦5,000", "JSS 2-3: ₦7,500", "SSS 1: ₦8,000", "Payment confirmation"]
-    },
-    {
-      step: 4,
-      title: "Schedule Examination",
-      desc: "Book entrance exam and interview slots",
-      icon: <Clock className="w-8 h-8" />,
-      color: "purple", 
-      details: ["Choose exam date", "Select time slot", "Interview appointment", "Receive confirmation"]
-    },
-    {
-      step: 5,
-      title: "Attend Assessment",
-      desc: "Take entrance exam and interview",
-      icon: <CheckCircle className="w-8 h-8" />,
-      color: "red",
-      details: ["Arrive 30 minutes early", "Bring required documents", "Complete written test", "Parent-student interview"]
-    },
-    {
-      step: 6,
-      title: "Await Results",
-      desc: "Results notification within 2 weeks",
-      icon: <Phone className="w-8 h-8" />,
-      color: "teal",
-      details: ["Email notification", "SMS alert", "Online portal update", "Admission letter download"]
-    }
+  const [activeTab, setActiveTab] = useState('jss');
+
+  const applicationSteps = {
+    jss: [
+      {
+        step: 1,
+        title: "Download Application Form",
+        description: "Download and print the JSS admission form or collect from school office",
+        action: "Download Form",
+        deadline: "Before March 31st"
+      },
+      {
+        step: 2,
+        title: "Complete Application",
+        description: "Fill out all sections completely and attach required documents",
+        action: "Submit Documents",
+        deadline: "By April 15th"
+      },
+      {
+        step: 3,
+        title: "Entrance Examination",
+        description: "Take the JSS entrance examination covering English, Mathematics, and General Knowledge",
+        action: "Exam Date",
+        deadline: "April 20th-22nd"
+      },
+      {
+        step: 4,
+        title: "Interview Process",
+        description: "Attend interview with parents/guardians (shortlisted candidates only)",
+        action: "Interview",
+        deadline: "May 1st-5th"
+      }
+    ],
+    sss: [
+      {
+        step: 1,
+        title: "Submit JSS Certificate",
+        description: "Provide JSS Certificate or BECE results with minimum 5 credits",
+        action: "Document Review",
+        deadline: "Before March 31st"
+      },
+      {
+        step: 2,
+        title: "Choose Stream",
+        description: "Select from Science, Arts/Humanities, or Commercial stream",
+        action: "Stream Selection",
+        deadline: "With Application"
+      },
+      {
+        step: 3,
+        title: "Placement Test",
+        description: "Take placement test in chosen stream subjects",
+        action: "Subject Test",
+        deadline: "April 25th-27th"
+      },
+      {
+        step: 4,
+        title: "Final Interview",
+        description: "Meet with subject teachers and school counselor",
+        action: "Assessment",
+        deadline: "May 6th-10th"
+      }
+    ]
+  };
+
+  const requiredDocuments = [
+    "Completed application form",
+    "Birth certificate or age declaration",
+    "Previous school report card/transcript",
+    "Passport photographs (4 copies)",
+    "Medical certificate of fitness",
+    "Parent/Guardian valid ID",
+    "School fees payment receipt (₦5,000 non-refundable application fee)"
   ];
 
-  const tips = [
-    { title: "Early Application", desc: "Apply early for better chances", color: "blue" },
-    { title: "Document Quality", desc: "Ensure all documents are clear and complete", color: "green" },
-    { title: "Exam Preparation", desc: "Review basic concepts for your level", color: "orange" },
-    { title: "Interview Readiness", desc: "Prepare student for friendly interview", color: "purple" }
-  ];
-
-  const timeline = [
-    { period: "January - February", activity: "Application Opens", color: "green" },
-    { period: "March", activity: "Application Deadline", color: "orange" },
-    { period: "April", activity: "Entrance Examinations", color: "blue" },
-    { period: "May", activity: "Results & Admission", color: "purple" }
+  const importantNotes = [
+    "All applications must be submitted before the deadline",
+    "Late applications will not be considered",
+    "Entrance examination is mandatory for new students",
+    "Results will be communicated within 2 weeks",
+    "Admission is subject to availability of space"
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-50 to-secondary-50">
-      {/* Hero */}
+    <div className="min-h-screen bg-neutral-50">
+      {/* Header */}
       <div className="bg-primary-800 text-white py-16">
-        <div className="max-w-6xl mx-auto px-6 text-center">
+        <div className="container-max">
           <h1 className="text-4xl font-bold mb-4">How to Apply</h1>
-          <p className="text-xl text-primary-200 mb-8">Simple steps to join our school community</p>
-          <button className="btn-accent px-8 py-4 rounded-lg font-semibold text-lg">
-            Start Application Now
-          </button>
+          <p className="text-primary-100 text-lg">
+            Follow these simple steps to join our academic community
+          </p>
         </div>
       </div>
+
+      {/* Class Selection Tabs */}
+      <section className="bg-white border-b">
+        <div className="container-max">
+          <div className="flex space-x-8 py-4">
+            <button
+              onClick={() => setActiveTab('jss')}
+              className={`pb-4 px-2 border-b-2 font-semibold transition-colors ${
+                activeTab === 'jss' 
+                  ? 'border-primary-600 text-primary-600' 
+                  : 'border-transparent text-neutral-600 hover:text-neutral-800'
+              }`}
+            >
+              JSS Admission (Junior Secondary)
+            </button>
+            <button
+              onClick={() => setActiveTab('sss')}
+              className={`pb-4 px-2 border-b-2 font-semibold transition-colors ${
+                activeTab === 'sss' 
+                  ? 'border-primary-600 text-primary-600' 
+                  : 'border-transparent text-neutral-600 hover:text-neutral-800'
+              }`}
+            >
+              SSS Admission (Senior Secondary)
+            </button>
+          </div>
+        </div>
+      </section>
 
       {/* Application Steps */}
-      <div className="py-16 bg-white">
-        <div className="max-w-6xl mx-auto px-6">
-          <h2 className="text-3xl font-bold text-primary-800 text-center mb-12">Application Process</h2>
-          <div className="space-y-8">
-            {steps.map((step, i) => (
-              <div key={i} className={`bg-${step.color}-50 p-6 rounded-2xl shadow-lg border-l-4 border-${step.color}-500`}>
-                <div className="grid md:grid-cols-4 gap-6 items-start">
-                  <div className="text-center md:text-left">
-                    <div className={`bg-${step.color}-600 text-white w-16 h-16 rounded-full flex items-center justify-center mx-auto md:mx-0 mb-4`}>
-                      <span className="text-2xl font-bold">{step.step}</span>
+      <section className="section-padding">
+        <div className="container-max">
+          <h2 className="text-3xl font-bold mb-8 text-neutral-800">
+            Application Steps for {activeTab.toUpperCase()}
+          </h2>
+          
+          <div className="space-y-6 mb-12">
+            {applicationSteps[activeTab].map((step, index) => (
+              <div key={index} className="card-base">
+                <div className="flex flex-col md:flex-row md:items-center justify-between">
+                  <div className="flex items-start mb-4 md:mb-0">
+                    <div className="w-10 h-10 bg-primary-600 text-white rounded-full flex items-center justify-center font-bold mr-4 flex-shrink-0">
+                      {step.step}
                     </div>
-                    <div className={`text-${step.color}-600 mb-2 flex justify-center md:justify-start`}>
-                      {step.icon}
+                    <div>
+                      <h3 className="text-xl font-semibold text-neutral-800 mb-2">
+                        {step.title}
+                      </h3>
+                      <p className="text-neutral-600 mb-2">{step.description}</p>
+                      <div className="flex items-center text-sm text-accent-700">
+                        <Clock className="w-4 h-4 mr-1" />
+                        {step.deadline}
+                      </div>
                     </div>
                   </div>
-                  <div className="md:col-span-2">
-                    <h3 className={`text-xl font-bold text-${step.color}-800 mb-2`}>{step.title}</h3>
-                    <p className="text-neutral-600 mb-4">{step.desc}</p>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold mb-2">Requirements:</h4>
-                    <ul className="text-sm space-y-1">
-                      {step.details.map((detail, idx) => (
-                        <li key={idx} className="flex items-start">
-                          <span className={`w-2 h-2 bg-${step.color}-500 rounded-full mt-2 mr-2 flex-shrink-0`}></span>
-                          {detail}
-                        </li>
-                      ))}
-                    </ul>
+                  <div className="md:ml-4">
+                    <span className="badge-info">{step.action}</span>
                   </div>
                 </div>
               </div>
             ))}
           </div>
-        </div>
-      </div>
 
-      {/* Application Timeline */}
-      <div className="py-16 bg-neutral-50">
-        <div className="max-w-6xl mx-auto px-6">
-          <h2 className="text-3xl font-bold text-primary-800 text-center mb-12">Application Timeline 2025</h2>
-          <div className="grid md:grid-cols-4 gap-8">
-            {timeline.map((time, i) => (
-              <div key={i} className="text-center">
-                <div className={`bg-${time.color}-100 p-6 rounded-xl shadow-lg mb-4`}>
-                  <div className={`text-lg font-bold text-${time.color}-800 mb-2`}>{time.period}</div>
-                  <div className="text-neutral-600">{time.activity}</div>
-                </div>
+          {/* Download Forms */}
+          <div className="card-base card-accent mb-12">
+            <h3 className="text-xl font-semibold mb-4 text-neutral-800">
+              Download Application Forms
+            </h3>
+            <div className="grid md:grid-cols-2 gap-4">
+              <button className="btn-primary flex items-center justify-center px-6 py-3 rounded-lg">
+                <Download className="w-5 h-5 mr-2" />
+                JSS Application Form
+              </button>
+              <button className="btn-secondary flex items-center justify-center px-6 py-3 rounded-lg">
+                <Download className="w-5 h-5 mr-2" />
+                SSS Application Form
+              </button>
+            </div>
+            <p className="text-sm text-neutral-600 mt-4">
+              Forms are also available at the school administrative office during working hours.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Required Documents */}
+      <section className="bg-white py-16">
+        <div className="container-max">
+          <div className="grid lg:grid-cols-2 gap-12">
+            <div>
+              <h2 className="text-2xl font-bold mb-6 text-neutral-800">
+                Required Documents
+              </h2>
+              <div className="space-y-3">
+                {requiredDocuments.map((doc, index) => (
+                  <div key={index} className="flex items-start">
+                    <div className="w-2 h-2 bg-primary-600 rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                    <span className="text-neutral-700">{doc}</span>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Helpful Tips */}
-      <div className="py-16 bg-white">
-        <div className="max-w-6xl mx-auto px-6">
-          <h2 className="text-3xl font-bold text-primary-800 text-center mb-12">Application Tips</h2>
-          <div className="grid md:grid-cols-4 gap-8">
-            {tips.map((tip, i) => (
-              <div key={i} className={`bg-${tip.color}-50 p-6 rounded-xl shadow-lg text-center border-t-4 border-${tip.color}-500`}>
-                <h3 className={`font-bold text-${tip.color}-800 mb-3`}>{tip.title}</h3>
-                <p className="text-neutral-600 text-sm">{tip.desc}</p>
+            </div>
+            
+            <div>
+              <h2 className="text-2xl font-bold mb-6 text-neutral-800">
+                Important Notes
+              </h2>
+              <div className="space-y-4">
+                {importantNotes.map((note, index) => (
+                  <div key={index} className="flex items-start">
+                    <AlertCircle className="w-5 h-5 text-accent-600 mt-0.5 mr-3 flex-shrink-0" />
+                    <span className="text-neutral-700">{note}</span>
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Support */}
-      <div className="py-16 bg-primary-800 text-white text-center">
-        <div className="max-w-6xl mx-auto px-6">
-          <h2 className="text-3xl font-bold mb-6">Need Support?</h2>
-          <p className="text-primary-200 mb-8">Our admissions team is here to help</p>
-          <div className="grid md:grid-cols-3 gap-6">
-            <div className="bg-white/10 p-6 rounded-xl">
-              <Phone className="w-8 h-8 mx-auto mb-3" />
-              <div className="font-bold">Call Us</div>
-              <div className="text-sm text-primary-200">+234-XXX-XXXX</div>
-            </div>
-            <div className="bg-white/10 p-6 rounded-xl">
-              <FileText className="w-8 h-8 mx-auto mb-3" />
-              <div className="font-bold">Email</div>
-              <div className="text-sm text-primary-200">admissions@school.com</div>
-            </div>
-            <div className="bg-white/10 p-6 rounded-xl">
-              <Clock className="w-8 h-8 mx-auto mb-3" />
-              <div className="font-bold">Office Hours</div>
-              <div className="text-sm text-primary-200">Mon-Fri: 8AM-4PM</div>
+      {/* Application Fee Information */}
+      <section className="bg-accent-50 py-16">
+        <div className="container-max">
+          <div className="card-base text-center max-w-2xl mx-auto">
+            <h3 className="text-2xl font-bold mb-4 text-neutral-800">Application Fee</h3>
+            <div className="text-4xl font-bold text-accent-700 mb-4">₦5,000</div>
+            <p className="text-neutral-600 mb-6">
+              Non-refundable application processing fee. Payment can be made at the school 
+              bursary office or through bank transfer.
+            </p>
+            <div className="text-sm text-neutral-500">
+              <p><strong>Bank:</strong> First Bank Nigeria</p>
+              <p><strong>Account Name:</strong> Nigerian Secondary School</p>
+              <p><strong>Account Number:</strong> 1234567890</p>
             </div>
           </div>
         </div>
-      </div>
+      </section>
+
+      {/* Contact Information */}
+      <section className="py-16 bg-white">
+        <div className="container-max">
+          <h2 className="text-3xl font-bold text-center mb-12 text-neutral-800">
+            Need Help with Your Application?
+          </h2>
+          
+          <div className="grid md:grid-cols-3 gap-8 mb-12">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <MapPin className="w-8 h-8 text-primary-600" />
+              </div>
+              <h3 className="font-semibold mb-2">Visit Our Office</h3>
+              <p className="text-neutral-600 text-sm">
+                123 Education Avenue<br />
+                Lagos Island, Lagos State<br />
+                Monday - Friday: 8:00 AM - 4:00 PM
+              </p>
+            </div>
+            
+            <div className="text-center">
+              <div className="w-16 h-16 bg-secondary-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Phone className="w-8 h-8 text-secondary-600" />
+              </div>
+              <h3 className="font-semibold mb-2">Call Us</h3>
+              <p className="text-neutral-600 text-sm">
+                +234 803 123 4567<br />
+                +234 806 789 0123<br />
+                Available: 8:00 AM - 5:00 PM
+              </p>
+            </div>
+            
+            <div className="text-center">
+              <div className="w-16 h-16 bg-accent-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <AlertCircle className="w-8 h-8 text-accent-600" />
+              </div>
+              <h3 className="font-semibold mb-2">Quick Inquiry</h3>
+              <p className="text-neutral-600 text-sm">
+                Send us a message using<br />
+                the form below for<br />
+                immediate assistance
+              </p>
+            </div>
+          </div>
+
+          {/* Inquiry Form */}
+          <div className="max-w-2xl mx-auto">
+            <AdmissionInquiryForm />
+          </div>
+        </div>
+      </section>
     </div>
   );
 };

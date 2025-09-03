@@ -1,180 +1,154 @@
-// utils/api.js - Axios configuration and interceptors for Nigerian School Management System
+// File Location: src/utils/api.js
+// Axios configuration with role-based interceptors
 
 import axios from 'axios';
 
-// Base API configuration
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api';
-const MOCK_API_ENABLED = import.meta.env.VITE_ENABLE_MOCK_API !== 'false';
-
-// Create axios instance with default configuration
+// Create axios instance with base configuration
 const api = axios.create({
-  baseURL: API_BASE_URL,
-  timeout: 15000, // 15 seconds timeout (good for slower Nigerian internet)
+  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api',
+  timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
-    'Accept': 'application/json',
-  },
+  }
 });
 
-// Request interceptor - Add auth token and handle loading
+// Request interceptor - Add auth token and role-based headers
 api.interceptors.request.use(
   (config) => {
-    // Add authorization token if available
-    const token = localStorage.getItem('auth_token');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-
-    // Add request timestamp for Nigerian timezone
-    config.headers['X-Request-Time'] = new Date().toISOString();
+    // Get auth data from localStorage (in real app, use secure storage)
+    const authData = localStorage.getItem('auth');
     
-    // Log request in development
-    if (import.meta.env.DEV) {
-      console.log('🚀 API Request:', config.method?.toUpperCase(), config.url);
+    if (authData) {
+      const { token, role } = JSON.parse(authData);
+      
+      // Add authorization header
+      config.headers.Authorization = `Bearer ${token}`;
+      
+      // Add role-based headers
+      config.headers['X-User-Role'] = role;
+      
+      // Add timestamp for request tracking
+      config.headers['X-Request-Time'] = new Date().toISOString();
     }
-
+    
     return config;
   },
   (error) => {
-    console.error('❌ Request Error:', error);
     return Promise.reject(error);
   }
 );
 
-// Response interceptor - Handle errors and responses
+// Response interceptor - Handle role-based responses and errors
 api.interceptors.response.use(
   (response) => {
-    // Log successful response in development
-    if (import.meta.env.DEV) {
-      console.log('✅ API Response:', response.status, response.config.url);
+    // Log successful requests in development
+    if (import.meta.env.NODE_ENV === 'development') {
+      console.log(`✅ ${response.config.method?.toUpperCase()} ${response.config.url}`, response.data);
     }
-
+    
     return response;
   },
   (error) => {
-    // Handle different error scenarios common in Nigerian context
-    if (error.code === 'ECONNABORTED') {
-      console.error('⏱️ Request timeout - Check internet connection');
-      error.message = 'Request timeout. Please check your internet connection.';
-    }
-
+    // Handle different error scenarios
     if (error.response) {
-      // Server responded with error status
       const { status, data } = error.response;
       
       switch (status) {
         case 401:
-          // Unauthorized - redirect to login
-          localStorage.removeItem('auth_token');
-          window.location.href = '/auth/login';
+          // Unauthorized - clear auth and redirect to login
+          localStorage.removeItem('auth');
+          window.location.href = '/login';
           break;
+          
         case 403:
-          error.message = 'Access denied. Contact school administrator.';
+          // Forbidden - insufficient role permissions
+          console.error('Access denied: Insufficient permissions');
           break;
-        case 404:
-          error.message = 'Resource not found.';
+          
+        case 429:
+          // Rate limiting
+          console.error('Too many requests. Please try again later.');
           break;
-        case 422:
-          error.message = data.message || 'Validation error occurred.';
-          break;
-        case 500:
-          error.message = 'Server error. Please try again later.';
-          break;
+          
         default:
-          error.message = data.message || 'An unexpected error occurred.';
+          console.error(`API Error ${status}:`, data?.message || error.message);
       }
     } else if (error.request) {
-      // Network error - common in Nigeria
-      error.message = 'Network error. Please check your internet connection.';
+      // Network error
+      console.error('Network error - please check your connection');
+    } else {
+      console.error('Request setup error:', error.message);
     }
-
-    console.error('❌ API Error:', error.message);
+    
     return Promise.reject(error);
   }
 );
 
-// Mock API delay simulation (for realistic testing)
-const mockDelay = (ms = 500) => new Promise(resolve => setTimeout(resolve, ms));
-
-// API helper functions
-export const apiHelpers = {
-  // Check if using mock API
-  isMockMode: () => MOCK_API_ENABLED,
-
-  // Format Nigerian phone numbers
-  formatPhoneNumber: (phone) => {
-    if (!phone) return '';
-    // Remove all non-digits
-    const cleaned = phone.replace(/\D/g, '');
-    // Format as +234-XXX-XXX-XXXX
-    if (cleaned.length === 11 && cleaned.startsWith('0')) {
-      return `+234-${cleaned.slice(1, 4)}-${cleaned.slice(4, 7)}-${cleaned.slice(7)}`;
-    }
-    return phone;
+// Role-based API endpoints
+export const endpoints = {
+  // Authentication endpoints
+  auth: {
+    login: '/auth/login',
+    logout: '/auth/logout',
+    refresh: '/auth/refresh',
+    forgotPassword: '/auth/forgot-password'
   },
-
-  // Format Nigerian currency
-  formatCurrency: (amount) => {
-    if (!amount) return '₦0.00';
-    return new Intl.NumberFormat('en-NG', {
-      style: 'currency',
-      currency: 'NGN',
-    }).format(amount);
+  
+  // Super Admin endpoints
+  superAdmin: {
+    users: '/super-admin/users',
+    schools: '/super-admin/schools', 
+    systemReports: '/super-admin/reports',
+    backup: '/super-admin/backup',
+    settings: '/super-admin/settings'
   },
-
-  // Handle file uploads with progress
-  uploadFile: async (file, onProgress) => {
-    const formData = new FormData();
-    formData.append('file', file);
-
-    return api.post('/upload', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-      onUploadProgress: (progressEvent) => {
-        const percentCompleted = Math.round(
-          (progressEvent.loaded * 100) / progressEvent.total
-        );
-        onProgress?.(percentCompleted);
-      },
-    });
+  
+  // Admin endpoints
+  admin: {
+    students: '/admin/students',
+    teachers: '/admin/teachers', 
+    parents: '/admin/parents',
+    classes: '/admin/classes',
+    subjects: '/admin/subjects',
+    reports: '/admin/reports',
+    cms: '/admin/cms'
   },
-
-  // Batch API requests
-  batchRequests: async (requests) => {
-    try {
-      const responses = await Promise.allSettled(requests);
-      return responses.map((result, index) => ({
-        index,
-        success: result.status === 'fulfilled',
-        data: result.status === 'fulfilled' ? result.value.data : null,
-        error: result.status === 'rejected' ? result.reason : null,
-      }));
-    } catch (error) {
-      console.error('Batch request error:', error);
-      throw error;
-    }
+  
+  // Teacher endpoints
+  teacher: {
+    myStudents: '/teacher/students',
+    attendance: '/teacher/attendance',
+    grades: '/teacher/grades',
+    reports: '/teacher/reports'
   },
-
-  // Export data helper
-  exportData: async (endpoint, format = 'csv') => {
-    const response = await api.get(`${endpoint}/export`, {
-      params: { format },
-      responseType: 'blob',
-    });
-    
-    // Create download link
-    const url = window.URL.createObjectURL(new Blob([response.data]));
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', `export_${Date.now()}.${format}`);
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-    window.URL.revokeObjectURL(url);
+  
+  // Parent endpoints
+  parent: {
+    myChildren: '/parent/children',
+    attendance: '/parent/attendance',
+    grades: '/parent/grades',
+    reports: '/parent/reports'
   },
+  
+  // Public endpoints (no auth required)
+  public: {
+    website: '/public/website',
+    contact: '/public/contact',
+    admissions: '/public/admissions'
+  }
 };
 
-// Export configured axios instance and helpers
+// Role-based request validation
+export const validateRoleAccess = (userRole, endpoint) => {
+  const roleEndpoints = {
+    super_admin: Object.values(endpoints).flat(),
+    admin: [...Object.values(endpoints.admin), ...Object.values(endpoints.public)],
+    teacher: [...Object.values(endpoints.teacher), ...Object.values(endpoints.public)],
+    parent: [...Object.values(endpoints.parent), ...Object.values(endpoints.public)]
+  };
+  
+  return roleEndpoints[userRole]?.includes(endpoint) || false;
+};
+
+// Export configured axios instance
 export default api;
-export { mockDelay };

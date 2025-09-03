@@ -1,3 +1,6 @@
-export { default as Navbar } from './Navbar';
-export { default as Sidebar } from './Sidebar';
-export { default as Breadcrumb } from './Breadcrumb';
+// File: src/components/layout/index.js
+// Export all layout components
+
+export { default as PublicNavigation } from './PublicNavigation';
+export { default as Header } from './Header';
+export { default as Footer } from './Footer';

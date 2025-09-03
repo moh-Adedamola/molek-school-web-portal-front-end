@@ -1,35 +1,22 @@
-import { Navigate } from 'react-router-dom';
-import useAuth from '../../hooks/useAuth';
+import { useAuth } from '../../context/AuthContext';
+import UnauthorizedAccess from './UnauthorizedAccess';
 
-const RoleBasedRoute = ({ children, allowedRoles = [] }) => {
-  const { user, loading } = useAuth();
+const RoleBasedRoute = ({ allowedRoles = [], children }) => {
+  const { user, isAuthenticated } = useAuth();
 
-  if (loading) {
+  if (!isAuthenticated || !user) {
+    return <UnauthorizedAccess message="Please log in to access this page." />;
+  }
+
+  const hasAccess = allowedRoles.length === 0 || allowedRoles.includes(user.role);
+
+  if (!hasAccess) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-      </div>
+      <UnauthorizedAccess 
+        message="You don't have permission to access this page."
+        userRole={user.role}
+      />
     );
-  }
-
-  if (!user) {
-    return <Navigate to="/auth/login" replace />;
-  }
-
-  if (!allowedRoles.includes(user.role)) {
-    // Redirect to appropriate dashboard if user doesn't have permission
-    switch (user.role) {
-      case 'super_admin':
-        return <Navigate to="/portal" replace />;
-      case 'admin':
-        return <Navigate to="/portal/admin" replace />;
-      case 'teacher':
-        return <Navigate to="/portal/teacher" replace />;
-      case 'parent':
-        return <Navigate to="/portal/parent" replace />;
-      default:
-        return <Navigate to="/" replace />;
-    }
   }
 
   return children;

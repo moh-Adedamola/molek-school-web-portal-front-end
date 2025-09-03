@@ -1,157 +1,319 @@
+// File location: src/components/forms/AttendanceForm.jsx
 import React, { useState } from 'react';
-import Button from '../ui/Button';
-import Card from '../ui/Card';
+import { Calendar, Clock, Users, Save, X } from 'lucide-react';
 
-const AttendanceForm = ({ students = [], onSubmit, loading = false }) => {
-  const [attendance, setAttendance] = useState({});
-  const [selectedDate, setSelectedDate] = useState(
-    new Date().toISOString().split('T')[0]
-  );
+const AttendanceForm = ({ 
+  students = [], 
+  onSubmit, 
+  onCancel, 
+  initialData = {},
+  className = '',
+  subject = '' 
+}) => {
+  const [formData, setFormData] = useState({
+    date: initialData.date || new Date().toISOString().split('T')[0],
+    period: initialData.period || '',
+    subject: initialData.subject || subject,
+    attendance: initialData.attendance || {}
+  });
+  
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Handle attendance status change
-  const handleStatusChange = (studentId, status) => {
-    setAttendance(prev => ({
+  const periods = [
+    { value: '1', label: '1st Period (8:00 - 9:00 AM)' },
+    { value: '2', label: '2nd Period (9:00 - 10:00 AM)' },
+    { value: '3', label: '3rd Period (10:30 - 11:30 AM)' },
+    { value: '4', label: '4th Period (11:30 - 12:30 PM)' },
+    { value: '5', label: '5th Period (1:30 - 2:30 PM)' },
+    { value: '6', label: '6th Period (2:30 - 3:30 PM)' }
+  ];
+
+  // Initialize attendance for all students
+  React.useEffect(() => {
+    if (students.length > 0 && Object.keys(formData.attendance).length === 0) {
+      const initialAttendance = {};
+      students.forEach(student => {
+        initialAttendance[student.id] = initialData.attendance?.[student.id] || 'present';
+      });
+      setFormData(prev => ({ ...prev, attendance: initialAttendance }));
+    }
+  }, [students, initialData.attendance]);
+
+  const handleInputChange = (field, value) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleAttendanceChange = (studentId, status) => {
+    setFormData(prev => ({
       ...prev,
-      [studentId]: status
+      attendance: { ...prev.attendance, [studentId]: status }
     }));
   };
 
-  // Handle form submission
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    
-    const attendanceData = {
-      date: selectedDate,
-      records: Object.entries(attendance).map(([studentId, status]) => ({
-        studentId: parseInt(studentId),
-        status,
-        markedAt: new Date().toISOString()
-      }))
-    };
-
-    onSubmit(attendanceData);
+  const markAllAttendance = (status) => {
+    const newAttendance = {};
+    students.forEach(student => {
+      newAttendance[student.id] = status;
+    });
+    setFormData(prev => ({ ...prev, attendance: newAttendance }));
   };
 
-  // Get status color classes
-  const getStatusColor = (status) => {
-    switch (status) {
-      case 'present':
-        return 'bg-secondary-100 text-secondary-800 border-secondary-200';
-      case 'absent':
-        return 'bg-red-100 text-red-800 border-red-200';
-      case 'late':
-        return 'bg-accent-100 text-accent-800 border-accent-200';
-      default:
-        return 'bg-neutral-100 text-neutral-600 border-neutral-200';
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    // Validation
+    if (!formData.date || !formData.period || !formData.subject) {
+      alert('Please fill in all required fields');
+      return;
+    }
+
+    setIsSubmitting(true);
+    
+    try {
+      await onSubmit(formData);
+    } catch (error) {
+      console.error('Error submitting attendance:', error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
+  const getAttendanceStats = () => {
+    const attendance = formData.attendance;
+    const total = students.length;
+    const present = Object.values(attendance).filter(status => status === 'present').length;
+    const absent = Object.values(attendance).filter(status => status === 'absent').length;
+    const late = Object.values(attendance).filter(status => status === 'late').length;
+    
+    return { total, present, absent, late };
+  };
+
+  const stats = getAttendanceStats();
+
   return (
-    <Card className="max-w-4xl mx-auto">
-      <Card.Header>
-        <Card.Title className="text-primary-800">Mark Daily Attendance</Card.Title>
-      </Card.Header>
+    <form onSubmit={handleSubmit} className={`space-y-6 ${className}`}>
+      {/* Form Header */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <h3 className="text-lg font-semibold text-neutral-800">Mark Attendance</h3>
+        <div className="flex gap-2">
+          {onCancel && (
+            <button
+              type="button"
+              onClick={onCancel}
+              className="btn-outline flex items-center gap-2 px-4 py-2 text-sm"
+            >
+              <X className="h-4 w-4" />
+              Cancel
+            </button>
+          )}
+          <button
+            type="submit"
+            disabled={isSubmitting || students.length === 0}
+            className="btn-primary flex items-center gap-2 px-4 py-2 text-sm disabled:opacity-50"
+          >
+            <Save className="h-4 w-4" />
+            {isSubmitting ? 'Saving...' : 'Save Attendance'}
+          </button>
+        </div>
+      </div>
 
-      <form onSubmit={handleSubmit}>
-        <Card.Content>
-          {/* Date Selection */}
-          <div className="mb-6">
-            <label className="block text-sm font-medium text-neutral-700 mb-2">
-              Attendance Date
-            </label>
-            <input
-              type="date"
-              value={selectedDate}
-              onChange={(e) => setSelectedDate(e.target.value)}
-              className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-              required
-            />
+      {/* Basic Information */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div>
+          <label className="block text-sm font-medium text-neutral-700 mb-2">
+            <Calendar className="inline h-4 w-4 mr-1" />
+            Date *
+          </label>
+          <input
+            type="date"
+            value={formData.date}
+            onChange={(e) => handleInputChange('date', e.target.value)}
+            className="input-base w-full"
+            required
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-neutral-700 mb-2">
+            <Clock className="inline h-4 w-4 mr-1" />
+            Period *
+          </label>
+          <select
+            value={formData.period}
+            onChange={(e) => handleInputChange('period', e.target.value)}
+            className="input-base w-full"
+            required
+          >
+            <option value="">Select Period</option>
+            {periods.map(period => (
+              <option key={period.value} value={period.value}>
+                {period.label}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-neutral-700 mb-2">
+            Subject *
+          </label>
+          <input
+            type="text"
+            value={formData.subject}
+            onChange={(e) => handleInputChange('subject', e.target.value)}
+            className="input-base w-full"
+            placeholder="Enter subject name"
+            required
+          />
+        </div>
+      </div>
+
+      {/* Attendance Stats */}
+      {students.length > 0 && (
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="text-center p-3 bg-neutral-100 rounded-lg">
+            <p className="text-xl font-bold text-neutral-800">{stats.total}</p>
+            <p className="text-sm text-neutral-600">Total</p>
           </div>
+          <div className="text-center p-3 bg-secondary-50 rounded-lg">
+            <p className="text-xl font-bold text-secondary-600">{stats.present}</p>
+            <p className="text-sm text-neutral-600">Present</p>
+          </div>
+          <div className="text-center p-3 bg-accent-50 rounded-lg">
+            <p className="text-xl font-bold text-accent-600">{stats.late}</p>
+            <p className="text-sm text-neutral-600">Late</p>
+          </div>
+          <div className="text-center p-3 bg-red-50 rounded-lg">
+            <p className="text-xl font-bold text-red-600">{stats.absent}</p>
+            <p className="text-sm text-neutral-600">Absent</p>
+          </div>
+        </div>
+      )}
 
-          {/* Students List */}
-          <div className="space-y-3">
-            <h3 className="text-lg font-semibold text-primary-800 mb-4">
-              Students ({students.length})
-            </h3>
-            
-            {students.map((student) => (
-              <div key={student.id} className="flex items-center justify-between p-4 border border-neutral-200 rounded-lg hover:bg-neutral-50">
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center">
-                    <span className="text-primary-700 font-semibold">
-                      {student.name.split(' ').map(n => n[0]).join('')}
-                    </span>
-                  </div>
-                  <div>
-                    <p className="font-medium text-neutral-900">{student.name}</p>
-                    <p className="text-sm text-neutral-600">
-                      {student.class} • ID: {student.id}
-                    </p>
-                  </div>
+      {/* Quick Actions */}
+      {students.length > 0 && (
+        <div className="flex flex-wrap gap-2">
+          <button
+            type="button"
+            onClick={() => markAllAttendance('present')}
+            className="btn-secondary text-sm px-3 py-1"
+          >
+            Mark All Present
+          </button>
+          <button
+            type="button"
+            onClick={() => markAllAttendance('absent')}
+            className="btn-danger text-sm px-3 py-1"
+          >
+            Mark All Absent
+          </button>
+          <button
+            type="button"
+            onClick={() => markAllAttendance('late')}
+            className="bg-accent-600 hover:bg-accent-700 text-white text-sm px-3 py-1 rounded transition-colors"
+          >
+            Mark All Late
+          </button>
+        </div>
+      )}
+
+      {/* Students Attendance List */}
+      {students.length > 0 ? (
+        <div className="space-y-3">
+          <h4 className="font-medium text-neutral-800 flex items-center gap-2">
+            <Users className="h-4 w-4" />
+            Students ({students.length})
+          </h4>
+          
+          <div className="space-y-2 max-h-96 overflow-y-auto">
+            {students.map(student => (
+              <div 
+                key={student.id} 
+                className="flex flex-col md:flex-row md:items-center justify-between p-3 bg-neutral-50 rounded-lg gap-3"
+              >
+                <div className="flex-1">
+                  <h5 className="font-medium text-neutral-800">{student.name}</h5>
+                  <p className="text-sm text-neutral-600">
+                    {student.admissionNumber} {student.class && `• ${student.class}`}
+                  </p>
                 </div>
-
-                {/* Attendance Buttons */}
-                <div className="flex space-x-2">
-                  {['present', 'late', 'absent'].map((status) => (
-                    <button
-                      key={status}
-                      type="button"
-                      onClick={() => handleStatusChange(student.id, status)}
-                      className={`px-4 py-2 rounded-lg border text-sm font-medium capitalize transition-colors ${
-                        attendance[student.id] === status
-                          ? getStatusColor(status)
-                          : 'bg-white text-neutral-600 border-neutral-300 hover:bg-neutral-50'
-                      }`}
-                    >
-                      {status}
-                    </button>
-                  ))}
+                
+                <div className="flex gap-2 flex-wrap">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      name={`attendance-${student.id}`}
+                      value="present"
+                      checked={formData.attendance[student.id] === 'present'}
+                      onChange={() => handleAttendanceChange(student.id, 'present')}
+                      className="text-secondary-600 focus:ring-secondary-600"
+                    />
+                    <span className="status-present px-2 py-1 rounded-full text-xs font-medium">
+                      Present
+                    </span>
+                  </label>
+                  
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      name={`attendance-${student.id}`}
+                      value="late"
+                      checked={formData.attendance[student.id] === 'late'}
+                      onChange={() => handleAttendanceChange(student.id, 'late')}
+                      className="text-accent-600 focus:ring-accent-600"
+                    />
+                    <span className="status-late px-2 py-1 rounded-full text-xs font-medium">
+                      Late
+                    </span>
+                  </label>
+                  
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      name={`attendance-${student.id}`}
+                      value="absent"
+                      checked={formData.attendance[student.id] === 'absent'}
+                      onChange={() => handleAttendanceChange(student.id, 'absent')}
+                      className="text-red-600 focus:ring-red-600"
+                    />
+                    <span className="status-absent px-2 py-1 rounded-full text-xs font-medium">
+                      Absent
+                    </span>
+                  </label>
                 </div>
               </div>
             ))}
           </div>
+        </div>
+      ) : (
+        <div className="text-center py-8 bg-neutral-50 rounded-lg">
+          <Users className="h-12 w-12 text-neutral-400 mx-auto mb-2" />
+          <p className="text-neutral-600">No students available</p>
+          <p className="text-sm text-neutral-500">Students will appear here when a class is selected</p>
+        </div>
+      )}
 
-          {/* Summary */}
-          {Object.keys(attendance).length > 0 && (
-            <div className="mt-6 p-4 bg-neutral-50 rounded-lg">
-              <h4 className="font-medium text-neutral-800 mb-2">Attendance Summary</h4>
-              <div className="grid grid-cols-3 gap-4 text-sm">
-                <div className="text-center">
-                  <div className="text-lg font-bold text-secondary-600">
-                    {Object.values(attendance).filter(s => s === 'present').length}
-                  </div>
-                  <div className="text-neutral-600">Present</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-lg font-bold text-accent-600">
-                    {Object.values(attendance).filter(s => s === 'late').length}
-                  </div>
-                  <div className="text-neutral-600">Late</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-lg font-bold text-red-600">
-                    {Object.values(attendance).filter(s => s === 'absent').length}
-                  </div>
-                  <div className="text-neutral-600">Absent</div>
-                </div>
-              </div>
-            </div>
-          )}
-        </Card.Content>
-
-        <Card.Footer className="flex justify-between">
-          <Button variant="secondary" type="button">
-            Clear All
-          </Button>
-          <Button 
-            type="submit" 
-            disabled={Object.keys(attendance).length === 0 || loading}
+      {/* Form Actions */}
+      <div className="flex justify-end gap-3 pt-4 border-t border-neutral-200">
+        {onCancel && (
+          <button
+            type="button"
+            onClick={onCancel}
+            className="btn-ghost px-6 py-2"
+            disabled={isSubmitting}
           >
-            {loading ? 'Saving...' : 'Save Attendance'}
-          </Button>
-        </Card.Footer>
-      </form>
-    </Card>
+            Cancel
+          </button>
+        )}
+        <button
+          type="submit"
+          disabled={isSubmitting || students.length === 0}
+          className="btn-primary px-6 py-2 disabled:opacity-50"
+        >
+          {isSubmitting ? 'Saving Attendance...' : 'Save Attendance'}
+        </button>
+      </div>
+    </form>
   );
 };
 

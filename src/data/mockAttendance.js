@@ -1,312 +1,212 @@
-// Mock Attendance Data - Nigerian 3-Term System
-export const mockAttendance = [
-  // JSS 1A Attendance Records
-  {
-    id: 'att_001',
-    studentId: 'student_001',
-    studentName: 'Kemi Adebayo',
-    classId: 'jss1a',
-    className: 'JSS 1A',
-    date: '2024-08-20',
-    status: 'present',
-    term: '1st Term',
-    academicYear: '2024/2025',
-    markedBy: 'teacher_001',
-    markedAt: '2024-08-20T08:00:00Z',
-    notes: ''
-  },
-  {
-    id: 'att_002',
-    studentId: 'student_001',
-    studentName: 'Kemi Adebayo',
-    classId: 'jss1a',
-    className: 'JSS 1A',
-    date: '2024-08-21',
-    status: 'late',
-    term: '1st Term',
-    academicYear: '2024/2025',
-    markedBy: 'teacher_001',
-    markedAt: '2024-08-21T08:30:00Z',
-    notes: 'Arrived 30 minutes late - traffic'
-  },
-  {
-    id: 'att_003',
-    studentId: 'student_002',
-    studentName: 'Tunde Johnson',
-    classId: 'jss1a',
-    className: 'JSS 1A',
-    date: '2024-08-20',
-    status: 'present',
-    term: '1st Term',
-    academicYear: '2024/2025',
-    markedBy: 'teacher_001',
-    markedAt: '2024-08-20T08:00:00Z',
-    notes: ''
-  },
-  {
-    id: 'att_004',
-    studentId: 'student_002',
-    studentName: 'Tunde Johnson',
-    classId: 'jss1a',
-    className: 'JSS 1A',
-    date: '2024-08-21',
-    status: 'absent',
-    term: '1st Term',
-    academicYear: '2024/2025',
-    markedBy: 'teacher_001',
-    markedAt: '2024-08-21T08:00:00Z',
-    notes: 'Sick - parent called to inform'
-  },
+// File Location: src/data/mockAttendance.js
+// Term-based attendance data linked to teachers and parents
 
-  // SSS 1 Science Attendance Records
-  {
-    id: 'att_005',
-    studentId: 'student_003',
-    studentName: 'Chidera Okonkwo',
-    classId: 'sss1_science',
-    className: 'SSS 1 Science',
-    date: '2024-08-20',
-    status: 'present',
-    term: '1st Term',
-    academicYear: '2024/2025',
-    markedBy: 'teacher_005',
-    markedAt: '2024-08-20T08:00:00Z',
-    notes: ''
-  },
-  {
-    id: 'att_006',
-    studentId: 'student_003',
-    studentName: 'Chidera Okonkwo',
-    classId: 'sss1_science',
-    className: 'SSS 1 Science',
-    date: '2024-08-21',
-    status: 'present',
-    term: '1st Term',
-    academicYear: '2024/2025',
-    markedBy: 'teacher_005',
-    markedAt: '2024-08-21T08:00:00Z',
-    notes: ''
-  },
-  {
-    id: 'att_007',
-    studentId: 'student_004',
-    studentName: 'Fatima Nwosu',
-    classId: 'sss1_science',
-    className: 'SSS 1 Science',
-    date: '2024-08-20',
-    status: 'late',
-    term: '1st Term',
-    academicYear: '2024/2025',
-    markedBy: 'teacher_005',
-    markedAt: '2024-08-20T08:15:00Z',
-    notes: 'Arrived 15 minutes late'
-  },
-  {
-    id: 'att_008',
-    studentId: 'student_004',
-    studentName: 'Fatima Nwosu',
-    classId: 'sss1_science',
-    className: 'SSS 1 Science',
-    date: '2024-08-21',
-    status: 'present',
-    term: '1st Term',
-    academicYear: '2024/2025',
-    markedBy: 'teacher_005',
-    markedAt: '2024-08-21T08:00:00Z',
-    notes: ''
-  }
-];
+// Current academic year and term
+export const currentAcademicYear = '2024/2025';
+export const currentTerm = 'First Term';
+export const currentWeek = 12;
 
-// Attendance summary data for analytics
-export const mockAttendanceSummary = [
-  {
-    studentId: 'student_001',
-    studentName: 'Kemi Adebayo',
-    classId: 'jss1a',
-    term: '1st Term',
-    academicYear: '2024/2025',
-    totalDays: 65,
-    presentDays: 60,
-    absentDays: 3,
-    lateDays: 2,
-    attendancePercentage: 92.3,
-    status: 'excellent' // excellent, good, average, poor
-  },
-  {
-    studentId: 'student_002',
-    studentName: 'Tunde Johnson',
-    classId: 'jss1a',
-    term: '1st Term',
-    academicYear: '2024/2025',
-    totalDays: 65,
-    presentDays: 58,
-    absentDays: 5,
-    lateDays: 2,
-    attendancePercentage: 89.2,
-    status: 'good'
-  },
-  {
-    studentId: 'student_003',
-    studentName: 'Chidera Okonkwo',
-    classId: 'sss1_science',
-    term: '1st Term',
-    academicYear: '2024/2025',
-    totalDays: 65,
-    presentDays: 63,
-    absentDays: 1,
-    lateDays: 1,
-    attendancePercentage: 96.9,
-    status: 'excellent'
-  },
-  {
-    studentId: 'student_004',
-    studentName: 'Fatima Nwosu',
-    classId: 'sss1_science',
-    term: '1st Term',
-    academicYear: '2024/2025',
-    totalDays: 65,
-    presentDays: 61,
-    absentDays: 2,
-    lateDays: 2,
-    attendancePercentage: 93.8,
-    status: 'excellent'
-  }
-];
-
-// Attendance helper functions
-export const getAttendanceByStudent = (studentId) => {
-  return mockAttendance.filter(record => record.studentId === studentId);
+// Attendance status types
+export const attendanceStatus = {
+  PRESENT: 'present',
+  ABSENT: 'absent',
+  LATE: 'late',
+  EXCUSED: 'excused'
 };
 
-export const getAttendanceByClass = (classId, date = null) => {
-  if (date) {
-    return mockAttendance.filter(record => 
-      record.classId === classId && record.date === date
-    );
-  }
-  return mockAttendance.filter(record => record.classId === classId);
+// Generate attendance data for a date range
+const generateAttendanceRecord = (studentId, date, status = 'present') => ({
+  id: `att_${studentId}_${date.replace(/-/g, '')}`,
+  studentId,
+  date,
+  status,
+  markedBy: getTeacherForDate(date),
+  markedAt: `${date}T08:30:00Z`,
+  remarks: status === 'absent' ? 'No reason provided' : null
+});
+
+// Mock function to assign teacher to date (simplified)
+const getTeacherForDate = (date) => {
+  const teachers = ['T001', 'T002', 'T003', 'T004'];
+  const dayIndex = new Date(date).getDay();
+  return teachers[dayIndex % teachers.length];
 };
 
-export const getAttendanceByDate = (date) => {
-  return mockAttendance.filter(record => record.date === date);
-};
-
-export const getAttendanceSummary = (studentId) => {
-  return mockAttendanceSummary.find(summary => summary.studentId === studentId);
-};
-
-export const getClassAttendanceSummary = (classId, term = '1st Term') => {
-  return mockAttendanceSummary.filter(summary => 
-    summary.classId === classId && summary.term === term
-  );
-};
-
-export const calculateAttendancePercentage = (presentDays, totalDays) => {
-  if (totalDays === 0) return 0;
-  return Math.round((presentDays / totalDays) * 100 * 10) / 10;
-};
-
-export const getAttendanceStatus = (percentage) => {
-  if (percentage >= 95) return 'excellent';
-  if (percentage >= 85) return 'good';
-  if (percentage >= 75) return 'average';
-  return 'poor';
-};
-
-export const getAttendanceStatusColor = (status) => {
-  const colors = {
-    excellent: 'green',
-    good: 'blue', 
-    average: 'yellow',
-    poor: 'red'
-  };
-  return colors[status] || 'gray';
-};
-
-export const getAttendanceColorByStatus = (attendanceStatus) => {
-  const statusColors = {
-    present: 'green',
-    absent: 'red',
-    late: 'orange',
-    excused: 'blue'
-  };
-  return statusColors[attendanceStatus] || 'gray';
-};
-
-// Nigerian school calendar terms
-export const nigerianTerms = [
-  {
-    name: '1st Term',
-    startDate: '2024-09-16',
-    endDate: '2024-12-20',
-    totalWeeks: 14,
-    totalDays: 70,
-    holidays: ['Independence Day', 'Christmas Break']
-  },
-  {
-    name: '2nd Term',
-    startDate: '2025-01-08',
-    endDate: '2025-04-04',
-    totalWeeks: 13,
-    totalDays: 65,
-    holidays: ['New Year', 'Easter Break']
-  },
-  {
-    name: '3rd Term',
-    startDate: '2025-04-29',
-    endDate: '2025-07-25',
-    totalWeeks: 13,
-    totalDays: 65,
-    holidays: ['Children\'s Day', 'Democracy Day']
-  }
-];
-
-// Attendance analytics functions
-export const getTermAttendanceAnalytics = (term, academicYear) => {
-  const termRecords = mockAttendance.filter(record => 
-    record.term === term && record.academicYear === academicYear
-  );
+// Generate mock attendance for date range
+const generateTermAttendance = (studentIds, startDate, endDate) => {
+  const attendance = [];
+  const start = new Date(startDate);
+  const end = new Date(endDate);
   
-  const totalRecords = termRecords.length;
-  const presentCount = termRecords.filter(r => r.status === 'present').length;
-  const absentCount = termRecords.filter(r => r.status === 'absent').length;
-  const lateCount = termRecords.filter(r => r.status === 'late').length;
-  
-  return {
-    totalRecords,
-    presentCount,
-    absentCount, 
-    lateCount,
-    presentPercentage: totalRecords ? Math.round((presentCount / totalRecords) * 100) : 0,
-    absentPercentage: totalRecords ? Math.round((absentCount / totalRecords) * 100) : 0,
-    latePercentage: totalRecords ? Math.round((lateCount / totalRecords) * 100) : 0
-  };
-};
-
-export const getWeeklyAttendancePattern = (classId, weekStartDate) => {
-  const weekDays = [];
-  const startDate = new Date(weekStartDate);
-  
-  for (let i = 0; i < 5; i++) { // Monday to Friday
-    const currentDate = new Date(startDate);
-    currentDate.setDate(startDate.getDate() + i);
-    const dateStr = currentDate.toISOString().split('T')[0];
+  for (let date = new Date(start); date <= end; date.setDate(date.getDate() + 1)) {
+    // Skip weekends
+    if (date.getDay() === 0 || date.getDay() === 6) continue;
     
-    const dayRecords = mockAttendance.filter(record => 
-      record.classId === classId && record.date === dateStr
-    );
+    const dateString = date.toISOString().split('T')[0];
     
-    weekDays.push({
-      date: dateStr,
-      dayName: currentDate.toLocaleDateString('en-US', { weekday: 'long' }),
-      totalStudents: dayRecords.length,
-      present: dayRecords.filter(r => r.status === 'present').length,
-      absent: dayRecords.filter(r => r.status === 'absent').length,
-      late: dayRecords.filter(r => r.status === 'late').length
+    studentIds.forEach(studentId => {
+      // 90% attendance rate simulation
+      const isPresent = Math.random() > 0.1;
+      let status = isPresent ? attendanceStatus.PRESENT : attendanceStatus.ABSENT;
+      
+      // 5% chance of being late when present
+      if (isPresent && Math.random() < 0.05) {
+        status = attendanceStatus.LATE;
+      }
+      
+      attendance.push(generateAttendanceRecord(studentId, dateString, status));
     });
   }
   
-  return weekDays;
+  return attendance;
 };
+
+// Mock attendance data for current term
+export const mockAttendance = {
+  // First Term 2024/2025 (September - December)
+  firstTerm: generateTermAttendance(
+    ['S001', 'S002', 'S003', 'S004', 'S005', 'S006', 'S007', 'S008', 'S009', 'S010'],
+    '2024-09-02',
+    '2024-12-13'
+  )
+};
+
+// Attendance summary by student
+export const attendanceSummary = {
+  'S001': {
+    studentId: 'S001',
+    term: 'First Term',
+    totalDays: 72,
+    present: 68,
+    absent: 3,
+    late: 1,
+    excused: 0,
+    attendanceRate: 94.4
+  },
+  'S002': {
+    studentId: 'S002',
+    term: 'First Term',
+    totalDays: 72,
+    present: 65,
+    absent: 5,
+    late: 2,
+    excused: 0,
+    attendanceRate: 90.3
+  },
+  'S003': {
+    studentId: 'S003',
+    term: 'First Term',
+    totalDays: 72,
+    present: 70,
+    absent: 1,
+    late: 1,
+    excused: 0,
+    attendanceRate: 97.2
+  }
+};
+
+// Class attendance statistics
+export const classAttendanceStats = {
+  'JSS1A': {
+    classId: 'JSS1A',
+    totalStudents: 35,
+    averageAttendance: 92.8,
+    todayPresent: 33,
+    todayAbsent: 2,
+    weeklyTrend: [89, 91, 94, 88, 92, 95, 93]
+  },
+  'JSS2B': {
+    classId: 'JSS2B',
+    totalStudents: 38,
+    averageAttendance: 89.5,
+    todayPresent: 35,
+    todayAbsent: 3,
+    weeklyTrend: [87, 89, 91, 85, 90, 92, 88]
+  }
+};
+
+// Teacher attendance marking interface
+export const teacherAttendanceView = {
+  'T001': {
+    teacherId: 'T001',
+    assignedClasses: ['JSS1A', 'JSS2A'],
+    canMarkAttendance: true,
+    todayMarked: false,
+    pendingClasses: ['JSS1A'],
+    markedClasses: ['JSS2A']
+  },
+  'T002': {
+    teacherId: 'T002',
+    assignedClasses: ['JSS3B', 'SSS1A'],
+    canMarkAttendance: true,
+    todayMarked: true,
+    pendingClasses: [],
+    markedClasses: ['JSS3B', 'SSS1A']
+  }
+};
+
+// Parent attendance view (children only)
+export const parentAttendanceView = {
+  'P001': {
+    parentId: 'P001',
+    children: [
+      {
+        studentId: 'S001',
+        name: 'Adebayo Johnson',
+        class: 'JSS2A',
+        todayStatus: 'present',
+        weekAttendance: ['present', 'present', 'present', 'late', 'present'],
+        monthlyRate: 94.4
+      }
+    ]
+  },
+  'P002': {
+    parentId: 'P002',
+    children: [
+      {
+        studentId: 'S002',
+        name: 'Fatima Ibrahim',
+        class: 'SSS1B',
+        todayStatus: 'absent',
+        weekAttendance: ['present', 'present', 'absent', 'present', 'absent'],
+        monthlyRate: 88.2
+      },
+      {
+        studentId: 'S003',
+        name: 'Ibrahim Ibrahim',
+        class: 'JSS1A',
+        todayStatus: 'present',
+        weekAttendance: ['present', 'present', 'present', 'present', 'present'],
+        monthlyRate: 97.1
+      }
+    ]
+  }
+};
+
+// Attendance alerts for admin/parents
+export const attendanceAlerts = [
+  {
+    id: 'alert_001',
+    type: 'chronic_absence',
+    studentId: 'S004',
+    studentName: 'Chioma Okafor',
+    class: 'JSS3A',
+    message: 'Student has been absent for 3 consecutive days',
+    severity: 'high',
+    createdAt: '2024-12-10T09:00:00Z',
+    parentNotified: true
+  },
+  {
+    id: 'alert_002',
+    type: 'attendance_drop',
+    studentId: 'S005',
+    studentName: 'Musa Abdullahi',
+    class: 'SSS2C',
+    message: 'Attendance rate dropped below 85% this month',
+    severity: 'medium',
+    createdAt: '2024-12-09T14:30:00Z',
+    parentNotified: false
+  }
+];
 
 export default mockAttendance;

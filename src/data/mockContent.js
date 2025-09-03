@@ -1,392 +1,311 @@
-// Mock Website Content Data - Nigerian School Context
-export const mockContent = {
-  // About Us Content
+// File Location: src/data/mockContent.js
+// Website content manageable by admin users
+
+export const websiteContent = {
+  // Homepage content sections
+  homepage: {
+    hero: {
+      title: "Excellence in Nigerian Secondary Education",
+      subtitle: "Empowering Students for Academic Success and Character Development",
+      ctaText: "Apply for Admission",
+      ctaLink: "/admissions",
+      backgroundImage: "/images/hero-banner.jpg",
+      lastUpdated: "2024-12-05T10:30:00Z",
+      updatedBy: "A001"
+    },
+    features: [
+      {
+        id: "feature_001",
+        icon: "GraduationCap",
+        title: "Academic Excellence",
+        description: "Comprehensive JSS and SSS programs aligned with Nigerian curriculum standards",
+        isActive: true
+      },
+      {
+        id: "feature_002", 
+        icon: "Users",
+        title: "Qualified Teachers",
+        description: "Experienced educators committed to student success and character building",
+        isActive: true
+      },
+      {
+        id: "feature_003",
+        icon: "Trophy",
+        title: "WAEC Success",
+        description: "Outstanding WAEC and NECO results with 95% pass rate over 5 years",
+        isActive: true
+      }
+    ],
+    stats: {
+      students: 847,
+      teachers: 42,
+      years: 25,
+      waecPass: 95,
+      lastUpdated: "2024-12-01T09:00:00Z"
+    }
+  },
+
+  // About Us content
   about: {
-    overview: {
-      title: "About Molek School",
-      subtitle: "Excellence in Nigerian Secondary Education",
-      content: `
-        Established in 1985, Molek School has been a beacon of academic excellence in Lagos State, Nigeria. 
-        We are committed to providing comprehensive secondary education that prepares students for success 
-        in higher education and life beyond the classroom.
-        
-        Our school serves students from JSS 1 through SSS 3, offering both Junior and Senior Secondary 
-        programs aligned with the Nigerian National Curriculum. We pride ourselves on our holistic approach 
-        to education, combining academic rigor with character development and practical skills.
-      `,
-      achievements: [
-        "95% WAEC pass rate in 2024",
-        "Over 3,000 successful graduates since 1985",
-        "State recognition for academic excellence",
-        "Modern facilities and qualified teachers",
-        "Strong alumni network across various professions"
-      ]
+    mission: {
+      title: "Our Mission",
+      content: "To provide quality secondary education that develops intellectual, moral, and social competencies in students, preparing them for tertiary education and responsible citizenship.",
+      lastUpdated: "2024-11-20T14:15:00Z",
+      updatedBy: "A001"
     },
-    
-    visionMission: {
-      vision: "To be the leading secondary school in Nigeria, known for academic excellence, character development, and producing well-rounded graduates who contribute meaningfully to society.",
-      
-      mission: "To provide quality, affordable, and accessible secondary education that nurtures intellectual growth, moral values, and practical skills necessary for success in the 21st century.",
-      
-      coreValues: [
-        {
-          title: "Excellence",
-          description: "We strive for the highest standards in all our endeavors, encouraging students to reach their full potential."
-        },
-        {
-          title: "Integrity",
-          description: "We uphold honesty, transparency, and ethical behavior in all our interactions and decisions."
-        },
-        {
-          title: "Innovation",
-          description: "We embrace modern teaching methods and technology to enhance the learning experience."
-        },
-        {
-          title: "Inclusivity",
-          description: "We welcome students from all backgrounds and provide equal opportunities for success."
-        },
-        {
-          title: "Community",
-          description: "We foster a sense of belonging and encourage active participation in school and community life."
-        }
-      ]
+    vision: {
+      title: "Our Vision", 
+      content: "To be the leading secondary school in Nigeria, recognized for academic excellence, character development, and innovative teaching methodologies.",
+      lastUpdated: "2024-11-20T14:15:00Z",
+      updatedBy: "A001"
     },
-
     history: {
-      title: "Our Rich Heritage",
-      founding: {
-        year: 1985,
-        story: `Molek School was founded in 1985 by Chief Dr. Adebayo Molek, a visionary educator who believed 
-                in the transformative power of quality education. Starting with just 45 students and 8 teachers, 
-                the school has grown to become one of Lagos State's most respected secondary institutions.`
-      },
-      
+      title: "Our History",
+      content: "Established in 1999, our school has grown from humble beginnings with 50 students to becoming one of Nigeria's premier secondary institutions with over 800 students and a track record of academic excellence.",
       milestones: [
-        {
-          year: 1985,
-          event: "School establishment with 45 students",
-          description: "Molek School opens its doors with a vision for educational excellence"
-        },
-        {
-          year: 1990,
-          event: "First graduating class achieves 100% WAEC pass rate",
-          description: "Early demonstration of academic excellence sets the standard"
-        },
-        {
-          year: 1995,
-          event: "Introduction of computer studies program",
-          description: "Pioneer in ICT education in Lagos State secondary schools"
-        },
-        {
-          year: 2000,
-          event: "Construction of modern science laboratories",
-          description: "Investment in STEM education infrastructure"
-        },
-        {
-          year: 2010,
-          event: "Recognition as Lagos State Model School",
-          description: "Official recognition for outstanding educational standards"
-        },
-        {
-          year: 2020,
-          event: "Launch of digital learning platform",
-          description: "Adaptation to modern educational technologies"
-        },
-        {
-          year: 2024,
-          event: "New computer laboratory with 50 systems",
-          description: "Continued investment in ICT infrastructure"
-        }
-      ]
-    }
-  },
-
-  // Academics Content
-  academics: {
-    overview: {
-      title: "Academic Excellence",
-      subtitle: "Comprehensive Nigerian Secondary Education",
-      content: `
-        Our academic program is designed to meet the highest standards of Nigerian secondary education, 
-        preparing students for WAEC, NECO, and JAMB examinations while fostering critical thinking and 
-        practical skills development.
-      `,
-      
-      levels: [
-        {
-          name: "Junior Secondary School (JSS)",
-          grades: "JSS 1 - JSS 3",
-          ageRange: "10-13 years",
-          description: "Foundation years focusing on core subjects and skill development",
-          subjects: [
-            "Mathematics", "English Language", "Basic Science", "Social Studies",
-            "Computer Studies", "Religious Studies", "Physical Education",
-            "Fine Arts", "Music", "French Language"
-          ]
-        },
-        {
-          name: "Senior Secondary School (SSS)",
-          grades: "SSS 1 - SSS 3",
-          ageRange: "13-16 years",
-          description: "Specialized education with focus on chosen career paths",
-          streams: [
-            {
-              name: "Science",
-              subjects: ["Mathematics", "Physics", "Chemistry", "Biology", "Further Mathematics", "Computer Science"]
-            },
-            {
-              name: "Arts/Humanities",
-              subjects: ["Literature", "History", "Government", "Economics", "Geography", "Fine Arts"]
-            },
-            {
-              name: "Commercial",
-              subjects: ["Accounting", "Economics", "Commerce", "Business Studies", "Marketing", "Office Practice"]
-            }
-          ]
-        }
-      ]
-    },
-
-    curriculum: {
-      title: "Nigerian National Curriculum",
-      description: "Our curriculum is fully aligned with the Nigerian Educational Research and Development Council (NERDC) standards",
-      
-      features: [
-        "WAEC and NECO examination preparation",
-        "JAMB-focused teaching methodologies",
-        "Practical and laboratory work",
-        "Continuous assessment system",
-        "Co-curricular activities integration"
+        { year: 1999, event: "School established with 50 students" },
+        { year: 2005, event: "First WAEC batch achieves 100% pass rate" },
+        { year: 2010, event: "Expanded to accommodate 500 students" },
+        { year: 2015, event: "Introduced computer laboratory and science equipment" },
+        { year: 2020, event: "Launched digital learning platform during COVID-19" },
+        { year: 2024, event: "Achieved 25 years of educational excellence" }
       ],
-
-      assessmentSystem: {
-        title: "Assessment and Grading",
-        description: "We use a comprehensive assessment system that includes:",
-        components: [
-          "Continuous Assessment (40%)",
-          "Mid-term Examinations (20%)",
-          "End-term Examinations (40%)"
-        ],
-        
-        gradingScale: [
-          { grade: "A", range: "80-100", performance: "Excellent", color: "green" },
-          { grade: "B", range: "70-79", performance: "Very Good", color: "blue" },
-          { grade: "C", range: "60-69", performance: "Good", color: "yellow" },
-          { grade: "D", range: "50-59", performance: "Pass", color: "orange" },
-          { grade: "F", range: "0-49", performance: "Fail", color: "red" }
-        ]
-      }
+      lastUpdated: "2024-11-25T11:30:00Z",
+      updatedBy: "A001"
     }
   },
 
-  // Admissions Content
-  admissions: {
-    overview: {
-      title: "Join the Molek Family",
-      subtitle: "Start Your Journey to Excellence",
-      content: `
-        We welcome students who are ready to embrace academic challenges and personal growth. 
-        Our admission process is designed to identify students who will thrive in our learning environment.
-      `
-    },
-
-    requirements: {
+  // Academic content
+  academics: {
+    programs: {
       jss: {
-        title: "JSS 1 Admission Requirements",
-        documents: [
-          "Completed admission form",
-          "Birth certificate or age declaration",
-          "Primary school leaving certificate",
-          "Common entrance examination result",
-          "Two recent passport photographs",
-          "Medical certificate",
-          "Letter of good conduct from previous school"
-        ]
+        title: "Junior Secondary School (JSS 1-3)",
+        description: "Foundation years focusing on broad-based education covering all core subjects as required by the Nigerian Educational Research and Development Council (NERDC).",
+        subjects: "English, Mathematics, Basic Science, Basic Technology, Social Studies, Creative Arts, Physical Education, Agricultural Science, and Religious Studies",
+        duration: "3 years",
+        ageRange: "10-13 years"
       },
-      
       sss: {
-        title: "SSS 1 Admission Requirements", 
-        documents: [
-          "Completed admission form",
-          "JSS 3 certificate",
-          "Junior WAEC (BECE) result",
-          "Two recent passport photographs",
-          "Medical certificate",
-          "Letter of good conduct from previous school",
-          "Stream selection form (Science/Arts/Commercial)"
-        ]
+        title: "Senior Secondary School (SSS 1-3)", 
+        description: "Specialized education in three streams: Sciences, Arts/Humanities, and Commercial subjects, preparing students for WAEC, NECO, and JAMB examinations.",
+        streams: ["Sciences", "Arts/Humanities", "Commercial"],
+        duration: "3 years", 
+        ageRange: "13-16 years"
       }
     },
-
-    process: {
-      title: "Admission Process",
-      steps: [
+    calendar: {
+      currentYear: "2024/2025",
+      terms: [
         {
-          step: 1,
-          title: "Application Submission",
-          description: "Complete and submit admission form with required documents"
+          name: "First Term",
+          startDate: "2024-09-02",
+          endDate: "2024-12-13",
+          holidays: ["2024-10-01", "2024-12-25", "2024-12-26"]
         },
         {
-          step: 2,
-          title: "Entrance Examination",
-          description: "Sit for school entrance examination (Mathematics, English, General Knowledge)"
+          name: "Second Term", 
+          startDate: "2025-01-13",
+          endDate: "2025-04-04",
+          holidays: ["2025-01-01", "2025-04-18", "2025-04-21"]
         },
         {
-          step: 3,
-          title: "Interview Session",
-          description: "Attend interview with parents/guardians"
-        },
-        {
-          step: 4,
-          title: "Admission Decision",
-          description: "Receive admission decision within 2 weeks"
-        },
-        {
-          step: 5,
-          title: "Registration",
-          description: "Complete registration and fee payment upon acceptance"
+          name: "Third Term",
+          startDate: "2025-04-28", 
+          endDate: "2025-07-18",
+          holidays: ["2025-05-01", "2025-06-12", "2025-10-01"]
         }
-      ]
-    },
-
-    fees: {
-      title: "Fee Structure (2024/2025 Academic Year)",
-      terms: "Fees are payable termly (3 terms per academic year)",
-      
-      structure: [
-        {
-          level: "JSS 1",
-          tuition: 45000,
-          development: 5000,
-          books: 8000,
-          uniform: 12000,
-          total: 70000
-        },
-        {
-          level: "JSS 2",
-          tuition: 48000,
-          development: 5000,
-          books: 8000,
-          uniform: 0,
-          total: 61000
-        },
-        {
-          level: "JSS 3",
-          tuition: 50000,
-          development: 5000,
-          books: 8000,
-          uniform: 0,
-          total: 63000
-        },
-        {
-          level: "SSS 1",
-          tuition: 65000,
-          development: 8000,
-          books: 12000,
-          uniform: 15000,
-          total: 100000
-        },
-        {
-          level: "SSS 2",
-          tuition: 68000,
-          development: 8000,
-          books: 12000,
-          uniform: 0,
-          total: 88000
-        },
-        {
-          level: "SSS 3",
-          tuition: 70000,
-          development: 8000,
-          books: 12000,
-          uniform: 0,
-          total: 90000
-        }
-      ]
+      ],
+      lastUpdated: "2024-08-15T10:00:00Z",
+      updatedBy: "A001"
     }
   },
 
-  // Contact Information
-  contact: {
-    main: {
-      schoolName: "Molek School",
-      address: {
-        street: "15 Education Drive, Ikeja",
-        city: "Lagos",
-        state: "Lagos State",
-        country: "Nigeria",
-        postalCode: "100001"
-      },
-      
-      phone: {
-        main: "+234-801-234-5678",
-        office: "+234-809-876-5432",
-        admissions: "+234-807-123-4567"
-      },
-      
-      email: {
-        main: "info@molekschool.edu.ng",
-        admissions: "admissions@molekschool.edu.ng",
-        principal: "principal@molekschool.edu.ng"
-      },
-      
-      website: "www.molekschool.edu.ng",
-      
-      workingHours: {
-        weekdays: "7:30 AM - 4:00 PM",
-        saturday: "8:00 AM - 2:00 PM",
-        sunday: "Closed"
-      }
+  // News and events
+  news: [
+    {
+      id: "news_001",
+      title: "First Term Examination Results Released",
+      excerpt: "Congratulations to all students on outstanding performance in first term examinations.",
+      content: "We are pleased to announce the release of first term examination results. Students and parents can access results through the school portal. Overall class performance shows significant improvement across all levels.",
+      category: "Academic",
+      publishedAt: "2024-12-10T09:00:00Z",
+      publishedBy: "A001",
+      isPublished: true,
+      featured: true,
+      image: "/images/news/exam-results.jpg"
     },
+    {
+      id: "news_002",
+      title: "Inter-House Sports Competition 2024",
+      excerpt: "Annual inter-house sports competition scheduled for December 20-22, 2024.",
+      content: "All students are invited to participate in the annual inter-house sports competition. Events include athletics, football, basketball, and traditional games. Registration closes December 15th.",
+      category: "Sports",
+      publishedAt: "2024-12-08T14:30:00Z", 
+      publishedBy: "A001",
+      isPublished: true,
+      featured: false,
+      image: "/images/news/sports-day.jpg"
+    }
+  ],
 
-    departments: [
+  // Events
+  events: [
+    {
+      id: "event_001",
+      title: "Parent-Teacher Conference",
+      description: "First term parent-teacher conference to discuss student progress.",
+      date: "2024-12-18T09:00:00Z",
+      endDate: "2024-12-18T15:00:00Z", 
+      location: "School Main Hall",
+      category: "Academic",
+      isPublic: true,
+      createdBy: "A001",
+      lastUpdated: "2024-12-05T11:00:00Z"
+    },
+    {
+      id: "event_002",
+      title: "Cultural Day Celebration",
+      description: "Celebrating Nigerian cultural diversity with traditional dances, food, and exhibitions.",
+      date: "2024-12-20T10:00:00Z",
+      endDate: "2024-12-20T16:00:00Z",
+      location: "School Compound",
+      category: "Cultural", 
+      isPublic: true,
+      createdBy: "A001",
+      lastUpdated: "2024-12-03T08:45:00Z"
+    }
+  ],
+
+  // Contact information
+  contact: {
+    address: {
+      street: "No. 15, Education Avenue",
+      city: "Jos",
+      state: "Plateau State", 
+      country: "Nigeria",
+      postalCode: "930001"
+    },
+    phone: {
+      primary: "+234 73 123 4567",
+      secondary: "+234 73 123 4568"
+    },
+    email: {
+      general: "info@schoolname.edu.ng",
+      admissions: "admissions@schoolname.edu.ng",
+      principal: "principal@schoolname.edu.ng"
+    },
+    socialMedia: {
+      facebook: "https://facebook.com/schoolname",
+      twitter: "https://twitter.com/schoolname",
+      instagram: "https://instagram.com/schoolname"
+    },
+    lastUpdated: "2024-11-30T16:20:00Z",
+    updatedBy: "A001"
+  },
+
+  // Gallery content
+  gallery: {
+    categories: [
       {
-        name: "Principal's Office",
-        head: "Mrs. Adebisi Ogundimu",
-        phone: "+234-801-234-5678",
-        email: "principal@molekschool.edu.ng"
+        id: "academic",
+        name: "Academic Activities",
+        description: "Classroom learning and academic events",
+        imageCount: 24
       },
       {
-        name: "Academic Office",
-        head: "Mr. Tunde Adeyemi",
-        phone: "+234-809-876-5432",
-        email: "academics@molekschool.edu.ng"
+        id: "sports", 
+        name: "Sports & Recreation",
+        description: "Sports activities and competitions",
+        imageCount: 18
       },
       {
-        name: "Admissions Office", 
-        head: "Mrs. Funmi Adebayo",
-        phone: "+234-807-123-4567",
-        email: "admissions@molekschool.edu.ng"
+        id: "cultural",
+        name: "Cultural Events",
+        description: "Cultural celebrations and traditional activities",
+        imageCount: 15
       },
       {
-        name: "Bursary Department",
-        head: "Mr. Kunle Ogundimu",
-        phone: "+234-805-987-6543",
-        email: "bursary@molekschool.edu.ng"
+        id: "graduation",
+        name: "Graduation Ceremonies",
+        description: "Student graduation and prize-giving ceremonies",
+        imageCount: 12
+      }
+    ],
+    featured: [
+      {
+        id: "img_001",
+        title: "Science Laboratory Session",
+        category: "academic",
+        image: "/images/gallery/science-lab.jpg",
+        uploadedAt: "2024-12-01T10:00:00Z"
+      },
+      {
+        id: "img_002",
+        title: "Inter-House Football Match",
+        category: "sports",
+        image: "/images/gallery/football-match.jpg", 
+        uploadedAt: "2024-11-28T15:30:00Z"
       }
     ]
+  },
+
+  // Footer content
+  footer: {
+    description: "Committed to providing quality secondary education in Nigeria since 1999.",
+    quickLinks: [
+      { title: "About Us", url: "/about" },
+      { title: "Academics", url: "/academics" },
+      { title: "Admissions", url: "/admissions" },
+      { title: "News & Events", url: "/news-events" },
+      { title: "Contact", url: "/contact" }
+    ],
+    copyright: "© 2024 Nigerian Secondary School. All rights reserved.",
+    lastUpdated: "2024-12-01T12:00:00Z",
+    updatedBy: "A001"
   }
 };
 
-// Content helper functions
-export const getContentBySection = (section) => {
-  return mockContent[section] || null;
+// Content management settings
+export const contentSettings = {
+  allowedImageTypes: ['jpg', 'jpeg', 'png', 'gif'],
+  maxImageSize: 5242880, // 5MB
+  maxNewsLength: 5000,
+  maxEventDescription: 1000,
+  autoPublish: false,
+  requireApproval: true,
+  seoEnabled: true
 };
 
-export const getAboutContent = () => {
-  return mockContent.about;
+// Content editing permissions by role
+export const contentPermissions = {
+  super_admin: {
+    canEdit: true,
+    canPublish: true,
+    canDelete: true,
+    canManageUsers: true,
+    sections: ['all']
+  },
+  admin: {
+    canEdit: true,
+    canPublish: true,
+    canDelete: false,
+    canManageUsers: false,
+    sections: ['homepage', 'about', 'academics', 'news', 'events', 'gallery', 'contact']
+  },
+  teacher: {
+    canEdit: false,
+    canPublish: false,
+    canDelete: false,
+    canManageUsers: false,
+    sections: []
+  },
+  parent: {
+    canEdit: false,
+    canPublish: false, 
+    canDelete: false,
+    canManageUsers: false,
+    sections: []
+  }
 };
 
-export const getAcademicsContent = () => {
-  return mockContent.academics;
-};
-
-export const getAdmissionsContent = () => {
-  return mockContent.admissions;
-};
-
-export const getContactInfo = () => {
-  return mockContent.contact;
-};
-
-export default mockContent;
+export default websiteContent;

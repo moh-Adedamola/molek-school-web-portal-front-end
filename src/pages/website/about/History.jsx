@@ -1,180 +1,243 @@
-import { Link } from 'react-router-dom';
-import { useWebsiteContent } from '../../../context/WebsiteContentContext';
+// File: src/pages/website/about/History.jsx
+import React from 'react';
+import { Calendar, Award, Users, Building, BookOpen } from 'lucide-react';
 
 const History = () => {
-  const { content } = useWebsiteContent();
+  const milestones = [
+    {
+      year: '2009',
+      title: 'School Foundation',
+      description: 'Founded with a vision to provide quality secondary education in Lagos State, starting with 120 students and 12 teaching staff.',
+      icon: <Building className="w-5 h-5" />,
+      color: 'primary'
+    },
+    {
+      year: '2011',
+      title: 'First WAEC Results',
+      description: 'Achieved 85% pass rate in our first WAEC examination, establishing our reputation for academic excellence.',
+      icon: <Award className="w-5 h-5" />,
+      color: 'secondary'
+    },
+    {
+      year: '2013',
+      title: 'Infrastructure Expansion',
+      description: 'Opened new science laboratories, computer lab, and library to enhance learning facilities.',
+      icon: <BookOpen className="w-5 h-5" />,
+      color: 'accent'
+    },
+    {
+      year: '2015',
+      title: 'Student Population Growth',
+      description: 'Reached 400 students across JSS and SSS levels, requiring additional classrooms and teaching staff.',
+      icon: <Users className="w-5 h-5" />,
+      color: 'primary'
+    },
+    {
+      year: '2017',
+      title: 'Excellence Recognition',
+      description: 'Awarded "Best Secondary School in Lagos State" for outstanding academic performance and character development.',
+      icon: <Award className="w-5 h-5" />,
+      color: 'secondary'
+    },
+    {
+      year: '2019',
+      title: 'Digital Learning Initiative',
+      description: 'Introduced e-learning platforms and smart classroom technology to enhance teaching and learning.',
+      icon: <BookOpen className="w-5 h-5" />,
+      color: 'accent'
+    },
+    {
+      year: '2021',
+      title: 'COVID-19 Adaptation',
+      description: 'Successfully transitioned to online learning during the pandemic, maintaining educational continuity.',
+      icon: <BookOpen className="w-5 h-5" />,
+      color: 'primary'
+    },
+    {
+      year: '2023',
+      title: '95% WAEC Pass Rate',
+      description: 'Achieved our highest WAEC pass rate, with 95% of students obtaining five credits and above.',
+      icon: <Award className="w-5 h-5" />,
+      color: 'secondary'
+    },
+    {
+      year: '2024',
+      title: '15 Years of Excellence',
+      description: 'Celebrating 15 years of educational excellence with over 2,000 graduates making positive impacts in society.',
+      icon: <Calendar className="w-5 h-5" />,
+      color: 'accent'
+    }
+  ];
+
+  const achievements = [
+    {
+      metric: '2,000+',
+      label: 'Graduates',
+      description: 'Alumni making positive contributions to society'
+    },
+    {
+      metric: '95%',
+      label: 'WAEC Pass Rate',
+      description: 'Students achieving 5 credits and above'
+    },
+    {
+      metric: '850',
+      label: 'Current Students',
+      description: 'Across JSS and SSS levels'
+    },
+    {
+      metric: '45',
+      label: 'Teaching Staff',
+      description: 'Qualified and experienced educators'
+    }
+  ];
 
   return (
-    <div className="min-h-screen">
-      {/* Breadcrumb */}
-      <div className="bg-neutral-100 py-4">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <nav className="text-sm">
-            <Link to="/" className="text-primary-600 hover:text-primary-800">Home</Link>
-            <span className="mx-2 text-neutral-500">/</span>
-            <Link to="/about" className="text-primary-600 hover:text-primary-800">About</Link>
-            <span className="mx-2 text-neutral-500">/</span>
-            <span className="text-neutral-800">History</span>
-          </nav>
+    <div className="min-h-screen bg-neutral-50">
+      {/* Hero Section */}
+      <div className="hero-gradient text-white">
+        <div className="container-max section-padding">
+          <div className="max-w-4xl mx-auto text-center">
+            <h1 className="text-4xl md:text-5xl font-bold mb-6 text-balance">
+              Our History
+            </h1>
+            <p className="text-xl md:text-2xl text-blue-100 mb-8 text-balance">
+              15 years of educational excellence and community impact
+            </p>
+          </div>
         </div>
       </div>
 
-      {/* Hero Section */}
-      <section className="bg-gradient-to-br from-primary-600 to-primary-800 py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            Our History
-          </h1>
-          <p className="text-xl text-primary-200 max-w-2xl mx-auto">
-            A journey of growth, excellence, and educational transformation since {content.school.established}
-          </p>
-        </div>
-      </section>
-
-      {/* Timeline Section */}
-      <section className="py-16 bg-white">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-primary-800 mb-4">
-              Milestones & Achievements
-            </h2>
-            <p className="text-lg text-neutral-600">
-              Key moments that shaped {content.school.name} into what we are today
-            </p>
+      <div className="section-padding">
+        <div className="container-max">
+          
+          {/* Introduction */}
+          <div className="max-w-4xl mx-auto mb-12">
+            <div className="card-base text-center">
+              <h2 className="text-2xl font-bold text-neutral-800 mb-4">
+                Our Journey of Excellence
+              </h2>
+              <p className="text-lg text-neutral-700 text-balance">
+                Since our establishment in 2009, we have been committed to providing quality 
+                secondary education that transforms lives and builds character. Our journey 
+                has been marked by continuous growth, innovation, and unwavering dedication 
+                to academic excellence.
+              </p>
+            </div>
           </div>
 
-          <div className="relative">
-            {/* Timeline Line */}
-            <div className="absolute left-1/2 transform -translate-x-px h-full w-0.5 bg-gradient-to-b from-primary-400 to-secondary-400"></div>
+          {/* Timeline */}
+          <div className="max-w-4xl mx-auto mb-12">
+            <h2 className="text-2xl font-bold text-center text-neutral-800 mb-8">
+              Major Milestones
+            </h2>
+            
+            <div className="relative">
+              {/* Timeline Line */}
+              <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-neutral-300"></div>
+              
+              <div className="space-y-8">
+                {milestones.map((milestone, index) => {
+                  const colorClasses = {
+                    primary: 'bg-primary-100 text-primary-600',
+                    secondary: 'bg-secondary-100 text-secondary-600',
+                    accent: 'bg-accent-100 text-accent-600'
+                  };
 
-            {/* Timeline Items */}
-            <div className="space-y-12">
-              {content.history.milestones.map((milestone, index) => (
-                <div key={index} className={`relative flex items-center ${index % 2 === 0 ? 'justify-start' : 'justify-end'}`}>
-                  {/* Timeline Marker */}
-                  <div className="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-accent-500 rounded-full border-4 border-white shadow-lg z-10"></div>
-                  
-                  {/* Content Card */}
-                  <div className={`w-5/12 ${index % 2 === 0 ? 'mr-8' : 'ml-8'}`}>
-                    <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-200 border-l-4 border-accent-500">
-                      {/* Year Badge */}
-                      <div className="inline-block bg-gradient-to-r from-accent-500 to-accent-600 text-white px-4 py-2 rounded-full text-sm font-bold mb-4">
-                        {milestone.year}
+                  return (
+                    <div key={index} className="relative flex gap-6 items-start">
+                      {/* Timeline Dot */}
+                      <div className={`relative z-10 w-16 h-16 rounded-full flex items-center justify-center ${colorClasses[milestone.color]} flex-shrink-0`}>
+                        {milestone.icon}
                       </div>
                       
-                      <h3 className="text-xl font-semibold text-primary-800 mb-3">
-                        {milestone.event}
-                      </h3>
-                      
-                      <p className="text-neutral-700 leading-relaxed">
-                        {milestone.description}
-                      </p>
+                      {/* Content */}
+                      <div className="card-base flex-1 ml-2">
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3">
+                          <h3 className="text-xl font-semibold text-neutral-800">
+                            {milestone.title}
+                          </h3>
+                          <span className="text-lg font-bold text-neutral-600 mt-1 sm:mt-0">
+                            {milestone.year}
+                          </span>
+                        </div>
+                        <p className="text-neutral-700 text-balance">
+                          {milestone.description}
+                        </p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+
+          {/* Achievements Summary */}
+          <div className="max-w-4xl mx-auto mb-12">
+            <div className="card-base">
+              <h2 className="text-2xl font-bold text-center text-neutral-800 mb-8">
+                Our Achievements
+              </h2>
+              
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                {achievements.map((achievement, index) => (
+                  <div key={index} className="text-center">
+                    <div className="text-3xl md:text-4xl font-bold text-primary-600 mb-2">
+                      {achievement.metric}
+                    </div>
+                    <div className="text-lg font-semibold text-neutral-800 mb-1">
+                      {achievement.label}
+                    </div>
+                    <div className="text-sm text-neutral-600 text-balance">
+                      {achievement.description}
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* Legacy Section */}
-      <section className="py-16 bg-gradient-to-br from-primary-50 to-secondary-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="text-3xl font-bold text-primary-800 mb-6">
-                Our Legacy Continues
-              </h2>
-              <p className="text-lg text-neutral-700 mb-6 leading-relaxed">
-                From humble beginnings with just 50 students, {content.school.name} has grown 
-                to become one of Lagos State's premier secondary schools. Our commitment to 
-                academic excellence, character development, and innovation has remained unwavering 
-                throughout our journey.
-              </p>
-              <p className="text-lg text-neutral-700 mb-6 leading-relaxed">
-                Today, we continue to build on our rich heritage while embracing modern 
-                educational practices and technology to prepare our students for the challenges 
-                of tomorrow.
-              </p>
+          {/* Legacy & Future */}
+          <div className="max-w-4xl mx-auto">
+            <div className="grid md:grid-cols-2 gap-8">
+              <div className="card-base">
+                <h3 className="text-xl font-bold text-neutral-800 mb-4 flex items-center gap-2">
+                  <Award className="w-5 h-5 text-secondary-600" />
+                  Our Legacy
+                </h3>
+                <p className="text-neutral-700 mb-4 text-balance">
+                  Over the past 15 years, we have educated over 2,000 students who have 
+                  gone on to excel in universities, professional careers, and leadership 
+                  positions across Nigeria and internationally.
+                </p>
+                <p className="text-neutral-700 text-balance">
+                  Our alumni serve as doctors, engineers, teachers, business leaders, 
+                  and public servants, carrying forward the values and excellence 
+                  instilled during their time at our school.
+                </p>
+              </div>
               
-              <div className="bg-white rounded-2xl p-6 shadow-lg">
-                <h3 className="text-xl font-semibold text-secondary-800 mb-4">
+              <div className="card-base">
+                <h3 className="text-xl font-bold text-neutral-800 mb-4 flex items-center gap-2">
+                  <BookOpen className="w-5 h-5 text-primary-600" />
                   Looking Forward
                 </h3>
-                <ul className="space-y-2 text-neutral-700">
-                  <li className="flex items-center">
-                    <span className="text-secondary-500 mr-2">✓</span>
-                    Expanding our STEM programs and facilities
-                  </li>
-                  <li className="flex items-center">
-                    <span className="text-secondary-500 mr-2">✓</span>
-                    Enhancing digital learning capabilities
-                  </li>
-                  <li className="flex items-center">
-                    <span className="text-secondary-500 mr-2">✓</span>
-                    Strengthening community partnerships
-                  </li>
-                  <li className="flex items-center">
-                    <span className="text-secondary-500 mr-2">✓</span>
-                    Maintaining our academic excellence standards
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            <div className="space-y-6">
-              {/* Achievement Cards */}
-              <div className="bg-white rounded-2xl p-6 shadow-lg border-l-4 border-primary-500">
-                <h3 className="text-xl font-semibold text-primary-800 mb-2">
-                  Academic Excellence
-                </h3>
-                <p className="text-neutral-700">
-                  Consistent 95%+ WAEC pass rates for over a decade
+                <p className="text-neutral-700 mb-4 text-balance">
+                  As we move into our next chapter, we remain committed to innovation 
+                  in education, embracing new technologies and teaching methods while 
+                  maintaining our core values and academic standards.
                 </p>
-              </div>
-
-              <div className="bg-white rounded-2xl p-6 shadow-lg border-l-4 border-secondary-500">
-                <h3 className="text-xl font-semibold text-secondary-800 mb-2">
-                  Infrastructure Growth
-                </h3>
-                <p className="text-neutral-700">
-                  Modern facilities including science labs, computer center, and library
-                </p>
-              </div>
-
-              <div className="bg-white rounded-2xl p-6 shadow-lg border-l-4 border-accent-500">
-                <h3 className="text-xl font-semibold text-accent-800 mb-2">
-                  Recognition & Awards
-                </h3>
-                <p className="text-neutral-700">
-                  Multiple awards for educational excellence and community impact
+                <p className="text-neutral-700 text-balance">
+                  We continue to invest in infrastructure, technology, and professional 
+                  development to ensure our students are prepared for the challenges 
+                  and opportunities of the 21st century.
                 </p>
               </div>
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* CTA Section */}
-      <section className="py-16 bg-gradient-to-r from-primary-600 to-secondary-600">
-        <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-white mb-4">
-            Be Part of Our Continuing Story
-          </h2>
-          <p className="text-xl text-primary-100 mb-8">
-            Join us as we write the next chapter of excellence in Nigerian education
-          </p>
-          <div className="space-x-4">
-            <Link to="/admissions" className="btn-accent px-8 py-3 rounded-lg font-medium">
-              Apply Today
-            </Link>
-            <Link to="/about/leadership" className="bg-white text-primary-700 px-8 py-3 rounded-lg font-medium hover:bg-primary-50 transition-colors">
-              Meet Our Team
-            </Link>
-          </div>
         </div>
-      </section>
+      </div>
     </div>
   );
 };

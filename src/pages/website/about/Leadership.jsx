@@ -1,185 +1,201 @@
-import { Link } from 'react-router-dom';
-import { useWebsiteContent } from '../../../context/WebsiteContentContext';
+// File: src/pages/website/about/Leadership.jsx
+import React from 'react';
+import { Award, BookOpen, Users, Target } from 'lucide-react';
 
 const Leadership = () => {
-  const { content } = useWebsiteContent();
+  const leadershipTeam = [
+    {
+      id: 1,
+      name: 'Mrs. Adunni Olatunji',
+      position: 'Principal',
+      qualification: 'M.Ed Educational Administration, B.Ed Mathematics',
+      experience: '20 years in Education Leadership',
+      bio: 'Mrs. Olatunji brings over two decades of educational excellence to our institution. Her visionary leadership has transformed our school into one of Lagos State\'s premier secondary schools. She is passionate about creating an environment where every student can achieve their full potential.',
+      achievements: [
+        'Led school to 95% WAEC pass rate',
+        'Awarded Best Principal Lagos State 2023',
+        'Implemented digital learning systems',
+        'Established scholarship program for underprivileged students'
+      ],
+      image: null
+    },
+    {
+      id: 2,
+      name: 'Mr. Chike Okonkwo',
+      position: 'Vice Principal (Academics)',
+      qualification: 'M.Sc Physics, B.Ed Physics, Advanced Diploma in Educational Leadership',
+      experience: '15 years in Academic Leadership',
+      bio: 'Mr. Okonkwo oversees our academic programs and curriculum development. His expertise in sciences and commitment to academic excellence has helped establish our reputation for outstanding WAEC and NECO results. He works closely with teachers to ensure quality instruction across all subjects.',
+      achievements: [
+        'Developed comprehensive WAEC preparation program',
+        'Increased science subjects pass rate to 98%',
+        'Introduced peer tutoring system',
+        'Led curriculum alignment with national standards'
+      ],
+      image: null
+    },
+    {
+      id: 3,
+      name: 'Mrs. Blessing Nwosu',
+      position: 'Vice Principal (Administration)',
+      qualification: 'MBA Human Resources, B.Sc Business Administration',
+      experience: '12 years in Educational Administration',
+      bio: 'Mrs. Nwosu manages the administrative operations of the school, ensuring smooth day-to-day functioning. Her background in business administration brings efficiency and modern management practices to our institution, creating an environment conducive to learning.',
+      achievements: [
+        'Streamlined student enrollment process',
+        'Implemented parent communication system',
+        'Established partnership with local businesses',
+        'Led school safety and security improvements'
+      ],
+      image: null
+    },
+    {
+      id: 4,
+      name: 'Mr. Olumide Adeyemi',
+      position: 'Dean of Students',
+      qualification: 'B.Ed Guidance & Counseling, M.A Psychology',
+      experience: '10 years in Student Affairs',
+      bio: 'Mr. Adeyemi is responsible for student welfare, discipline, and counseling services. His approach combines firmness with compassion, helping students develop strong character while providing support for their personal and academic challenges.',
+      achievements: [
+        'Established student mentorship program',
+        'Reduced disciplinary issues by 60%',
+        'Introduced career guidance workshops',
+        'Created peer support networks'
+      ],
+      image: null
+    }
+  ];
 
   return (
-    <div className="min-h-screen">
-      {/* Breadcrumb */}
-      <div className="bg-neutral-100 py-4">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <nav className="text-sm">
-            <Link to="/" className="text-primary-600 hover:text-primary-800">Home</Link>
-            <span className="mx-2 text-neutral-500">/</span>
-            <Link to="/about" className="text-primary-600 hover:text-primary-800">About</Link>
-            <span className="mx-2 text-neutral-500">/</span>
-            <span className="text-neutral-800">Leadership</span>
-          </nav>
+    <div className="min-h-screen bg-neutral-50">
+      {/* Hero Section */}
+      <div className="hero-gradient text-white">
+        <div className="container-max section-padding">
+          <div className="max-w-4xl mx-auto text-center">
+            <h1 className="text-4xl md:text-5xl font-bold mb-6 text-balance">
+              School Leadership
+            </h1>
+            <p className="text-xl md:text-2xl text-blue-100 mb-8 text-balance">
+              Meet the dedicated leaders guiding our educational mission
+            </p>
+          </div>
         </div>
       </div>
 
-      {/* Hero Section */}
-      <section className="bg-gradient-to-br from-primary-600 to-primary-800 py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            Leadership Team
-          </h1>
-          <p className="text-xl text-primary-200 max-w-2xl mx-auto">
-            Meet the dedicated leaders guiding {content.school.name} towards excellence
-          </p>
-        </div>
-      </section>
-
-      {/* Leadership Cards */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-primary-800 mb-4">
-              Our Leadership
-            </h2>
-            <p className="text-lg text-neutral-600 max-w-2xl mx-auto">
-              Experienced educators and administrators committed to student success
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {content.leadership.map((leader, index) => (
-              <div key={index} className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200 overflow-hidden border border-neutral-200">
-                {/* Profile Image Placeholder */}
-                <div className="bg-gradient-to-br from-primary-100 to-secondary-100 h-64 flex items-center justify-center">
-                  <div className="w-32 h-32 bg-primary-200 rounded-full flex items-center justify-center">
-                    <span className="text-4xl text-primary-700">👨‍💼</span>
+      {/* Leadership Team */}
+      <div className="section-padding">
+        <div className="container-max">
+          <div className="space-y-8">
+            {leadershipTeam.map((leader, index) => (
+              <div key={leader.id} className="card-base">
+                <div className={`grid lg:grid-cols-${index === 0 ? '3' : '2'} gap-8 items-start`}>
+                  {/* Photo */}
+                  <div className="flex justify-center lg:justify-start">
+                    <div className={`${index === 0 ? 'w-48 h-48' : 'w-32 h-32'} rounded-full overflow-hidden bg-neutral-200`}>
+                      {leader.image ? (
+                        <img
+                          src={leader.image}
+                          alt={leader.name}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center bg-primary-100 text-primary-600 font-bold text-3xl">
+                          {leader.name.charAt(0)}
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div>
-                
-                {/* Profile Info */}
-                <div className="p-6">
-                  <h3 className="text-2xl font-bold text-primary-800 mb-2">
-                    {leader.name}
-                  </h3>
-                  <p className="text-lg font-semibold text-secondary-600 mb-3">
-                    {leader.position}
-                  </p>
-                  
-                  <div className="space-y-3">
-                    <div className="bg-primary-50 rounded-lg p-3">
-                      <h4 className="text-sm font-semibold text-primary-800 mb-1">
-                        Qualification
-                      </h4>
-                      <p className="text-sm text-primary-700">
+
+                  {/* Information */}
+                  <div className={`${index === 0 ? 'lg:col-span-2' : ''} space-y-4`}>
+                    <div>
+                      <h2 className={`${index === 0 ? 'text-3xl' : 'text-2xl'} font-bold text-neutral-800 mb-2`}>
+                        {leader.name}
+                      </h2>
+                      <p className="text-primary-600 font-semibold text-lg mb-2">
+                        {leader.position}
+                      </p>
+                      <p className="text-neutral-600 text-sm mb-2">
                         {leader.qualification}
                       </p>
-                    </div>
-                    
-                    <div className="bg-secondary-50 rounded-lg p-3">
-                      <h4 className="text-sm font-semibold text-secondary-800 mb-1">
-                        Experience
-                      </h4>
-                      <p className="text-sm text-secondary-700">
-                        {leader.experience} in educational leadership
+                      <p className="text-neutral-600 text-sm font-medium">
+                        {leader.experience}
                       </p>
+                    </div>
+
+                    <p className="text-neutral-700 leading-relaxed text-balance">
+                      {leader.bio}
+                    </p>
+
+                    {/* Achievements */}
+                    <div>
+                      <h3 className="font-semibold text-neutral-800 mb-3 flex items-center gap-2">
+                        <Award className="w-4 h-4 text-accent-600" />
+                        Key Achievements
+                      </h3>
+                      <div className="grid sm:grid-cols-2 gap-2">
+                        {leader.achievements.map((achievement, idx) => (
+                          <div key={idx} className="flex items-start gap-2">
+                            <div className="w-1.5 h-1.5 bg-secondary-600 rounded-full mt-2 flex-shrink-0"></div>
+                            <p className="text-sm text-neutral-600">{achievement}</p>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             ))}
           </div>
-        </div>
-      </section>
 
-      {/* Leadership Message */}
-      <section className="py-16 bg-gradient-to-br from-primary-50 to-secondary-50">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-white rounded-2xl shadow-xl p-8 lg:p-12">
-            <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold text-primary-800 mb-4">
-                Message from Leadership
-              </h2>
-              <div className="w-16 h-1 bg-gradient-to-r from-primary-500 to-secondary-500 mx-auto rounded-full"></div>
-            </div>
-            
-            <div className="prose prose-lg max-w-none text-center">
-              <p className="text-xl text-neutral-700 leading-relaxed mb-6">
-                "At {content.school.name}, we believe that every student has the potential for greatness. 
-                Our leadership team is committed to creating an environment where academic excellence, 
-                character development, and innovation thrive together."
-              </p>
-              
-              <p className="text-lg text-neutral-600 leading-relaxed mb-8">
-                "We work tirelessly to ensure that our JSS and SSS programs not only prepare students 
-                for WAEC and NECO examinations but also equip them with the skills and values needed 
-                to succeed in an ever-changing world. Our door is always open to students, parents, 
-                and the community as we work together towards educational excellence."
-              </p>
-              
-              <div className="bg-gradient-to-r from-primary-600 to-secondary-600 rounded-2xl p-6 text-white">
-                <p className="text-lg font-semibold">
-                  Together, we are shaping the leaders of tomorrow.
-                </p>
-                <p className="text-sm mt-2 opacity-90">
-                  - The Leadership Team, {content.school.name}
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Leadership Principles */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-primary-800 mb-4">
-              Our Leadership Principles
+          {/* Leadership Philosophy */}
+          <div className="card-base mt-12">
+            <h2 className="text-2xl font-bold text-center text-neutral-800 mb-8">
+              Our Leadership Philosophy
             </h2>
-            <p className="text-lg text-neutral-600">
-              The core principles that guide our leadership approach
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              { title: "Servant Leadership", description: "Leading by serving our students, staff, and community", icon: "🤝" },
-              { title: "Transparency", description: "Open communication and accountability in all our actions", icon: "🔍" },
-              { title: "Innovation", description: "Embracing change and continuous improvement in education", icon: "💡" },
-              { title: "Excellence", description: "Setting high standards and achieving outstanding results", icon: "⭐" }
-            ].map((principle, index) => (
-              <div key={index} className="bg-gradient-to-br from-neutral-50 to-primary-50 rounded-2xl p-6 text-center border border-primary-200 hover:shadow-lg transition-shadow duration-200">
-                <div className="w-16 h-16 bg-primary-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <span className="text-2xl text-white">{principle.icon}</span>
+            <div className="grid md:grid-cols-3 gap-8">
+              <div className="text-center">
+                <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Users className="w-8 h-8 text-primary-600" />
                 </div>
-                <h3 className="text-xl font-semibold text-primary-800 mb-3">
-                  {principle.title}
+                <h3 className="text-lg font-semibold text-neutral-800 mb-3">
+                  Collaborative Leadership
                 </h3>
-                <p className="text-sm text-neutral-700 leading-relaxed">
-                  {principle.description}
+                <p className="text-neutral-600 text-sm text-balance">
+                  We believe in shared leadership that involves teachers, 
+                  students, and parents in decision-making processes.
                 </p>
               </div>
-            ))}
+              
+              <div className="text-center">
+                <div className="w-16 h-16 bg-secondary-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <BookOpen className="w-8 h-8 text-secondary-600" />
+                </div>
+                <h3 className="text-lg font-semibold text-neutral-800 mb-3">
+                  Academic Excellence
+                </h3>
+                <p className="text-neutral-600 text-sm text-balance">
+                  Our leadership is committed to maintaining the highest 
+                  academic standards while supporting every student's journey.
+                </p>
+              </div>
+              
+              <div className="text-center">
+                <div className="w-16 h-16 bg-accent-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Target className="w-8 h-8 text-accent-600" />
+                </div>
+                <h3 className="text-lg font-semibold text-neutral-800 mb-3">
+                  Continuous Improvement
+                </h3>
+                <p className="text-neutral-600 text-sm text-balance">
+                  We are committed to ongoing professional development 
+                  and innovation in educational practices.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-16 bg-gradient-to-r from-secondary-600 to-accent-600">
-        <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-white mb-4">
-            Experience Leadership Excellence
-          </h2>
-          <p className="text-xl text-secondary-100 mb-8">
-            Join a school where strong leadership drives exceptional results
-          </p>
-          <div className="space-x-4">
-            <Link to="/admissions" className="bg-white text-secondary-700 px-8 py-3 rounded-lg font-medium hover:bg-secondary-50 transition-colors">
-              Apply Now
-            </Link>
-            <Link to="/about/staff" className="btn-accent px-8 py-3 rounded-lg font-medium">
-              Meet Our Staff
-            </Link>
-          </div>
-        </div>
-      </section>
+      </div>
     </div>
   );
 };

@@ -1,109 +1,58 @@
 const Table = ({ 
-  children, 
-  className = '',
-  striped = true,
-  hover = true,
-  responsive = true,
+  headers, 
+  data, 
+  onRowClick,
+  role = 'admin',
+  className = '' 
 }) => {
-  const baseClasses = 'w-full text-sm text-left';
-  const responsiveClasses = responsive ? 'overflow-x-auto' : '';
-  
-  const tableClasses = `${baseClasses} ${className}`;
-  
+  const roleColors = {
+    'super-admin': 'bg-blue-800 text-white',
+    admin: 'bg-blue-700 text-white',
+    teacher: 'bg-emerald-600 text-white',
+    parent: 'bg-blue-600 text-white'
+  };
+
+  const headerClass = roleColors[role] || roleColors.admin;
+
   return (
-    <div className={`${responsiveClasses} rounded-lg border border-neutral-200 bg-white`}>
-      <table className={tableClasses}>
-        {children}
+    <div className={`overflow-x-auto rounded-lg border border-gray-200 ${className}`}>
+      <table className="min-w-full divide-y divide-gray-200">
+        <thead className={headerClass}>
+          <tr>
+            {headers.map((header, index) => (
+              <th 
+                key={index}
+                className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider"
+              >
+                {header}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody className="bg-white divide-y divide-gray-200">
+          {data.map((row, rowIndex) => (
+            <tr 
+              key={rowIndex}
+              onClick={() => onRowClick && onRowClick(row)}
+              className={`${onRowClick ? 'cursor-pointer hover:bg-gray-50' : ''} transition-colors`}
+            >
+              {Object.values(row).map((cell, cellIndex) => (
+                <td key={cellIndex} className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  {cell}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
       </table>
+      
+      {data.length === 0 && (
+        <div className="text-center py-8 text-gray-500">
+          No data available
+        </div>
+      )}
     </div>
   );
 };
-
-const TableHeader = ({ children, className = '' }) => (
-  <thead className={`bg-primary-600 text-white ${className}`}>
-    {children}
-  </thead>
-);
-
-const TableBody = ({ children, className = '', striped = true, hover = true }) => {
-  const stripedClasses = striped ? '[&>tr:nth-child(even)]:bg-neutral-50' : '';
-  const hoverClasses = hover ? '[&>tr:hover]:bg-neutral-100' : '';
-  
-  return (
-    <tbody className={`divide-y divide-neutral-200 ${stripedClasses} ${hoverClasses} ${className}`}>
-      {children}
-    </tbody>
-  );
-};
-
-const TableRow = ({ children, className = '', variant = 'default' }) => {
-  const variants = {
-    default: '',
-    success: 'bg-secondary-50 hover:bg-secondary-100',
-    warning: 'bg-accent-50 hover:bg-accent-100',
-    error: 'bg-red-50 hover:bg-red-100',
-  };
-  
-  return (
-    <tr className={`${variants[variant]} ${className}`}>
-      {children}
-    </tr>
-  );
-};
-
-const TableHead = ({ children, className = '', sortable = false, sortDirection }) => {
-  const baseClasses = 'px-6 py-4 text-left text-xs font-medium uppercase tracking-wider';
-  const sortableClasses = sortable ? 'cursor-pointer select-none hover:bg-primary-700' : '';
-  
-  return (
-    <th className={`${baseClasses} ${sortableClasses} ${className}`}>
-      <div className="flex items-center space-x-1">
-        <span>{children}</span>
-        {sortable && (
-          <span className="ml-2">
-            {sortDirection === 'asc' ? '↑' : sortDirection === 'desc' ? '↓' : '↕'}
-          </span>
-        )}
-      </div>
-    </th>
-  );
-};
-
-const TableCell = ({ children, className = '', align = 'left' }) => {
-  const alignClasses = {
-    left: 'text-left',
-    center: 'text-center',
-    right: 'text-right',
-  };
-  
-  return (
-    <td className={`px-6 py-4 whitespace-nowrap text-neutral-900 ${alignClasses[align]} ${className}`}>
-      {children}
-    </td>
-  );
-};
-
-const TableCaption = ({ children, className = '' }) => (
-  <caption className={`py-4 text-sm text-neutral-600 ${className}`}>
-    {children}
-  </caption>
-);
-
-// Empty state component
-const TableEmpty = ({ message = "No data available", className = '' }) => (
-  <TableRow>
-    <TableCell className={`text-center py-12 text-neutral-500 italic ${className}`} colSpan="100%">
-      {message}
-    </TableCell>
-  </TableRow>
-);
-
-Table.Header = TableHeader;
-Table.Body = TableBody;
-Table.Row = TableRow;
-Table.Head = TableHead;
-Table.Cell = TableCell;
-Table.Caption = TableCaption;
-Table.Empty = TableEmpty;
 
 export default Table;

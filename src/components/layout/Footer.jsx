@@ -1,279 +1,203 @@
+// File: src/components/layout/Footer.jsx
+// Website footer with Nigerian school context and comprehensive links
+
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { 
-  GraduationCap,
-  MapPin,
-  Phone,
-  Mail,
-  Clock,
-  Facebook,
-  Twitter,
-  Instagram,
-  Youtube,
-  Award,
-  BookOpen,
-  Users,
-  Calendar,
-  ExternalLink,
-  Heart
+  GraduationCap, 
+  Phone, 
+  Mail, 
+  MapPin, 
+  Facebook, 
+  Twitter, 
+  Instagram, 
+  Youtube 
 } from 'lucide-react';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
+  const quickLinks = [
+    { name: 'About Us', href: '/about' },
+    { name: 'Academics', href: '/academics' },
+    { name: 'Admissions', href: '/admissions' },
+    { name: 'News & Events', href: '/news-events' },
+    { name: 'Gallery', href: '/gallery' },
+    { name: 'Contact', href: '/contact' }
+  ];
+
+  const academicLinks = [
+    { name: 'JSS 1-3 Programs', href: '/academics/subjects' },
+    { name: 'SSS 1-3 Programs', href: '/academics/subjects' },
+    { name: 'WAEC Preparation', href: '/academics/curriculum' },
+    { name: 'NECO Preparation', href: '/academics/curriculum' },
+    { name: 'Academic Calendar', href: '/academics/calendar' },
+    { name: 'Tuition Fees', href: '/academics/fees' }
+  ];
+
+  const importantLinks = [
+    { name: 'Admission Process', href: '/admissions/how-to-apply' },
+    { name: 'Staff Directory', href: '/about/staff' },
+    { name: 'School Handbook', href: '#' },
+    { name: 'Parent Portal', href: '/auth/login' },
+    { name: 'Teacher Portal', href: '/auth/login' },
+    { name: 'Emergency Contacts', href: '/contact/information' }
+  ];
+
   return (
-    <footer className="bg-primary-900 text-white">
+    <footer className="bg-primary-800 text-white">
       {/* Main Footer Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="container-max py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* School Information */}
-          <div className="lg:col-span-2">
-            <div className="flex items-center mb-4">
-              <div className="p-2 bg-white bg-opacity-10 rounded-xl backdrop-blur-sm mr-3">
-                <GraduationCap className="h-8 w-8 text-white" />
+          <div className="lg:col-span-1">
+            <div className="flex items-center space-x-3 mb-6">
+              <div className="bg-white p-2 rounded-lg">
+                <GraduationCap className="h-6 w-6 text-primary-600" />
               </div>
               <div>
-                <h3 className="text-xl font-bold text-white">Molek School</h3>
-                <p className="text-primary-200 text-sm">Excellence in Nigerian Education</p>
+                <h3 className="text-lg font-bold">Nigerian Secondary School</h3>
+                <p className="text-primary-200 text-sm">Excellence in Education</p>
               </div>
             </div>
-            
-            <p className="text-primary-200 mb-6 text-sm leading-relaxed">
-              Dedicated to nurturing young minds and preparing students for success in their 
-              academic journey. We combine traditional Nigerian values with modern educational 
-              approaches to create well-rounded individuals ready for the challenges of tomorrow.
+            <p className="text-primary-100 text-sm mb-6 leading-relaxed">
+              Committed to providing quality secondary education following the Nigerian 
+              curriculum with focus on academic excellence, character development, and 
+              preparation for WAEC and NECO examinations.
             </p>
-
-            {/* Quick Stats */}
-            <div className="grid grid-cols-2 gap-4 mb-6">
-              <div className="bg-white bg-opacity-5 rounded-lg p-3">
-                <div className="flex items-center">
-                  <Users className="h-5 w-5 text-secondary-400 mr-2" />
-                  <div>
-                    <p className="text-lg font-semibold text-white">245+</p>
-                    <p className="text-xs text-primary-300">Students</p>
-                  </div>
-                </div>
-              </div>
-              <div className="bg-white bg-opacity-5 rounded-lg p-3">
-                <div className="flex items-center">
-                  <Award className="h-5 w-5 text-accent-400 mr-2" />
-                  <div>
-                    <p className="text-lg font-semibold text-white">15+</p>
-                    <p className="text-xs text-primary-300">Years Excellence</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Contact Information */}
-            <div className="space-y-3">
-              <div className="flex items-center text-sm">
-                <MapPin className="h-4 w-4 text-primary-400 mr-3 flex-shrink-0" />
-                <span className="text-primary-200">
-                  123 Education Avenue, Victoria Island, Lagos State, Nigeria
-                </span>
-              </div>
-              <div className="flex items-center text-sm">
-                <Phone className="h-4 w-4 text-primary-400 mr-3 flex-shrink-0" />
-                <span className="text-primary-200">+234 803 123 4567, +234 806 789 0123</span>
-              </div>
-              <div className="flex items-center text-sm">
-                <Mail className="h-4 w-4 text-primary-400 mr-3 flex-shrink-0" />
-                <span className="text-primary-200">info@molekschool.edu.ng</span>
-              </div>
-              <div className="flex items-center text-sm">
-                <Clock className="h-4 w-4 text-primary-400 mr-3 flex-shrink-0" />
-                <span className="text-primary-200">Mon - Fri: 7:00 AM - 4:00 PM</span>
-              </div>
+            
+            {/* Social Media Links */}
+            <div className="flex space-x-4">
+              <a 
+                href="#" 
+                className="bg-primary-700 p-2 rounded-lg hover:bg-primary-600 transition-colors"
+                aria-label="Facebook"
+              >
+                <Facebook className="h-5 w-5" />
+              </a>
+              <a 
+                href="#" 
+                className="bg-primary-700 p-2 rounded-lg hover:bg-primary-600 transition-colors"
+                aria-label="Twitter"
+              >
+                <Twitter className="h-5 w-5" />
+              </a>
+              <a 
+                href="#" 
+                className="bg-primary-700 p-2 rounded-lg hover:bg-primary-600 transition-colors"
+                aria-label="Instagram"
+              >
+                <Instagram className="h-5 w-5" />
+              </a>
+              <a 
+                href="#" 
+                className="bg-primary-700 p-2 rounded-lg hover:bg-primary-600 transition-colors"
+                aria-label="YouTube"
+              >
+                <Youtube className="h-5 w-5" />
+              </a>
             </div>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h4 className="text-lg font-semibold text-white mb-4">Quick Links</h4>
+            <h4 className="text-lg font-semibold mb-6">Quick Links</h4>
             <ul className="space-y-3">
-              <li>
-                <Link 
-                  to="/about" 
-                  className="text-primary-200 hover:text-white transition-colors duration-200 text-sm flex items-center"
-                >
-                  <BookOpen className="h-3 w-3 mr-2" />
-                  About Our School
-                </Link>
-              </li>
-              <li>
-                <Link 
-                  to="/academics" 
-                  className="text-primary-200 hover:text-white transition-colors duration-200 text-sm flex items-center"
-                >
-                  <Award className="h-3 w-3 mr-2" />
-                  Academic Programs
-                </Link>
-              </li>
-              <li>
-                <Link 
-                  to="/admissions" 
-                  className="text-primary-200 hover:text-white transition-colors duration-200 text-sm flex items-center"
-                >
-                  <Users className="h-3 w-3 mr-2" />
-                  Admissions
-                </Link>
-              </li>
-              <li>
-                <Link 
-                  to="/news-events" 
-                  className="text-primary-200 hover:text-white transition-colors duration-200 text-sm flex items-center"
-                >
-                  <Calendar className="h-3 w-3 mr-2" />
-                  News & Events
-                </Link>
-              </li>
-              <li>
-                <Link 
-                  to="/gallery" 
-                  className="text-primary-200 hover:text-white transition-colors duration-200 text-sm flex items-center"
-                >
-                  <ExternalLink className="h-3 w-3 mr-2" />
-                  Photo Gallery
-                </Link>
-              </li>
-              <li>
-                <Link 
-                  to="/contact" 
-                  className="text-primary-200 hover:text-white transition-colors duration-200 text-sm flex items-center"
-                >
-                  <Phone className="h-3 w-3 mr-2" />
-                  Contact Us
-                </Link>
-              </li>
+              {quickLinks.map((link) => (
+                <li key={link.name}>
+                  <Link
+                    to={link.href}
+                    className="text-primary-100 hover:text-white transition-colors text-sm"
+                  >
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
-          {/* Academic Information */}
+          {/* Academic Programs */}
           <div>
-            <h4 className="text-lg font-semibold text-white mb-4">Academic Excellence</h4>
+            <h4 className="text-lg font-semibold mb-6">Academic Programs</h4>
             <ul className="space-y-3">
-              <li>
-                <Link 
-                  to="/academics/subjects" 
-                  className="text-primary-200 hover:text-white transition-colors duration-200 text-sm"
-                >
-                  JSS & SSS Programs
-                </Link>
-              </li>
-              <li>
-                <Link 
-                  to="/academics/curriculum" 
-                  className="text-primary-200 hover:text-white transition-colors duration-200 text-sm"
-                >
-                  Nigerian Curriculum
-                </Link>
-              </li>
-              <li>
-                <a 
-                  href="https://www.waec.org.ng" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-primary-200 hover:text-white transition-colors duration-200 text-sm flex items-center"
-                >
-                  WAEC Preparation
-                  <ExternalLink className="h-3 w-3 ml-1" />
-                </a>
-              </li>
-              <li>
-                <a 
-                  href="https://www.neco.gov.ng" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-primary-200 hover:text-white transition-colors duration-200 text-sm flex items-center"
-                >
-                  NECO Integration
-                  <ExternalLink className="h-3 w-3 ml-1" />
-                </a>
-              </li>
-              <li>
-                <Link 
-                  to="/academics/calendar" 
-                  className="text-primary-200 hover:text-white transition-colors duration-200 text-sm"
-                >
-                  Academic Calendar
-                </Link>
-              </li>
-              <li>
-                <Link 
-                  to="/auth/login" 
-                  className="text-accent-400 hover:text-accent-300 transition-colors duration-200 text-sm font-medium"
-                >
-                  Portal Access
-                </Link>
-              </li>
+              {academicLinks.map((link) => (
+                <li key={link.name}>
+                  <Link
+                    to={link.href}
+                    className="text-primary-100 hover:text-white transition-colors text-sm"
+                  >
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
+          </div>
 
-            {/* Social Media */}
-            <div className="mt-6">
-              <h5 className="text-sm font-semibold text-white mb-3">Follow Us</h5>
-              <div className="flex space-x-3">
-                <Link
-                  to="#"
-                  className="p-2 bg-white bg-opacity-10 rounded-lg hover:bg-opacity-20 transition-all duration-200"
-                  aria-label="Facebook"
-                >
-                  <Facebook className="h-4 w-4 text-primary-200" />
-                </Link>
-                <Link
-                  to="#"
-                  className="p-2 bg-white bg-opacity-10 rounded-lg hover:bg-opacity-20 transition-all duration-200"
-                  aria-label="Twitter"
-                >
-                  <Twitter className="h-4 w-4 text-primary-200" />
-                </Link>
-                <Link
-                  to="#"
-                  className="p-2 bg-white bg-opacity-10 rounded-lg hover:bg-opacity-20 transition-all duration-200"
-                  aria-label="Instagram"
-                >
-                  <Instagram className="h-4 w-4 text-primary-200" />
-                </Link>
-                <Link
-                  to="#"
-                  className="p-2 bg-white bg-opacity-10 rounded-lg hover:bg-opacity-20 transition-all duration-200"
-                  aria-label="YouTube"
-                >
-                  <Youtube className="h-4 w-4 text-primary-200" />
-                </Link>
-              </div>
+          {/* Important Links */}
+          <div>
+            <h4 className="text-lg font-semibold mb-6">Important Links</h4>
+            <ul className="space-y-3">
+              {importantLinks.map((link) => (
+                <li key={link.name}>
+                  <Link
+                    to={link.href}
+                    className="text-primary-100 hover:text-white transition-colors text-sm"
+                  >
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      {/* Contact Information Bar */}
+      <div className="border-t border-primary-700 py-6">
+        <div className="container-max">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center md:text-left">
+            <div className="flex items-center justify-center md:justify-start space-x-2">
+              <Phone className="h-4 w-4 text-primary-300" />
+              <span className="text-primary-100 text-sm">+234 803 123 4567</span>
+            </div>
+            <div className="flex items-center justify-center md:justify-start space-x-2">
+              <Mail className="h-4 w-4 text-primary-300" />
+              <span className="text-primary-100 text-sm">info@nigerianschool.edu.ng</span>
+            </div>
+            <div className="flex items-center justify-center md:justify-start space-x-2">
+              <MapPin className="h-4 w-4 text-primary-300" />
+              <span className="text-primary-100 text-sm">Victoria Island, Lagos, Nigeria</span>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Bottom Footer */}
-      <div className="border-t border-primary-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex flex-col sm:flex-row justify-between items-center text-sm">
-            <div className="flex items-center text-primary-300 mb-2 sm:mb-0">
-              <span>© {currentYear} Molek School Management System.</span>
-              <span className="ml-1">Built with</span>
-              <Heart className="h-3 w-3 mx-1 text-red-400" />
-              <span>for Nigerian Educational Excellence.</span>
-            </div>
-            
-            <div className="flex items-center space-x-4 text-primary-300">
+      {/* Bottom Copyright */}
+      <div className="bg-primary-900 py-4">
+        <div className="container-max">
+          <div className="flex flex-col md:flex-row justify-between items-center text-center md:text-left">
+            <p className="text-primary-200 text-sm">
+              © {currentYear} Nigerian Secondary School. All rights reserved.
+            </p>
+            <div className="flex space-x-6 mt-4 md:mt-0">
               <Link 
                 to="/privacy-policy" 
-                className="hover:text-white transition-colors duration-200"
+                className="text-primary-200 hover:text-white text-sm transition-colors"
               >
                 Privacy Policy
               </Link>
-              <div className="w-px h-3 bg-primary-700"></div>
               <Link 
                 to="/terms-of-service" 
-                className="hover:text-white transition-colors duration-200"
+                className="text-primary-200 hover:text-white text-sm transition-colors"
               >
                 Terms of Service
               </Link>
-              <div className="w-px h-3 bg-primary-700"></div>
-              <span>Made in Nigeria 🇳🇬</span>
+              <Link 
+                to="/accessibility" 
+                className="text-primary-200 hover:text-white text-sm transition-colors"
+              >
+                Accessibility
+              </Link>
             </div>
           </div>
         </div>

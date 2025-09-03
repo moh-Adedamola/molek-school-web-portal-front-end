@@ -1,206 +1,201 @@
-// pages/website/news-events/Newsletter.jsx
-import { Download, Mail, Calendar, Eye } from 'lucide-react';
+// File: src/pages/website/news-events/Newsletter.jsx
+
+import { useState } from 'react';
+import { Download, Eye, Search, Calendar, FileText } from 'lucide-react';
 
 const Newsletter = () => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedYear, setSelectedYear] = useState('2024');
+
   // Mock newsletter data
   const newsletters = [
     {
       id: 1,
-      title: "December 2024 Newsletter",
-      description: "Year-end review, student achievements, upcoming events, and holiday wishes from our school community.",
-      date: "December 2024",
-      publishDate: "2024-12-01",
-      downloadUrl: "/newsletters/dec-2024.pdf",
-      coverImage: "/api/placeholder/300/400",
-      downloads: 234,
-      featured: true
+      title: 'March 2024 Newsletter',
+      description: 'Academic achievements, sports updates, and upcoming events',
+      publishDate: '2024-03-01',
+      downloadUrl: '/documents/newsletter-march-2024.pdf',
+      thumbnail: '/images/newsletters/march-2024-thumb.jpg',
+      pages: 12,
+      fileSize: '2.4 MB'
     },
     {
       id: 2,
-      title: "November 2024 Newsletter",
-      description: "Inter-house sports results, academic excellence awards, parent-teacher conference recap, and upcoming examinations.",
-      date: "November 2024",
-      publishDate: "2024-11-01",
-      downloadUrl: "/newsletters/nov-2024.pdf",
-      coverImage: "/api/placeholder/300/400",
-      downloads: 189
+      title: 'February 2024 Newsletter',
+      description: 'New term updates, staff introductions, and parent feedback',
+      publishDate: '2024-02-01',
+      downloadUrl: '/documents/newsletter-feb-2024.pdf',
+      thumbnail: '/images/newsletters/feb-2024-thumb.jpg',
+      pages: 10,
+      fileSize: '1.8 MB'
     },
     {
       id: 3,
-      title: "October 2024 Newsletter",
-      description: "New teacher introductions, first term examination schedule, student spotlight, and facility updates.",
-      date: "October 2024",
-      publishDate: "2024-10-01",
-      downloadUrl: "/newsletters/oct-2024.pdf",
-      coverImage: "/api/placeholder/300/400",
-      downloads: 167
-    },
-    {
-      id: 4,
-      title: "September 2024 Newsletter",
-      description: "Welcome back message, new academic year updates, enrollment statistics, and upcoming school events.",
-      date: "September 2024",
-      publishDate: "2024-09-01",
-      downloadUrl: "/newsletters/sep-2024.pdf",
-      coverImage: "/api/placeholder/300/400",
-      downloads: 203
+      title: 'January 2024 Newsletter',
+      description: 'New year greetings, academic calendar, and enrollment updates',
+      publishDate: '2024-01-15',
+      downloadUrl: '/documents/newsletter-jan-2024.pdf',
+      thumbnail: '/images/newsletters/jan-2024-thumb.jpg',
+      pages: 8,
+      fileSize: '1.5 MB'
     }
   ];
 
-  const NewsletterCard = ({ newsletter }) => (
-    <div className={`bg-white rounded-lg shadow-md overflow-hidden transition-shadow hover:shadow-lg ${
-      newsletter.featured ? 'ring-2 ring-primary-500' : ''
-    }`}>
-      {newsletter.featured && (
-        <div className="bg-primary-600 text-white text-center py-2 text-sm font-medium">
-          Latest Newsletter
-        </div>
-      )}
-      
-      <div className="p-6">
-        <div className="flex flex-col md:flex-row gap-4">
-          {/* Cover Image */}
-          <div className="md:w-1/3">
-            <img 
-              src={newsletter.coverImage} 
-              alt={`${newsletter.title} Cover`}
-              className="w-full h-48 md:h-full object-cover rounded-lg shadow-sm"
-            />
-          </div>
-          
-          {/* Content */}
-          <div className="md:w-2/3 space-y-3">
-            <div className="flex items-center justify-between">
-              <h3 className="text-xl font-semibold text-neutral-800">
-                {newsletter.title}
-              </h3>
-              {newsletter.featured && (
-                <span className="bg-accent-100 text-accent-800 px-2 py-1 rounded-full text-xs font-medium">
-                  New
-                </span>
-              )}
-            </div>
-            
-            <div className="flex items-center space-x-4 text-sm text-neutral-600">
-              <div className="flex items-center space-x-1">
-                <Calendar size={14} />
-                <span>{newsletter.date}</span>
-              </div>
-              <div className="flex items-center space-x-1">
-                <Eye size={14} />
-                <span>{newsletter.downloads} downloads</span>
-              </div>
-            </div>
-            
-            <p className="text-neutral-600 text-sm leading-relaxed">
-              {newsletter.description}
-            </p>
-            
-            <div className="flex flex-col sm:flex-row gap-3 pt-2">
-              <button className="btn-primary px-4 py-2 rounded-lg text-sm font-medium flex items-center justify-center space-x-2">
-                <Download size={16} />
-                <span>Download PDF</span>
-              </button>
-              <button className="btn-secondary px-4 py-2 rounded-lg text-sm font-medium">
-                View Online
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+  const availableYears = ['2024', '2023', '2022', '2021'];
+
+  const filteredNewsletters = newsletters.filter(newsletter => {
+    const matchesSearch = newsletter.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         newsletter.description.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesYear = newsletter.publishDate.startsWith(selectedYear);
+    return matchesSearch && matchesYear;
+  });
+
+  const handleDownload = (newsletter) => {
+    // In a real app, this would trigger the download
+    console.log(`Downloading ${newsletter.title}`);
+  };
+
+  const handlePreview = (newsletter) => {
+    // In a real app, this would open a preview modal
+    console.log(`Previewing ${newsletter.title}`);
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-primary-50">
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-primary-800 text-white">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="text-center">
-            <h1 className="text-4xl font-bold mb-4">School Newsletter Archive</h1>
-            <p className="text-xl text-primary-200 max-w-3xl mx-auto">
-              Stay connected with our school community through monthly newsletters featuring updates, achievements, and important information
-            </p>
-          </div>
+      <div className="hero-gradient text-white py-16">
+        <div className="container-max">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">Newsletter Archive</h1>
+          <p className="text-xl text-blue-100 max-w-2xl">
+            Access past newsletters featuring school updates, achievements, and important announcements.
+          </p>
         </div>
       </div>
 
-      {/* Newsletter Subscription */}
-      <div className="bg-white border-b border-neutral-200">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="bg-gradient-to-r from-secondary-50 to-primary-50 rounded-lg p-6">
-            <div className="flex flex-col md:flex-row items-center justify-between">
-              <div className="mb-4 md:mb-0">
-                <h3 className="text-lg font-semibold text-neutral-800 mb-1">
-                  Subscribe to Our Newsletter
-                </h3>
-                <p className="text-neutral-600 text-sm">
-                  Get the latest school updates delivered to your email monthly
-                </p>
+      <div className="container-max py-8">
+        {/* Search and Filter */}
+        <div className="flex flex-col md:flex-row gap-4 mb-8">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+            <input
+              type="text"
+              placeholder="Search newsletters..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="input-base pl-10 w-full"
+            />
+          </div>
+          <select
+            value={selectedYear}
+            onChange={(e) => setSelectedYear(e.target.value)}
+            className="input-base min-w-32"
+          >
+            {availableYears.map(year => (
+              <option key={year} value={year}>{year}</option>
+            ))}
+          </select>
+        </div>
+
+        {/* Newsletter Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+          {filteredNewsletters.map((newsletter) => (
+            <div key={newsletter.id} className="card-base group">
+              {/* Thumbnail */}
+              <div className="w-full h-48 bg-gray-100 rounded-lg mb-4 overflow-hidden">
+                {newsletter.thumbnail ? (
+                  <img
+                    src={newsletter.thumbnail}
+                    alt={newsletter.title}
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center">
+                    <FileText className="w-16 h-16 text-gray-400" />
+                  </div>
+                )}
               </div>
-              <div className="flex flex-col sm:flex-row gap-3">
-                <input
-                  type="email"
-                  placeholder="Enter your email address"
-                  className="px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                />
-                <button className="btn-primary px-6 py-2 rounded-lg font-medium flex items-center space-x-2">
-                  <Mail size={16} />
-                  <span>Subscribe</span>
+
+              {/* Content */}
+              <h3 className="text-lg font-semibold mb-2 text-gray-800">
+                {newsletter.title}
+              </h3>
+              
+              <p className="text-gray-600 text-sm mb-4">
+                {newsletter.description}
+              </p>
+
+              {/* Meta Info */}
+              <div className="flex items-center gap-4 text-xs text-gray-500 mb-4">
+                <div className="flex items-center gap-1">
+                  <Calendar className="w-3 h-3" />
+                  <span>
+                    {new Date(newsletter.publishDate).toLocaleDateString('en-US', {
+                      month: 'long',
+                      year: 'numeric'
+                    })}
+                  </span>
+                </div>
+                <span>{newsletter.pages} pages</span>
+                <span>{newsletter.fileSize}</span>
+              </div>
+
+              {/* Actions */}
+              <div className="flex gap-2">
+                <button
+                  onClick={() => handlePreview(newsletter)}
+                  className="btn-outline flex-1 text-sm py-2 flex items-center justify-center gap-1"
+                >
+                  <Eye className="w-4 h-4" />
+                  Preview
+                </button>
+                <button
+                  onClick={() => handleDownload(newsletter)}
+                  className="btn-primary flex-1 text-sm py-2 flex items-center justify-center gap-1"
+                >
+                  <Download className="w-4 h-4" />
+                  Download
                 </button>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Newsletter Archive */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="space-y-8">
-          {newsletters.map(newsletter => (
-            <NewsletterCard key={newsletter.id} newsletter={newsletter} />
           ))}
         </div>
 
-        {/* Load More */}
-        <div className="text-center mt-12">
-          <button className="btn-primary px-8 py-3 rounded-lg">
-            Load Older Newsletters
-          </button>
-        </div>
-      </div>
+        {/* Empty State */}
+        {filteredNewsletters.length === 0 && (
+          <div className="text-center py-16">
+            <FileText className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+            <h3 className="text-xl font-semibold text-gray-600 mb-2">
+              No newsletters found
+            </h3>
+            <p className="text-gray-500">
+              Try adjusting your search terms or select a different year.
+            </p>
+          </div>
+        )}
 
-      {/* Newsletter Info */}
-      <div className="bg-white border-t border-neutral-200">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-            <div className="space-y-3">
-              <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center mx-auto">
-                <Calendar className="text-primary-600" size={24} />
-              </div>
-              <h3 className="font-semibold text-neutral-800">Monthly Updates</h3>
-              <p className="text-sm text-neutral-600">
-                New newsletters published every month with the latest school information
-              </p>
+        {/* Subscription Section */}
+        <div className="card-base bg-blue-50 border-blue-200">
+          <div className="text-center">
+            <h2 className="text-2xl font-bold text-gray-800 mb-4">
+              Subscribe to Our Newsletter
+            </h2>
+            <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
+              Stay informed about school activities, academic achievements, and important updates. 
+              Get our monthly newsletter delivered directly to your email.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+              <input
+                type="email"
+                placeholder="Enter your email address"
+                className="input-base flex-1"
+              />
+              <button className="btn-primary whitespace-nowrap">
+                Subscribe Now
+              </button>
             </div>
-            <div className="space-y-3">
-              <div className="w-12 h-12 bg-secondary-100 rounded-lg flex items-center justify-center mx-auto">
-                <Download className="text-secondary-600" size={24} />
-              </div>
-              <h3 className="font-semibold text-neutral-800">PDF Downloads</h3>
-              <p className="text-sm text-neutral-600">
-                All newsletters available as downloadable PDF files for offline reading
-              </p>
-            </div>
-            <div className="space-y-3">
-              <div className="w-12 h-12 bg-accent-100 rounded-lg flex items-center justify-center mx-auto">
-                <Mail className="text-accent-600" size={24} />
-              </div>
-              <h3 className="font-semibold text-neutral-800">Email Delivery</h3>
-              <p className="text-sm text-neutral-600">
-                Subscribe to receive newsletters directly in your email inbox
-              </p>
-            </div>
+            <p className="text-xs text-gray-500 mt-3">
+              We respect your privacy. Unsubscribe at any time.
+            </p>
           </div>
         </div>
       </div>

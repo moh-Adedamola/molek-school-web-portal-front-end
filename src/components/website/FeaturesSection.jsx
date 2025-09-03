@@ -1,182 +1,188 @@
-const FeaturesSection = ({ 
-  title = "Comprehensive School Management", 
-  subtitle = "Integrated solutions for students, teachers, parents, and administrators",
-  features = null
-}) => {
-  
-  const defaultFeatures = [
+// File: src/components/website/FeaturesSection.jsx
+// School highlights and key features with responsive design
+
+import React from 'react';
+import { Link } from 'react-router-dom'; // Added this import
+import { 
+  Award, 
+  Users, 
+  BookOpen, 
+  Microscope, 
+  Calculator, 
+  Globe, 
+  Trophy, 
+  Heart,
+  Zap,
+  Shield
+} from 'lucide-react';
+
+const FeaturesSection = () => {
+  const features = [
     {
-      id: 1,
-      icon: "📚",
-      title: "Academic Excellence",
-      description: "JSS & SSS programs with WAEC/NECO preparation and comprehensive curriculum management.",
-      gradient: "from-primary-50 to-primary-100",
-      iconBg: "bg-primary-600",
-      titleColor: "text-primary-800",
-      highlights: ["JSS 1-3 Programs", "SSS 1-3 Programs", "WAEC Preparation", "NECO Preparation"]
+      icon: Award,
+      title: 'WAEC Excellence',
+      description: 'Consistent 95%+ pass rates in WAEC and NECO examinations with dedicated preparation programs.',
+      color: 'secondary',
+      stats: '95% Pass Rate'
     },
     {
-      id: 2,
-      icon: "👥",
-      title: "Student Management",
-      description: "Complete student lifecycle management from admission to graduation with attendance tracking.",
-      gradient: "from-secondary-50 to-secondary-100",
-      iconBg: "bg-secondary-600",
-      titleColor: "text-secondary-800",
-      highlights: ["Enrollment Management", "Attendance Tracking", "Progress Monitoring", "Parent Communication"]
+      icon: Users,
+      title: 'Qualified Educators',
+      description: 'Experienced teachers with Nigerian Teaching Council certification and subject expertise.',
+      color: 'primary',
+      stats: '30+ Teachers'
     },
     {
-      id: 3,
-      icon: "📊",
-      title: "Analytics & Reports",
-      description: "Real-time insights and comprehensive reporting for informed decision making.",
-      gradient: "from-accent-50 to-accent-100",
-      iconBg: "bg-accent-600",
-      titleColor: "text-accent-800",
-      highlights: ["Performance Analytics", "Attendance Reports", "Grade Analytics", "Custom Reports"]
+      icon: BookOpen,
+      title: 'Nigerian Curriculum',
+      description: 'Comprehensive JSS and SSS programs aligned with Federal Ministry of Education standards.',
+      color: 'accent',
+      stats: 'JSS 1-3 & SSS 1-3'
     },
     {
-      id: 4,
-      icon: "🏫",
-      title: "School Administration",
-      description: "Streamlined administrative processes for efficient school operations and management.",
-      gradient: "from-purple-50 to-purple-100",
-      iconBg: "bg-purple-600",
-      titleColor: "text-purple-800",
-      highlights: ["Staff Management", "Class Scheduling", "Resource Planning", "Communication Hub"]
+      icon: Microscope,
+      title: 'Science Excellence',
+      description: 'Well-equipped laboratories for Physics, Chemistry, and Biology practical sessions.',
+      color: 'secondary',
+      stats: '3 Lab Facilities'
     },
     {
-      id: 5,
-      icon: "💳",
-      title: "Fee Management",
-      description: "Transparent fee structure and payment tracking for Nigerian secondary schools.",
-      gradient: "from-emerald-50 to-emerald-100",
-      iconBg: "bg-emerald-600",
-      titleColor: "text-emerald-800",
-      highlights: ["Term-based Billing", "Payment Tracking", "Fee Reminders", "Receipt Generation"]
+      icon: Calculator,
+      title: 'Mathematics Focus',
+      description: 'Strong foundation in mathematics with additional support for further mathematics students.',
+      color: 'primary',
+      stats: 'Advanced Math'
     },
     {
-      id: 6,
-      icon: "🌍",
-      title: "Nigerian Context",
-      description: "Designed specifically for the Nigerian education system with local integration.",
-      gradient: "from-green-50 to-green-100",
-      iconBg: "bg-green-600",
-      titleColor: "text-green-800",
-      highlights: ["Local Curriculum", "Nigerian Holidays", "Multi-language Support", "Local Payment Systems"]
+      icon: Globe,
+      title: 'Holistic Development',
+      description: 'Character building, leadership training, and extracurricular activities for well-rounded education.',
+      color: 'accent',
+      stats: '10+ Clubs'
+    },
+    {
+      icon: Trophy,
+      title: 'Academic Competitions',
+      description: 'Regular participation in inter-school competitions, quiz competitions, and academic olympiads.',
+      color: 'secondary',
+      stats: 'Multiple Awards'
+    },
+    {
+      icon: Heart,
+      title: 'Pastoral Care',
+      description: 'Dedicated guidance counselors and pastoral care system for student wellbeing.',
+      color: 'primary',
+      stats: '24/7 Support'
     }
   ];
 
-  const displayFeatures = features || defaultFeatures;
+  const getColorClasses = (color) => {
+    switch (color) {
+      case 'primary':
+        return {
+          icon: 'bg-primary-100 text-primary-600',
+          title: 'text-primary-700',
+          stats: 'text-primary-600 bg-primary-50'
+        };
+      case 'secondary':
+        return {
+          icon: 'bg-secondary-100 text-secondary-600',
+          title: 'text-secondary-700',
+          stats: 'text-secondary-600 bg-secondary-50'
+        };
+      case 'accent':
+        return {
+          icon: 'bg-accent-100 text-accent-600',
+          title: 'text-accent-700',
+          stats: 'text-accent-600 bg-accent-50'
+        };
+      default:
+        return {
+          icon: 'bg-neutral-100 text-neutral-600',
+          title: 'text-neutral-700',
+          stats: 'text-neutral-600 bg-neutral-50'
+        };
+    }
+  };
 
   return (
-    <section className="py-20 bg-white relative overflow-hidden">
-      {/* Background decorations */}
-      <div className="absolute top-0 left-0 w-64 h-64 bg-primary-100/30 rounded-full -translate-x-32 -translate-y-32"></div>
-      <div className="absolute bottom-0 right-0 w-80 h-80 bg-secondary-100/30 rounded-full translate-x-40 translate-y-40"></div>
-      
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="section-padding bg-white">
+      <div className="container-max">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-primary-800 mb-6">
-            {title}
-          </h2>
-          <p className="text-xl text-neutral-600 max-w-3xl mx-auto leading-relaxed">
-            {subtitle}
-          </p>
-          
-          {/* Decorative line */}
-          <div className="flex items-center justify-center mt-8">
-            <div className="h-1 w-16 bg-primary-600 rounded-full"></div>
-            <div className="h-2 w-2 bg-accent-500 rounded-full mx-4"></div>
-            <div className="h-1 w-16 bg-secondary-600 rounded-full"></div>
+          <div className="inline-flex items-center space-x-2 bg-primary-50 px-4 py-2 rounded-full mb-4">
+            <Zap className="h-4 w-4 text-primary-600" />
+            <span className="text-primary-700 font-medium text-sm">Why Choose Us</span>
           </div>
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-neutral-800 mb-6 text-balance">
+            Building Tomorrow's Leaders
+          </h2>
+          <p className="text-lg md:text-xl text-neutral-600 max-w-3xl mx-auto text-balance">
+            We provide comprehensive secondary education that prepares students for 
+            academic success and lifelong learning in the 21st century.
+          </p>
         </div>
 
         {/* Features Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {displayFeatures.map((feature, index) => (
-            <div 
-              key={feature.id}
-              className={`group relative bg-gradient-to-br ${feature.gradient} p-8 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-white/50`}
-              style={{ animationDelay: `${index * 100}ms` }}
-            >
-              {/* Background glow effect */}
-              <div className="absolute inset-0 bg-gradient-to-br from-white/0 to-white/10 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              
-              {/* Icon */}
-              <div className={`relative w-16 h-16 ${feature.iconBg} rounded-2xl flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
-                <span className="text-white text-2xl">{feature.icon}</span>
-              </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+          {features.map((feature, index) => {
+            const IconComponent = feature.icon;
+            const colors = getColorClasses(feature.color);
+            
+            return (
+              <div
+                key={index}
+                className="feature-card group"
+              >
+                {/* Icon */}
+                <div className={`inline-flex p-4 rounded-xl ${colors.icon} mb-4 group-hover:scale-110 transition-transform`}>
+                  <IconComponent className="h-6 w-6" />
+                </div>
 
-              {/* Content */}
-              <div className="relative">
-                <h3 className={`text-2xl font-bold ${feature.titleColor} mb-4 group-hover:text-opacity-90 transition-colors duration-300`}>
+                {/* Content */}
+                <h3 className={`text-lg font-semibold mb-3 ${colors.title}`}>
                   {feature.title}
                 </h3>
                 
-                <p className="text-neutral-700 mb-6 leading-relaxed">
+                <p className="text-neutral-600 text-sm leading-relaxed mb-4">
                   {feature.description}
                 </p>
 
-                {/* Feature highlights */}
-                <div className="space-y-2">
-                  {feature.highlights?.map((highlight, idx) => (
-                    <div key={idx} className="flex items-center text-sm text-neutral-600">
-                      <span className="w-1.5 h-1.5 bg-accent-500 rounded-full mr-3 flex-shrink-0"></span>
-                      <span>{highlight}</span>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Hover indicator */}
-                <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-accent-500 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0">
-                  <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                  </svg>
+                {/* Stats Badge */}
+                <div className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${colors.stats}`}>
+                  {feature.stats}
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
-        {/* Call to Action */}
-        <div className="text-center mt-16">
-          <div className="bg-gradient-to-r from-primary-600 to-secondary-600 rounded-3xl p-8 shadow-xl">
-            <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">
-              Ready to Transform Your School Management?
-            </h3>
-            <p className="text-primary-100 mb-8 max-w-2xl mx-auto">
-              Join hundreds of Nigerian secondary schools already using our comprehensive management system.
-            </p>
-            
-            <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4">
-              <button className="px-8 py-4 bg-white text-primary-700 font-semibold rounded-2xl hover:bg-primary-50 transition-colors duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
-                Get Started Today
-              </button>
-              <button className="px-8 py-4 bg-transparent border-2 border-white text-white font-semibold rounded-2xl hover:bg-white hover:text-primary-700 transition-all duration-300">
-                Schedule Demo
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Trust indicators */}
+        {/* Bottom CTA Section */}
         <div className="mt-16 text-center">
-          <p className="text-neutral-500 text-sm mb-6">Trusted by leading Nigerian secondary schools</p>
-          <div className="flex flex-wrap justify-center items-center space-x-8 opacity-60">
-            {/* Placeholder for school logos */}
-            <div className="w-24 h-12 bg-neutral-200 rounded-lg flex items-center justify-center text-neutral-400 text-xs">
-              School Logo
+          <div className="bg-gradient-to-r from-primary-50 to-secondary-50 rounded-2xl p-8 md:p-12">
+            <div className="flex items-center justify-center mb-4">
+              <Shield className="h-8 w-8 text-primary-600 mr-3" />
+              <h3 className="text-2xl md:text-3xl font-bold text-neutral-800">
+                Trusted by Nigerian Families
+              </h3>
             </div>
-            <div className="w-24 h-12 bg-neutral-200 rounded-lg flex items-center justify-center text-neutral-400 text-xs">
-              School Logo
-            </div>
-            <div className="w-24 h-12 bg-neutral-200 rounded-lg flex items-center justify-center text-neutral-400 text-xs">
-              School Logo
-            </div>
-            <div className="w-24 h-12 bg-neutral-200 rounded-lg flex items-center justify-center text-neutral-400 text-xs">
-              School Logo
+            <p className="text-neutral-600 mb-6 max-w-2xl mx-auto">
+              Join hundreds of families who have trusted us with their children's education. 
+              Our proven track record speaks for itself.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link
+                to="/about/staff"
+                className="btn-primary px-6 py-3 rounded-lg font-medium"
+              >
+                Meet Our Teachers
+              </Link>
+              <Link
+                to="/academics"
+                className="btn-secondary px-6 py-3 rounded-lg font-medium"
+              >
+                Explore Programs
+              </Link>
             </div>
           </div>
         </div>

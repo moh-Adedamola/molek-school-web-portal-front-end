@@ -1,281 +1,219 @@
-import { Link } from 'react-router-dom';
-import { useState } from 'react';
+// File: src/pages/website/about/StaffDirectory.jsx
+import React, { useState } from 'react';
+import { Search, Filter, Users } from 'lucide-react';
+import StaffCard from '../../../components/website/StaffCard';
 
 const StaffDirectory = () => {
-  const [selectedDepartment, setSelectedDepartment] = useState('All');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterDepartment, setFilterDepartment] = useState('all');
 
   // Mock staff data
-  const staffData = [
-    // JSS Teachers
-    { name: "Mrs. Funmilayo Adebayo", department: "JSS English", subject: "English Language", qualification: "B.A. English, M.Ed.", experience: "8 years" },
-    { name: "Mr. Olumide Ogundimu", department: "JSS Mathematics", subject: "Mathematics", qualification: "B.Sc. Mathematics", experience: "6 years" },
-    { name: "Mrs. Kemi Okafor", department: "JSS Science", subject: "Basic Science", qualification: "B.Sc. Biology, PGDE", experience: "7 years" },
-    { name: "Mr. Tunde Adeyemi", department: "JSS Social Studies", subject: "Social Studies", qualification: "B.A. History", experience: "5 years" },
-    
-    // SSS Sciences
-    { name: "Dr. Ibrahim Hassan", department: "SSS Sciences", subject: "Physics", qualification: "Ph.D. Physics", experience: "12 years" },
-    { name: "Mrs. Grace Okoro", department: "SSS Sciences", subject: "Chemistry", qualification: "M.Sc. Chemistry", experience: "9 years" },
-    { name: "Mr. David Oludare", department: "SSS Sciences", subject: "Biology", qualification: "B.Sc. Biology, M.Ed.", experience: "10 years" },
-    { name: "Mrs. Folake Johnson", department: "SSS Sciences", subject: "Mathematics", qualification: "B.Sc. Mathematics", experience: "11 years" },
-    
-    // SSS Arts
-    { name: "Mr. Chukwudi Eze", department: "SSS Arts", subject: "Literature", qualification: "M.A. Literature", experience: "8 years" },
-    { name: "Mrs. Blessing Adamu", department: "SSS Arts", subject: "Government", qualification: "B.Sc. Political Science", experience: "7 years" },
-    { name: "Mr. Sunday Okafor", department: "SSS Arts", subject: "History", qualification: "B.A. History, M.A.", experience: "9 years" },
-    
-    // SSS Commercial
-    { name: "Mrs. Amina Yusuf", department: "SSS Commercial", subject: "Economics", qualification: "B.Sc. Economics", experience: "6 years" },
-    { name: "Mr. Peter Okonkwo", department: "SSS Commercial", subject: "Accounting", qualification: "B.Sc. Accounting, ACA", experience: "10 years" },
-    
-    // Support Staff
-    { name: "Mrs. Bola Adeyemi", department: "Administration", subject: "School Secretary", qualification: "OND Business Admin", experience: "15 years" },
-    { name: "Mr. Joseph Onyeka", department: "Administration", subject: "Bursar", qualification: "B.Sc. Accounting", experience: "12 years" },
-    { name: "Mrs. Fatima Mohammed", department: "Administration", subject: "Librarian", qualification: "B.L.I.S", experience: "8 years" }
+  const staffMembers = [
+    {
+      id: 1,
+      name: 'Mrs. Adunni Olatunji',
+      position: 'Principal',
+      department: 'Administration',
+      qualification: 'M.Ed Educational Administration, B.Ed Mathematics',
+      subjects: [],
+      email: 'principal@school.edu.ng',
+      phone: '+234 801 234 5678',
+      experience: 20,
+      bio: 'Passionate educator with over 20 years of experience in secondary education leadership.',
+      image: null
+    },
+    {
+      id: 2,
+      name: 'Mr. Chike Okonkwo',
+      position: 'Vice Principal (Academics)',
+      department: 'Administration',
+      qualification: 'M.Sc Physics, B.Ed Physics',
+      subjects: ['Physics'],
+      email: 'vp.academics@school.edu.ng',
+      phone: '+234 802 345 6789',
+      experience: 15,
+      bio: 'Dedicated to academic excellence and student achievement in sciences.',
+      image: null
+    },
+    {
+      id: 3,
+      name: 'Mrs. Fatima Ibrahim',
+      position: 'Head of Mathematics Department',
+      department: 'Mathematics',
+      qualification: 'B.Sc Mathematics, PGDE',
+      subjects: ['Mathematics', 'Further Mathematics'],
+      email: 'f.ibrahim@school.edu.ng',
+      phone: '+234 803 456 7890',
+      experience: 12,
+      bio: 'Mathematics specialist focused on making complex concepts accessible to all students.',
+      image: null
+    },
+    {
+      id: 4,
+      name: 'Mr. Emmanuel Bassey',
+      position: 'English Language Teacher',
+      department: 'Languages',
+      qualification: 'B.A English Language, PGDE',
+      subjects: ['English Language', 'Literature'],
+      email: 'e.bassey@school.edu.ng',
+      phone: '+234 804 567 8901',
+      experience: 8,
+      bio: 'Passionate about developing students\' communication and literary skills.',
+      image: null
+    },
+    {
+      id: 5,
+      name: 'Dr. Kemi Adebayo',
+      position: 'Biology Teacher',
+      department: 'Sciences',
+      qualification: 'Ph.D Biology, B.Sc Biology',
+      subjects: ['Biology', 'Agricultural Science'],
+      email: 'k.adebayo@school.edu.ng',
+      phone: '+234 805 678 9012',
+      experience: 10,
+      bio: 'Research-focused educator bringing practical science to the classroom.',
+      image: null
+    },
+    {
+      id: 6,
+      name: 'Mrs. Grace Okoro',
+      position: 'Chemistry Teacher',
+      department: 'Sciences',
+      qualification: 'M.Sc Chemistry, B.Ed Chemistry',
+      subjects: ['Chemistry'],
+      email: 'g.okoro@school.edu.ng',
+      phone: '+234 806 789 0123',
+      experience: 9,
+      bio: 'Committed to making chemistry engaging and understandable for all students.',
+      image: null
+    },
+    {
+      id: 7,
+      name: 'Mr. Biodun Ajayi',
+      position: 'History Teacher',
+      department: 'Social Sciences',
+      qualification: 'B.A History, PGDE',
+      subjects: ['History', 'Government'],
+      email: 'b.ajayi@school.edu.ng',
+      phone: '+234 807 890 1234',
+      experience: 7,
+      bio: 'Bringing Nigerian and world history to life for young minds.',
+      image: null
+    },
+    {
+      id: 8,
+      name: 'Mrs. Hauwa Mohammed',
+      position: 'Computer Science Teacher',
+      department: 'Technology',
+      qualification: 'B.Sc Computer Science, PGDE',
+      subjects: ['Computer Science', 'Data Processing'],
+      email: 'h.mohammed@school.edu.ng',
+      phone: '+234 808 901 2345',
+      experience: 6,
+      bio: 'Technology enthusiast preparing students for the digital future.',
+      image: null
+    }
   ];
 
-  const departments = ['All', 'JSS English', 'JSS Mathematics', 'JSS Science', 'JSS Social Studies', 'SSS Sciences', 'SSS Arts', 'SSS Commercial', 'Administration'];
+  const departments = [
+    'all',
+    'Administration',
+    'Mathematics',
+    'Sciences',
+    'Languages',
+    'Social Sciences',
+    'Technology'
+  ];
 
-  const filteredStaff = selectedDepartment === 'All' 
-    ? staffData 
-    : staffData.filter(staff => staff.department === selectedDepartment);
+  const filteredStaff = staffMembers.filter(staff => {
+    const matchesSearch = staff.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         staff.position.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         staff.subjects.some(subject => 
+                           subject.toLowerCase().includes(searchTerm.toLowerCase())
+                         );
+    
+    const matchesDepartment = filterDepartment === 'all' || 
+                             staff.department === filterDepartment;
+    
+    return matchesSearch && matchesDepartment;
+  });
 
   return (
-    <div className="min-h-screen">
-      {/* Breadcrumb */}
-      <div className="bg-neutral-100 py-4">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <nav className="text-sm">
-            <Link to="/" className="text-primary-600 hover:text-primary-800">Home</Link>
-            <span className="mx-2 text-neutral-500">/</span>
-            <Link to="/about" className="text-primary-600 hover:text-primary-800">About</Link>
-            <span className="mx-2 text-neutral-500">/</span>
-            <span className="text-neutral-800">Staff Directory</span>
-          </nav>
+    <div className="min-h-screen bg-neutral-50">
+      {/* Header */}
+      <div className="bg-white border-b border-neutral-200">
+        <div className="container-max py-8">
+          <div className="text-center mb-8">
+            <h1 className="text-3xl md:text-4xl font-bold text-neutral-800 mb-4">
+              Our Teaching Staff
+            </h1>
+            <p className="text-lg text-neutral-600 max-w-2xl mx-auto text-balance">
+              Meet our dedicated team of qualified educators committed to your child's success
+            </p>
+          </div>
+
+          {/* Search and Filter */}
+          <div className="flex flex-col md:flex-row gap-4 max-w-2xl mx-auto">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-neutral-400" />
+              <input
+                type="text"
+                placeholder="Search by name, position, or subject..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="input-base pl-10 w-full"
+              />
+            </div>
+            
+            <div className="relative">
+              <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-neutral-400" />
+              <select
+                value={filterDepartment}
+                onChange={(e) => setFilterDepartment(e.target.value)}
+                className="input-base pl-10 pr-10 appearance-none bg-white min-w-[200px]"
+              >
+                {departments.map(dept => (
+                  <option key={dept} value={dept}>
+                    {dept === 'all' ? 'All Departments' : dept}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Hero Section */}
-      <section className="bg-gradient-to-br from-primary-600 to-primary-800 py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            Staff Directory
-          </h1>
-          <p className="text-xl text-primary-200 max-w-2xl mx-auto">
-            Meet our dedicated team of qualified educators and support staff
-          </p>
-        </div>
-      </section>
-
-      {/* Department Filter */}
-      <section className="py-8 bg-white border-b border-neutral-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-wrap justify-center gap-3">
-            {departments.map((dept) => (
-              <button
-                key={dept}
-                onClick={() => setSelectedDepartment(dept)}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                  selectedDepartment === dept
-                    ? 'bg-primary-600 text-white'
-                    : 'bg-neutral-100 text-neutral-700 hover:bg-primary-50'
-                }`}
-              >
-                {dept}
-              </button>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Staff Grid */}
-      <section className="py-16 bg-neutral-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-primary-800 mb-4">
-              Our Teaching Staff
-            </h2>
-            <p className="text-lg text-neutral-600">
-              Qualified educators dedicated to student success
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filteredStaff.map((staff, index) => (
-              <div key={index} className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-200 border-l-4 border-primary-500">
-                {/* Avatar Placeholder */}
-                <div className="w-20 h-20 bg-gradient-to-br from-primary-100 to-secondary-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-2xl text-primary-700">👨‍🏫</span>
-                </div>
-                
-                {/* Staff Info */}
-                <div className="text-center">
-                  <h3 className="text-lg font-semibold text-primary-800 mb-2">
-                    {staff.name}
-                  </h3>
-                  <p className="text-sm font-medium text-secondary-600 mb-3">
-                    {staff.subject}
-                  </p>
-                  
-                  <div className="space-y-2">
-                    <div className="bg-primary-50 rounded-lg p-2">
-                      <p className="text-xs font-semibold text-primary-800">Department</p>
-                      <p className="text-xs text-primary-700">{staff.department}</p>
-                    </div>
-                    
-                    <div className="bg-secondary-50 rounded-lg p-2">
-                      <p className="text-xs font-semibold text-secondary-800">Qualification</p>
-                      <p className="text-xs text-secondary-700">{staff.qualification}</p>
-                    </div>
-                    
-                    <div className="bg-accent-50 rounded-lg p-2">
-                      <p className="text-xs font-semibold text-accent-800">Experience</p>
-                      <p className="text-xs text-accent-700">{staff.experience}</p>
-                    </div>
-                  </div>
-                </div>
+      <div className="section-padding">
+        <div className="container-max">
+          {filteredStaff.length > 0 ? (
+            <>
+              <div className="flex items-center gap-2 mb-6">
+                <Users className="w-5 h-5 text-neutral-600" />
+                <span className="text-neutral-600">
+                  Showing {filteredStaff.length} staff member{filteredStaff.length !== 1 ? 's' : ''}
+                </span>
               </div>
-            ))}
-          </div>
-
-          {filteredStaff.length === 0 && (
+              
+              <div className="grid gap-6">
+                {filteredStaff.map(staff => (
+                  <StaffCard key={staff.id} staff={staff} />
+                ))}
+              </div>
+            </>
+          ) : (
             <div className="text-center py-12">
-              <p className="text-lg text-neutral-600">No staff found in this department.</p>
+              <Users className="w-16 h-16 text-neutral-300 mx-auto mb-4" />
+              <h3 className="text-xl font-semibold text-neutral-600 mb-2">
+                No staff members found
+              </h3>
+              <p className="text-neutral-500">
+                Try adjusting your search terms or filter criteria
+              </p>
             </div>
           )}
         </div>
-      </section>
-
-      {/* Staff Statistics */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-primary-800 mb-4">
-              Our Team at a Glance
-            </h2>
-            <p className="text-lg text-neutral-600">
-              Professional qualifications and experience statistics
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div className="bg-gradient-to-br from-primary-50 to-primary-100 rounded-2xl p-6 text-center border-2 border-primary-200">
-              <div className="w-12 h-12 bg-primary-600 rounded-xl flex items-center justify-center mx-auto mb-4">
-                <span className="text-white font-bold">65</span>
-              </div>
-              <h3 className="text-2xl font-bold text-primary-600 mb-2">Total Staff</h3>
-              <p className="text-sm text-primary-700">Teaching & Support</p>
-            </div>
-
-            <div className="bg-gradient-to-br from-secondary-50 to-secondary-100 rounded-2xl p-6 text-center border-2 border-secondary-200">
-              <div className="w-12 h-12 bg-secondary-600 rounded-xl flex items-center justify-center mx-auto mb-4">
-                <span className="text-white font-bold">85%</span>
-              </div>
-              <h3 className="text-2xl font-bold text-secondary-600 mb-2">Degree Holders</h3>
-              <p className="text-sm text-secondary-700">Bachelor's & Above</p>
-            </div>
-
-            <div className="bg-gradient-to-br from-accent-50 to-accent-100 rounded-2xl p-6 text-center border-2 border-accent-200">
-              <div className="w-12 h-12 bg-accent-600 rounded-xl flex items-center justify-center mx-auto mb-4">
-                <span className="text-white font-bold">8</span>
-              </div>
-              <h3 className="text-2xl font-bold text-accent-600 mb-2">Avg Experience</h3>
-              <p className="text-sm text-accent-700">Years in Education</p>
-            </div>
-
-            <div className="bg-gradient-to-br from-primary-50 to-secondary-100 rounded-2xl p-6 text-center border-2 border-primary-200">
-              <div className="w-12 h-12 bg-primary-600 rounded-xl flex items-center justify-center mx-auto mb-4">
-                <span className="text-white font-bold">15</span>
-              </div>
-              <h3 className="text-2xl font-bold text-primary-600 mb-2">Departments</h3>
-              <p className="text-sm text-primary-700">Subject Areas</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Professional Development */}
-      <section className="py-16 bg-gradient-to-br from-neutral-50 to-primary-50">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-white rounded-2xl shadow-xl p-8 lg:p-12">
-            <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold text-primary-800 mb-4">
-                Professional Development
-              </h2>
-              <div className="w-16 h-1 bg-gradient-to-r from-primary-500 to-secondary-500 mx-auto rounded-full"></div>
-            </div>
-            
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              <div>
-                <h3 className="text-xl font-semibold text-secondary-800 mb-4">
-                  Continuous Learning
-                </h3>
-                <p className="text-neutral-700 mb-4 leading-relaxed">
-                  Our staff engage in regular professional development to stay current with 
-                  educational best practices, curriculum updates, and innovative teaching methods.
-                </p>
-                <ul className="space-y-2">
-                  <li className="flex items-center text-neutral-700">
-                    <span className="text-secondary-500 mr-2">✓</span>
-                    Regular training workshops and seminars
-                  </li>
-                  <li className="flex items-center text-neutral-700">
-                    <span className="text-secondary-500 mr-2">✓</span>
-                    WAEC and NECO examination updates
-                  </li>
-                  <li className="flex items-center text-neutral-700">
-                    <span className="text-secondary-500 mr-2">✓</span>
-                    Technology integration training
-                  </li>
-                </ul>
-              </div>
-              
-              <div>
-                <h3 className="text-xl font-semibold text-accent-800 mb-4">
-                  Qualifications & Certifications
-                </h3>
-                <p className="text-neutral-700 mb-4 leading-relaxed">
-                  Our teachers hold relevant qualifications from recognized Nigerian institutions 
-                  and many pursue advanced degrees and professional certifications.
-                </p>
-                <ul className="space-y-2">
-                  <li className="flex items-center text-neutral-700">
-                    <span className="text-accent-500 mr-2">✓</span>
-                    Teaching Council of Nigeria (TRCN) registration
-                  </li>
-                  <li className="flex items-center text-neutral-700">
-                    <span className="text-accent-500 mr-2">✓</span>
-                    Subject-specific professional bodies
-                  </li>
-                  <li className="flex items-center text-neutral-700">
-                    <span className="text-accent-500 mr-2">✓</span>
-                    Ongoing postgraduate studies support
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-16 bg-gradient-to-r from-primary-600 to-secondary-600">
-        <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-white mb-4">
-            Join Our Educational Family
-          </h2>
-          <p className="text-xl text-primary-100 mb-8">
-            Experience the difference quality teaching makes in your child's education
-          </p>
-          <div className="space-x-4">
-            <Link to="/admissions" className="btn-accent px-8 py-3 rounded-lg font-medium">
-              Enroll Your Child
-            </Link>
-            <Link to="/contact" className="bg-white text-primary-700 px-8 py-3 rounded-lg font-medium hover:bg-primary-50 transition-colors">
-              Contact Us
-            </Link>
-          </div>
-        </div>
-      </section>
+      </div>
     </div>
   );
 };

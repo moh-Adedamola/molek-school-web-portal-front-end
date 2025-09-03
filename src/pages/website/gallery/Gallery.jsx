@@ -1,253 +1,289 @@
-// pages/website/gallery/Gallery.jsx
+// File: src/pages/website/gallery/Gallery.jsx
+
 import { useState } from 'react';
-import { Camera, Video, Calendar, Filter } from 'lucide-react';
-import ImageGallery from '../../../components/ui/ImageGallery';
+import { Camera, Play, Filter, Search, Grid, List } from 'lucide-react';
+import GalleryGrid from '../../../components/website/GalleryGrid';
 
 const Gallery = () => {
+  const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
-  const [selectedType, setSelectedType] = useState('all');
+  const [viewMode, setViewMode] = useState('grid');
+  const [selectedYear, setSelectedYear] = useState('2024');
 
   // Mock gallery data
   const galleryItems = [
     {
       id: 1,
-      title: "Inter-House Sports Competition",
-      url: "/api/placeholder/400/300",
-      thumbnail: "/api/placeholder/400/300",
-      type: "photo",
-      category: "sports",
-      date: "2024-12-15",
-      description: "Annual inter-house sports competition featuring track and field events"
+      url: '/images/gallery/sports-day-1.jpg',
+      title: 'Annual Sports Day 2024',
+      description: 'Students competing in various athletic events',
+      type: 'image',
+      category: 'sports',
+      date: '2024-03-15',
+      alt: 'Students running track race'
     },
     {
       id: 2,
-      title: "Science Laboratory Practical",
-      url: "/api/placeholder/400/300",
-      thumbnail: "/api/placeholder/400/300",
-      type: "photo",
-      category: "academics",
-      date: "2024-12-10",
-      description: "Students conducting chemistry experiments in our modern laboratory"
+      url: '/images/gallery/science-fair-video.mp4',
+      thumbnail: '/images/gallery/science-fair-thumb.jpg',
+      title: 'Science Fair Presentation',
+      description: 'Student presenting innovative project',
+      type: 'video',
+      category: 'academics',
+      date: '2024-03-10',
+      alt: 'Science fair presentation video'
     },
     {
       id: 3,
-      title: "Cultural Day Celebration",
-      url: "/api/placeholder/400/300",
-      thumbnail: "/api/placeholder/400/300",
-      type: "video",
-      category: "events",
-      date: "2024-12-08",
-      description: "Students showcasing Nigerian cultural heritage through dance and music"
+      url: '/images/gallery/cultural-day-1.jpg',
+      title: 'Cultural Day Celebration',
+      description: 'Traditional dance performance',
+      type: 'image',
+      category: 'cultural',
+      date: '2024-02-28',
+      alt: 'Students in traditional costumes dancing'
     },
     {
       id: 4,
-      title: "New Computer Laboratory",
-      url: "/api/placeholder/400/300",
-      thumbnail: "/api/placeholder/400/300",
-      type: "photo",
-      category: "facilities",
-      date: "2024-12-05",
-      description: "State-of-the-art computer laboratory with modern equipment"
+      url: '/images/gallery/graduation-2024.jpg',
+      title: 'Graduation Ceremony 2024',
+      description: 'SSS3 students receiving certificates',
+      type: 'image',
+      category: 'ceremony',
+      date: '2024-07-20',
+      alt: 'Graduation ceremony with students in caps and gowns'
     },
     {
       id: 5,
-      title: "Prize Giving Ceremony",
-      url: "/api/placeholder/400/300",
-      thumbnail: "/api/placeholder/400/300",
-      type: "video",
-      category: "events",
-      date: "2024-12-01",
-      description: "Awards ceremony recognizing outstanding student achievements"
+      url: '/images/gallery/library-opening.jpg',
+      title: 'New Library Opening',
+      description: 'Modern library facility inauguration',
+      type: 'image',
+      category: 'infrastructure',
+      date: '2024-01-15',
+      alt: 'New library interior with students reading'
     },
     {
       id: 6,
-      title: "Mathematics Class Session",
-      url: "/api/placeholder/400/300",
-      thumbnail: "/api/placeholder/400/300",
-      type: "photo",
-      category: "academics",
-      date: "2024-11-28",
-      description: "Interactive mathematics lesson in our modern classroom"
-    },
-    {
-      id: 7,
-      title: "School Library Reading Hour",
-      url: "/api/placeholder/400/300",
-      thumbnail: "/api/placeholder/400/300",
-      type: "photo",
-      category: "academics",
-      date: "2024-11-25",
-      description: "Students enjoying quiet study time in our well-equipped library"
-    },
-    {
-      id: 8,
-      title: "Football Match Highlights",
-      url: "/api/placeholder/400/300",
-      thumbnail: "/api/placeholder/400/300",
-      type: "video",
-      category: "sports",
-      date: "2024-11-22",
-      description: "Exciting highlights from our school football championship match"
+      url: '/images/gallery/inter-house-sports-video.mp4',
+      thumbnail: '/images/gallery/inter-house-sports-thumb.jpg',
+      title: 'Inter-House Sports Competition',
+      description: 'Highlights from the annual competition',
+      type: 'video',
+      category: 'sports',
+      date: '2024-02-15',
+      alt: 'Inter-house sports competition highlights'
     }
   ];
 
   const categories = [
-    { value: 'all', label: 'All Categories', count: galleryItems.length },
-    { value: 'academics', label: 'Academics', count: galleryItems.filter(item => item.category === 'academics').length },
-    { value: 'sports', label: 'Sports', count: galleryItems.filter(item => item.category === 'sports').length },
-    { value: 'events', label: 'Events', count: galleryItems.filter(item => item.category === 'events').length },
-    { value: 'facilities', label: 'Facilities', count: galleryItems.filter(item => item.category === 'facilities').length }
+    { value: 'all', label: 'All Categories', icon: Grid },
+    { value: 'academics', label: 'Academic Events', icon: null },
+    { value: 'sports', label: 'Sports & Games', icon: null },
+    { value: 'cultural', label: 'Cultural Activities', icon: null },
+    { value: 'ceremony', label: 'Ceremonies', icon: null },
+    { value: 'infrastructure', label: 'Facilities', icon: null }
   ];
 
-  const types = [
-    { value: 'all', label: 'All Media' },
-    { value: 'photo', label: 'Photos Only' },
-    { value: 'video', label: 'Videos Only' }
-  ];
+  const availableYears = ['2024', '2023', '2022'];
 
+  // Filter gallery items
   const filteredItems = galleryItems.filter(item => {
-    const categoryMatch = selectedCategory === 'all' || item.category === selectedCategory;
-    const typeMatch = selectedType === 'all' || item.type === selectedType;
-    return categoryMatch && typeMatch;
+    const matchesSearch = item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         item.description.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = selectedCategory === 'all' || item.category === selectedCategory;
+    const matchesYear = item.date.startsWith(selectedYear);
+    return matchesSearch && matchesCategory && matchesYear;
   });
 
-  const getMediaIcon = (type) => {
-    return type === 'video' ? <Video size={16} /> : <Camera size={16} />;
-  };
-
-  const getCategoryColor = (category) => {
-    const colors = {
-      academics: 'text-primary-600',
-      sports: 'text-secondary-600',
-      events: 'text-accent-600',
-      facilities: 'text-purple-600'
-    };
-    return colors[category] || 'text-neutral-600';
+  const getItemCount = (category) => {
+    if (category === 'all') return galleryItems.length;
+    return galleryItems.filter(item => item.category === category).length;
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-primary-50">
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-primary-800 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="text-center">
-            <h1 className="text-4xl font-bold mb-4">School Gallery</h1>
-            <p className="text-xl text-primary-200 max-w-3xl mx-auto">
-              Explore our vibrant school life through photos and videos capturing memorable moments, achievements, and daily activities
-            </p>
-          </div>
+      <div className="hero-gradient text-white py-16">
+        <div className="container-max">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">Photo & Video Gallery</h1>
+          <p className="text-xl text-blue-100 max-w-2xl">
+            Explore memorable moments from school events, activities, achievements, and daily life at our institution.
+          </p>
         </div>
       </div>
 
-      {/* Filter Section */}
-      <div className="bg-white border-b border-neutral-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="flex flex-col lg:flex-row gap-6">
-            {/* Category Filter */}
-            <div className="flex-1">
-              <div className="flex items-center space-x-2 mb-3">
-                <Filter size={20} className="text-neutral-500" />
-                <span className="font-medium text-neutral-700">Categories</span>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {categories.map(category => (
-                  <button
-                    key={category.value}
-                    onClick={() => setSelectedCategory(category.value)}
-                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                      selectedCategory === category.value
-                        ? 'bg-primary-600 text-white'
-                        : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
-                    }`}
-                  >
-                    {category.label} ({category.count})
-                  </button>
-                ))}
-              </div>
-            </div>
+      <div className="container-max py-8">
+        {/* Controls */}
+        <div className="flex flex-col lg:flex-row gap-4 mb-8">
+          {/* Search */}
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+            <input
+              type="text"
+              placeholder="Search photos and videos..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="input-base pl-10 w-full"
+            />
+          </div>
 
-            {/* Media Type Filter */}
-            <div className="lg:w-64">
-              <div className="flex items-center space-x-2 mb-3">
-                <span className="font-medium text-neutral-700">Media Type</span>
-              </div>
+          {/* Filters */}
+          <div className="flex flex-wrap gap-4">
+            <div className="relative">
+              <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
               <select
-                value={selectedType}
-                onChange={(e) => setSelectedType(e.target.value)}
-                className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white"
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+                className="input-base pl-10 pr-8 min-w-48"
               >
-                {types.map(type => (
-                  <option key={type.value} value={type.value}>{type.label}</option>
+                {categories.map(category => (
+                  <option key={category.value} value={category.value}>
+                    {category.label} ({getItemCount(category.value)})
+                  </option>
                 ))}
               </select>
             </div>
+
+            <select
+              value={selectedYear}
+              onChange={(e) => setSelectedYear(e.target.value)}
+              className="input-base min-w-32"
+            >
+              {availableYears.map(year => (
+                <option key={year} value={year}>{year}</option>
+              ))}
+            </select>
+
+            {/* View Mode Toggle */}
+            <div className="flex bg-white rounded-lg border overflow-hidden">
+              <button
+                onClick={() => setViewMode('grid')}
+                className={`p-2 ${
+                  viewMode === 'grid' 
+                    ? 'bg-blue-600 text-white' 
+                    : 'text-gray-600 hover:bg-gray-50'
+                }`}
+              >
+                <Grid className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => setViewMode('list')}
+                className={`p-2 ${
+                  viewMode === 'list' 
+                    ? 'bg-blue-600 text-white' 
+                    : 'text-gray-600 hover:bg-gray-50'
+                }`}
+              >
+                <List className="w-4 h-4" />
+              </button>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Gallery Grid */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {filteredItems.length > 0 ? (
-          <>
-            {/* Results Info */}
-            <div className="mb-8 text-center">
-              <p className="text-neutral-600">
-                Showing {filteredItems.length} {filteredItems.length === 1 ? 'item' : 'items'}
-                {selectedCategory !== 'all' && ` in ${categories.find(c => c.value === selectedCategory)?.label}`}
-                {selectedType !== 'all' && ` (${selectedType}s only)`}
-              </p>
-            </div>
+        {/* Stats Bar */}
+        <div className="flex flex-wrap gap-4 mb-8 text-sm text-gray-600">
+          <span>Showing {filteredItems.length} items</span>
+          <span>•</span>
+          <span>{filteredItems.filter(item => item.type === 'image').length} Photos</span>
+          <span>•</span>
+          <span>{filteredItems.filter(item => item.type === 'video').length} Videos</span>
+        </div>
 
-            {/* Gallery Component */}
-            <ImageGallery items={filteredItems} />
-          </>
+        {/* Gallery Content */}
+        {viewMode === 'grid' ? (
+          <GalleryGrid items={filteredItems} gridCols={3} />
         ) : (
-          <div className="text-center py-12">
-            <div className="mb-4">
-              <Camera className="mx-auto text-neutral-400" size={64} />
-            </div>
-            <p className="text-neutral-600 text-lg">No items found matching your filters.</p>
-            <button 
-              onClick={() => {
-                setSelectedCategory('all');
-                setSelectedType('all');
-              }}
-              className="mt-4 btn-primary px-6 py-2 rounded-lg"
-            >
-              Clear Filters
-            </button>
+          /* List View */
+          <div className="space-y-4">
+            {filteredItems.map((item) => (
+              <div key={item.id} className="card-base">
+                <div className="flex flex-col md:flex-row gap-4">
+                  {/* Thumbnail */}
+                  <div className="w-full md:w-48 h-32 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
+                    <div className="relative w-full h-full">
+                      <img
+                        src={item.type === 'video' ? item.thumbnail || item.url : item.url}
+                        alt={item.alt || item.title}
+                        className="w-full h-full object-cover"
+                      />
+                      {item.type === 'video' && (
+                        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30">
+                          <Play className="w-8 h-8 text-white" fill="white" />
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Content */}
+                  <div className="flex-1">
+                    <div className="flex items-start justify-between mb-2">
+                      <h3 className="text-lg font-semibold text-gray-800">{item.title}</h3>
+                      <div className="flex items-center gap-2 text-sm text-gray-500">
+                        {item.type === 'video' ? (
+                          <Play className="w-4 h-4" />
+                        ) : (
+                          <Camera className="w-4 h-4" />
+                        )}
+                        <span className="capitalize">{item.type}</span>
+                      </div>
+                    </div>
+                    
+                    <p className="text-gray-600 mb-3">{item.description}</p>
+                    
+                    <div className="flex items-center gap-4 text-sm text-gray-500">
+                      <span>
+                        {new Date(item.date).toLocaleDateString('en-US', {
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric'
+                        })}
+                      </span>
+                      <span className="capitalize badge-info text-xs">
+                        {item.category.replace('-', ' ')}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         )}
-      </div>
 
-      {/* Stats Section */}
-      <div className="bg-white border-t border-neutral-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            <div className="space-y-2">
-              <div className="text-3xl font-bold text-primary-600">
-                {galleryItems.filter(item => item.type === 'photo').length}
-              </div>
-              <div className="text-sm text-neutral-600 font-medium">Photos</div>
-            </div>
-            <div className="space-y-2">
-              <div className="text-3xl font-bold text-secondary-600">
-                {galleryItems.filter(item => item.type === 'video').length}
-              </div>
-              <div className="text-sm text-neutral-600 font-medium">Videos</div>
-            </div>
-            <div className="space-y-2">
-              <div className="text-3xl font-bold text-accent-600">
-                {categories.length - 1}
-              </div>
-              <div className="text-sm text-neutral-600 font-medium">Categories</div>
-            </div>
-            <div className="space-y-2">
-              <div className="text-3xl font-bold text-purple-600">
-                {galleryItems.length}
-              </div>
-              <div className="text-sm text-neutral-600 font-medium">Total Items</div>
-            </div>
+        {/* Empty State */}
+        {filteredItems.length === 0 && (
+          <div className="text-center py-16">
+            <Camera className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+            <h3 className="text-xl font-semibold text-gray-600 mb-2">
+              No media found
+            </h3>
+            <p className="text-gray-500">
+              Try adjusting your search terms or filters to find what you're looking for.
+            </p>
+          </div>
+        )}
+
+        {/* Featured Categories */}
+        <div className="mt-16">
+          <h2 className="text-2xl font-bold text-gray-800 mb-8">Browse by Category</h2>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            {categories.slice(1).map((category) => (
+              <button
+                key={category.value}
+                onClick={() => setSelectedCategory(category.value)}
+                className={`card-base text-center hover:shadow-lg transition-all duration-300 ${
+                  selectedCategory === category.value ? 'border-blue-300 bg-blue-50' : ''
+                }`}
+              >
+                <div className="text-blue-600 mb-2">
+                  <Camera className="w-8 h-8 mx-auto" />
+                </div>
+                <h3 className="font-medium text-sm mb-1">{category.label}</h3>
+                <p className="text-xs text-gray-500">
+                  {getItemCount(category.value)} items
+                </p>
+              </button>
+            ))}
           </div>
         </div>
       </div>

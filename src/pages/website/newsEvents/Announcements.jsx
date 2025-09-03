@@ -1,173 +1,266 @@
-// pages/website/news-events/Announcements.jsx
-import { AlertTriangle, Info, CheckCircle, Clock } from 'lucide-react';
+// File: src/pages/website/news-events/Announcements.jsx
+
+import { useState } from 'react';
+import { AlertCircle, Clock, Search, Filter, Pin, Bell } from 'lucide-react';
 
 const Announcements = () => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedPriority, setSelectedPriority] = useState('all');
+
   // Mock announcements data
   const announcements = [
     {
       id: 1,
-      title: "School Fee Payment Deadline - Final Notice",
-      content: "All outstanding school fees must be paid by December 20th, 2024. Students with unpaid fees will not be allowed to take end-of-term examinations.",
-      date: "2024-12-15",
-      priority: "urgent",
-      department: "Accounts Office",
-      type: "payment"
+      title: 'School Fees Payment Deadline - Term 2',
+      content: 'All parents are reminded that the deadline for Term 2 school fees payment is March 30, 2024. Late payments will incur a 5% penalty fee.',
+      priority: 'high',
+      category: 'Financial',
+      publishDate: '2024-03-15T10:00:00Z',
+      isPinned: true,
+      targetAudience: 'Parents'
     },
     {
       id: 2,
-      title: "WAEC Registration Ongoing",
-      content: "SSS3 students should complete their WAEC registration at the school's examination office. Bring recent passport photographs and registration fees.",
-      date: "2024-12-12",
-      priority: "high",
-      department: "Examination Office",
-      type: "academic"
+      title: 'Uniform Policy Update',
+      content: 'Updated uniform guidelines are now in effect. Students must wear complete school uniform including proper footwear. Violations will result in disciplinary action.',
+      priority: 'medium',
+      category: 'Policy',
+      publishDate: '2024-03-14T08:30:00Z',
+      isPinned: true,
+      targetAudience: 'Students & Parents'
     },
     {
       id: 3,
-      title: "New School Uniform Guidelines",
-      content: "Updated school uniform guidelines are now available. All students must comply with the new dress code starting January 2025.",
-      date: "2024-12-10",
-      priority: "normal",
-      department: "Student Affairs",
-      type: "policy"
+      title: 'Mid-Term Break Schedule',
+      content: 'Mid-term break will commence on March 25th and resume on April 1st, 2024. All students are expected to return promptly.',
+      priority: 'medium',
+      category: 'Academic',
+      publishDate: '2024-03-10T14:00:00Z',
+      isPinned: false,
+      targetAudience: 'All'
     },
     {
       id: 4,
-      title: "Library Extended Hours",
-      content: "The school library will now be open from 7:00 AM to 7:00 PM during examination periods to support student learning.",
-      date: "2024-12-08",
-      priority: "normal",
-      department: "Library Services",
-      type: "facility"
-    },
-    {
-      id: 5,
-      title: "Parent-Teacher Conference Scheduled",
-      content: "A mandatory parent-teacher conference is scheduled for December 22nd, 2024. All parents/guardians are expected to attend.",
-      date: "2024-12-06",
-      priority: "high",
-      department: "Academic Affairs",
-      type: "meeting"
+      title: 'Library Operating Hours Extended',
+      content: 'The school library will now operate from 7:00 AM to 6:00 PM on weekdays to accommodate more study sessions.',
+      priority: 'low',
+      category: 'Facility',
+      publishDate: '2024-03-08T11:00:00Z',
+      isPinned: false,
+      targetAudience: 'Students'
     }
   ];
 
+  const priorities = [
+    { value: 'all', label: 'All Priorities' },
+    { value: 'high', label: 'High Priority' },
+    { value: 'medium', label: 'Medium Priority' },
+    { value: 'low', label: 'Low Priority' }
+  ];
+
+  // Filter announcements
+  const filteredAnnouncements = announcements.filter(announcement => {
+    const matchesSearch = announcement.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         announcement.content.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesPriority = selectedPriority === 'all' || announcement.priority === selectedPriority;
+    return matchesSearch && matchesPriority;
+  });
+
+  // Sort announcements - pinned first, then by date
+  const sortedAnnouncements = [...filteredAnnouncements].sort((a, b) => {
+    if (a.isPinned && !b.isPinned) return -1;
+    if (!a.isPinned && b.isPinned) return 1;
+    return new Date(b.publishDate) - new Date(a.publishDate);
+  });
+
+  const getPriorityStyle = (priority) => {
+    switch (priority) {
+      case 'high':
+        return 'badge-error';
+      case 'medium':
+        return 'badge-warning';
+      case 'low':
+        return 'badge-info';
+      default:
+        return 'badge-info';
+    }
+  };
+
   const getPriorityIcon = (priority) => {
-    switch (priority) {
-      case 'urgent': return <AlertTriangle className="text-red-600" size={20} />;
-      case 'high': return <Info className="text-accent-600" size={20} />;
-      default: return <CheckCircle className="text-primary-600" size={20} />;
+    if (priority === 'high') {
+      return <AlertCircle className="w-4 h-4" />;
     }
+    return <Bell className="w-4 h-4" />;
   };
 
-  const getPriorityStyles = (priority) => {
-    switch (priority) {
-      case 'urgent': return 'border-l-red-500 bg-red-50';
-      case 'high': return 'border-l-accent-500 bg-accent-50';
-      default: return 'border-l-primary-500 bg-primary-50';
-    }
-  };
-
-  const getTypeColor = (type) => {
-    const colors = {
-      payment: 'bg-red-100 text-red-800',
-      academic: 'bg-primary-100 text-primary-800',
-      policy: 'bg-purple-100 text-purple-800',
-      facility: 'bg-secondary-100 text-secondary-800',
-      meeting: 'bg-accent-100 text-accent-800'
+  const formatDateTime = (dateString) => {
+    const date = new Date(dateString);
+    return {
+      date: date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      }),
+      time: date.toLocaleTimeString('en-US', {
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true
+      })
     };
-    return colors[type] || 'bg-neutral-100 text-neutral-800';
+  };
+
+  const getTimeAgo = (dateString) => {
+    const now = new Date();
+    const publishDate = new Date(dateString);
+    const diffInHours = Math.floor((now - publishDate) / (1000 * 60 * 60));
+    
+    if (diffInHours < 1) return 'Just now';
+    if (diffInHours < 24) return `${diffInHours} hour${diffInHours > 1 ? 's' : ''} ago`;
+    
+    const diffInDays = Math.floor(diffInHours / 24);
+    if (diffInDays < 7) return `${diffInDays} day${diffInDays > 1 ? 's' : ''} ago`;
+    
+    const diffInWeeks = Math.floor(diffInDays / 7);
+    return `${diffInWeeks} week${diffInWeeks > 1 ? 's' : ''} ago`;
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-primary-50">
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-primary-800 text-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="text-center">
-            <h1 className="text-4xl font-bold mb-4">Official Announcements</h1>
-            <p className="text-xl text-primary-200">
-              Important notices and updates from school administration
-            </p>
-          </div>
+      <div className="hero-gradient text-white py-16">
+        <div className="container-max">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">Announcements</h1>
+          <p className="text-xl text-blue-100 max-w-2xl">
+            Important school announcements, policy updates, and notices for students, parents, and staff.
+          </p>
         </div>
       </div>
 
-      {/* Priority Legend */}
-      <div className="bg-white border-b border-neutral-200">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex flex-wrap justify-center gap-6 text-sm">
-            <div className="flex items-center space-x-2">
-              <AlertTriangle className="text-red-600" size={16} />
-              <span className="text-red-700 font-medium">Urgent</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Info className="text-accent-600" size={16} />
-              <span className="text-accent-700 font-medium">High Priority</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <CheckCircle className="text-primary-600" size={16} />
-              <span className="text-primary-700 font-medium">Normal</span>
-            </div>
+      <div className="container-max py-8">
+        {/* Search and Filter */}
+        <div className="flex flex-col md:flex-row gap-4 mb-8">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+            <input
+              type="text"
+              placeholder="Search announcements..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="input-base pl-10 w-full"
+            />
           </div>
-        </div>
-      </div>
-
-      {/* Announcements List */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="space-y-6">
-          {announcements.map(announcement => (
-            <div 
-              key={announcement.id} 
-              className={`bg-white rounded-lg shadow-md border-l-4 overflow-hidden ${getPriorityStyles(announcement.priority)}`}
+          <div className="relative">
+            <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+            <select
+              value={selectedPriority}
+              onChange={(e) => setSelectedPriority(e.target.value)}
+              className="input-base pl-10 pr-8 min-w-48"
             >
-              <div className="p-6">
+              {priorities.map(priority => (
+                <option key={priority.value} value={priority.value}>
+                  {priority.label}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        {/* Announcements List */}
+        <div className="space-y-4">
+          {sortedAnnouncements.map((announcement) => {
+            const dateTime = formatDateTime(announcement.publishDate);
+            
+            return (
+              <div 
+                key={announcement.id} 
+                className={`card-base ${announcement.isPinned ? 'border-l-4 border-l-yellow-400 bg-yellow-50' : ''}`}
+              >
                 {/* Header */}
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex items-center space-x-3">
-                    {getPriorityIcon(announcement.priority)}
-                    <div>
-                      <h2 className="text-lg font-semibold text-neutral-800">
+                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-4">
+                  <div className="flex-1">
+                    <div className="flex items-start gap-3 mb-2">
+                      {announcement.isPinned && (
+                        <Pin className="w-4 h-4 text-yellow-600 mt-1 flex-shrink-0" />
+                      )}
+                      <h2 className="text-xl font-semibold text-gray-800 flex-1">
                         {announcement.title}
                       </h2>
-                      <div className="flex items-center space-x-4 text-sm text-neutral-600 mt-1">
-                        <div className="flex items-center space-x-1">
-                          <Clock size={14} />
-                          <span>{new Date(announcement.date).toLocaleDateString()}</span>
-                        </div>
-                        <span>•</span>
-                        <span>{announcement.department}</span>
+                    </div>
+                    
+                    {/* Meta information */}
+                    <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
+                      <div className="flex items-center gap-1">
+                        <Clock className="w-4 h-4" />
+                        <span>{getTimeAgo(announcement.publishDate)}</span>
                       </div>
+                      <span className="text-gray-300">•</span>
+                      <span>{announcement.category}</span>
+                      <span className="text-gray-300">•</span>
+                      <span>{announcement.targetAudience}</span>
                     </div>
                   </div>
-                  
-                  <span className={`px-3 py-1 rounded-full text-xs font-medium ${getTypeColor(announcement.type)}`}>
-                    {announcement.type}
-                  </span>
+
+                  {/* Priority Badge */}
+                  <div className={`${getPriorityStyle(announcement.priority)} flex items-center gap-1 flex-shrink-0`}>
+                    {getPriorityIcon(announcement.priority)}
+                    <span className="capitalize">{announcement.priority}</span>
+                  </div>
                 </div>
 
                 {/* Content */}
-                <div className="text-neutral-700 leading-relaxed">
+                <div className="text-gray-700 leading-relaxed mb-4">
                   {announcement.content}
                 </div>
 
-                {/* Action Button for urgent items */}
-                {announcement.priority === 'urgent' && (
-                  <div className="mt-4 pt-4 border-t border-neutral-200">
-                    <button className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                      Take Action Now
-                    </button>
-                  </div>
-                )}
+                {/* Footer */}
+                <div className="flex items-center justify-between text-xs text-gray-500 border-t pt-3">
+                  <span>
+                    Published on {dateTime.date} at {dateTime.time}
+                  </span>
+                  {announcement.isPinned && (
+                    <div className="flex items-center gap-1 text-yellow-600">
+                      <Pin className="w-3 h-3" />
+                      <span>Pinned</span>
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
-        {/* Load More */}
-        <div className="text-center mt-12">
-          <button className="btn-primary px-8 py-3 rounded-lg">
-            Load Older Announcements
-          </button>
+        {/* Empty State */}
+        {sortedAnnouncements.length === 0 && (
+          <div className="text-center py-16">
+            <Bell className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+            <h3 className="text-xl font-semibold text-gray-600 mb-2">
+              No announcements found
+            </h3>
+            <p className="text-gray-500">
+              Try adjusting your search terms or filters.
+            </p>
+          </div>
+        )}
+
+        {/* Information Panel */}
+        <div className="mt-12 card-base bg-blue-50 border-blue-200">
+          <div className="flex items-start gap-4">
+            <div className="text-blue-600 flex-shrink-0">
+              <AlertCircle className="w-6 h-6" />
+            </div>
+            <div>
+              <h3 className="font-semibold text-gray-800 mb-2">
+                Stay Updated
+              </h3>
+              <p className="text-gray-600 text-sm mb-3">
+                Important announcements are also sent via SMS and email to registered parents and students. 
+                Make sure your contact information is up to date.
+              </p>
+              <button className="btn-outline text-sm">
+                Update Contact Info
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

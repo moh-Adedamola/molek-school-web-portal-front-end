@@ -1,115 +1,58 @@
-import { Loader2 } from 'lucide-react';
-
-const LoadingSpinner = ({
-  size = 'md',
-  color = 'primary',
-  overlay = false,
-  text,
-  className = '',
+const LoadingSpinner = ({ 
+  size = 'md', 
+  text = 'Loading...', 
+  centered = false,
+  color = 'blue'
 }) => {
   const sizes = {
-    xs: 'w-3 h-3',
-    sm: 'w-4 h-4',
-    md: 'w-6 h-6',
-    lg: 'w-8 h-8',
-    xl: 'w-12 h-12',
+    sm: 'h-4 w-4',
+    md: 'h-6 w-6',
+    lg: 'h-8 w-8',
+    xl: 'h-12 w-12'
   };
 
   const colors = {
-    primary: 'text-primary-600',
-    secondary: 'text-secondary-600',
-    accent: 'text-accent-600',
-    neutral: 'text-neutral-600',
-    white: 'text-white',
+    blue: 'text-blue-600',
+    green: 'text-emerald-600',
+    amber: 'text-amber-600',
+    gray: 'text-gray-400'
   };
 
-  const spinnerClasses = `${sizes[size]} ${colors[color]} animate-spin ${className}`;
-
-  const spinner = (
-    <div className="flex flex-col items-center justify-center space-y-2">
-      <Loader2 className={spinnerClasses} />
-      {text && (
-        <p className="text-sm text-neutral-600 animate-pulse">{text}</p>
-      )}
-    </div>
+  const spinnerClasses = `animate-spin ${sizes[size]} ${colors[color]}`;
+  
+  const Spinner = () => (
+    <svg className={spinnerClasses} fill="none" viewBox="0 0 24 24">
+      <circle 
+        className="opacity-25" 
+        cx="12" 
+        cy="12" 
+        r="10" 
+        stroke="currentColor" 
+        strokeWidth="4"
+      />
+      <path 
+        className="opacity-75" 
+        fill="currentColor" 
+        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+      />
+    </svg>
   );
 
-  if (overlay) {
+  if (centered) {
     return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-white/80 backdrop-blur-sm">
-        {spinner}
+      <div className="flex flex-col items-center justify-center min-h-32 space-y-3">
+        <Spinner />
+        {text && <p className="text-sm text-gray-600">{text}</p>}
       </div>
     );
   }
 
-  return spinner;
-};
-
-// Inline spinner for buttons and small components
-const InlineSpinner = ({ size = 'sm', color = 'current', className = '' }) => {
-  const sizes = {
-    xs: 'w-3 h-3',
-    sm: 'w-4 h-4',
-    md: 'w-5 h-5',
-  };
-
   return (
-    <Loader2 className={`${sizes[size]} text-${color} animate-spin ${className}`} />
+    <div className="flex items-center space-x-2">
+      <Spinner />
+      {text && <span className="text-sm text-gray-600">{text}</span>}
+    </div>
   );
 };
-
-// Page loading spinner
-const PageLoader = ({ text = 'Loading...', className = '' }) => (
-  <div className={`flex items-center justify-center min-h-[400px] ${className}`}>
-    <LoadingSpinner size="lg" text={text} />
-  </div>
-);
-
-// Card loading skeleton
-const CardLoader = ({ className = '' }) => (
-  <div className={`animate-pulse ${className}`}>
-    <div className="bg-neutral-200 rounded-lg p-6 space-y-4">
-      <div className="h-4 bg-neutral-300 rounded w-3/4"></div>
-      <div className="space-y-2">
-        <div className="h-3 bg-neutral-300 rounded"></div>
-        <div className="h-3 bg-neutral-300 rounded w-5/6"></div>
-      </div>
-    </div>
-  </div>
-);
-
-// Table loading skeleton
-const TableLoader = ({ rows = 5, cols = 4, className = '' }) => (
-  <div className={`animate-pulse ${className}`}>
-    <div className="bg-white border border-neutral-200 rounded-lg overflow-hidden">
-      {/* Header */}
-      <div className="bg-primary-100 px-6 py-4 border-b border-neutral-200">
-        <div className="flex space-x-4">
-          {Array.from({ length: cols }, (_, i) => (
-            <div key={i} className="h-4 bg-primary-200 rounded flex-1"></div>
-          ))}
-        </div>
-      </div>
-      
-      {/* Rows */}
-      <div className="divide-y divide-neutral-200">
-        {Array.from({ length: rows }, (_, rowIndex) => (
-          <div key={rowIndex} className="px-6 py-4">
-            <div className="flex space-x-4">
-              {Array.from({ length: cols }, (_, colIndex) => (
-                <div key={colIndex} className="h-3 bg-neutral-200 rounded flex-1"></div>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  </div>
-);
-
-LoadingSpinner.Inline = InlineSpinner;
-LoadingSpinner.Page = PageLoader;
-LoadingSpinner.Card = CardLoader;
-LoadingSpinner.Table = TableLoader;
 
 export default LoadingSpinner;

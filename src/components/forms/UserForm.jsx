@@ -1,51 +1,64 @@
+// File: components/forms/UserForm.jsx
 import React, { useState, useEffect } from 'react';
-import { X, Save, User, Mail, Phone, MapPin, BookOpen, Users } from 'lucide-react';
+import { X, Eye, EyeOff, User, Mail, Phone, MapPin, Shield } from 'lucide-react';
 
-const UserForm = ({ 
-  user = null, 
-  userType = 'student', 
-  onSubmit, 
-  onCancel, 
-  isOpen = false,
-  loading = false 
-}) => {
+const UserForm = ({ user, isOpen, onClose, onSave }) => {
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
     email: '',
     phone: '',
-    dateOfBirth: '',
+    role: 'teacher',
+    status: 'active',
     address: '',
+    dateOfBirth: '',
     gender: '',
-    role: userType,
-    
-    // Student specific
-    studentId: '',
-    classId: '',
-    parentId: '',
-    admissionDate: '',
-    
-    // Teacher specific
     employeeId: '',
     subjects: [],
     classes: [],
-    qualification: '',
-    experience: '',
-    
-    // Parent specific
-    occupation: '',
-    children: [],
-    
-    // Admin specific
-    department: '',
-    permissions: []
+    password: '',
+    confirmPassword: ''
   });
 
+  const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
+  const [saving, setSaving] = useState(false);
+
+  const roles = [
+    { value: 'admin', label: 'Administrator', description: 'Full school management access' },
+    { value: 'teacher', label: 'Teacher', description: 'Classroom and student management' },
+    { value: 'parent', label: 'Parent', description: 'Access to own children\'s data' }
+  ];
+
+  const subjects = [
+    'Mathematics', 'English Language', 'Physics', 'Chemistry', 'Biology',
+    'Geography', 'History', 'Economics', 'Government', 'Literature',
+    'Further Mathematics', 'Agricultural Science', 'Technical Drawing'
+  ];
+
+  const classes = [
+    'JSS 1A', 'JSS 1B', 'JSS 2A', 'JSS 2B', 'JSS 3A', 'JSS 3B',
+    'SSS 1A', 'SSS 1B', 'SSS 2A', 'SSS 2B', 'SSS 3A', 'SSS 3B'
+  ];
 
   useEffect(() => {
     if (user) {
-      setFormData({ ...formData, ...user });
+      setFormData({
+        firstName: user.firstName || '',
+        lastName: user.lastName || '',
+        email: user.email || '',
+        phone: user.phone || '',
+        role: user.role || 'teacher',
+        status: user.status || 'active',
+        address: user.address || '',
+        dateOfBirth: user.dateOfBirth || '',
+        gender: user.gender || '',
+        employeeId: user.employeeId || '',
+        subjects: user.subjects || [],
+        classes: user.classes || [],
+        password: '',
+        confirmPassword: ''
+      });
     } else {
       // Reset form for new user
       setFormData({
@@ -53,555 +66,417 @@ const UserForm = ({
         lastName: '',
         email: '',
         phone: '',
-        dateOfBirth: '',
+        role: 'teacher',
+        status: 'active',
         address: '',
+        dateOfBirth: '',
         gender: '',
-        role: userType,
-        studentId: '',
-        classId: '',
-        parentId: '',
-        admissionDate: '',
         employeeId: '',
         subjects: [],
         classes: [],
-        qualification: '',
-        experience: '',
-        occupation: '',
-        children: [],
-        department: '',
-        permissions: []
+        password: '',
+        confirmPassword: ''
       });
     }
-  }, [user, userType]);
+    setErrors({});
+  }, [user, isOpen]);
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+  const handleInputChange = (field, value) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: value
+    }));
     
-    if (type === 'checkbox') {
-      if (name === 'subjects' || name === 'classes' || name === 'permissions') {
-        const currentArray = formData[name] || [];
-        if (checked) {
-          setFormData({ ...formData, [name]: [...currentArray, value] });
-        } else {
-          setFormData({ ...formData, [name]: currentArray.filter(item => item !== value) });
-        }
-      } else {
-        setFormData({ ...formData, [name]: checked });
-      }
-    } else {
-      setFormData({ ...formData, [name]: value });
-    }
-
     // Clear error when user starts typing
-    if (errors[name]) {
-      setErrors({ ...errors, [name]: '' });
+    if (errors[field]) {
+      setErrors(prev => ({
+        ...prev,
+        [field]: null
+      }));
     }
   };
 
   const validateForm = () => {
     const newErrors = {};
 
-    // Common validations
     if (!formData.firstName.trim()) newErrors.firstName = 'First name is required';
     if (!formData.lastName.trim()) newErrors.lastName = 'Last name is required';
-    if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Email is invalid';
+    if (!formData.email.trim()) newErrors.email = 'Email is required';
+    if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Email format is invalid';
+    if (!formData.phone.trim()) newErrors.phone = 'Phone number is required';
+    
+    // Password validation for new users
+    if (!user) {
+      if (!formData.password) newErrors.password = 'Password is required';
+      if (formData.password.length < 6) newErrors.password = 'Password must be at least 6 characters';
+      if (formData.password !== formData.confirmPassword) newErrors.confirmPassword = 'Passwords do not match';
     }
-    if (!formData.phone.trim()) newErrors.phone = 'Phone is required';
-    if (!formData.gender) newErrors.gender = 'Gender is required';
 
     // Role-specific validations
-    if (userType === 'student') {
-      if (!formData.classId) newErrors.classId = 'Class is required';
-      if (!formData.admissionDate) newErrors.admissionDate = 'Admission date is required';
-    }
-    
-    if (userType === 'teacher') {
-      if (!formData.qualification.trim()) newErrors.qualification = 'Qualification is required';
+    if (formData.role === 'teacher') {
       if (formData.subjects.length === 0) newErrors.subjects = 'At least one subject is required';
-    }
-
-    if (userType === 'admin') {
-      if (!formData.department.trim()) newErrors.department = 'Department is required';
+      if (formData.classes.length === 0) newErrors.classes = 'At least one class is required';
     }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validateForm()) {
-      onSubmit(formData);
+    
+    if (!validateForm()) return;
+
+    setSaving(true);
+    
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      const userData = {
+        ...formData,
+        id: user?.id || Date.now(),
+        fullName: `${formData.firstName} ${formData.lastName}`,
+        createdAt: user?.createdAt || new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+
+      onSave(userData);
+      onClose();
+    } catch (error) {
+      console.error('Error saving user:', error);
+    } finally {
+      setSaving(false);
     }
+  };
+
+  const handleSubjectChange = (subject) => {
+    const newSubjects = formData.subjects.includes(subject)
+      ? formData.subjects.filter(s => s !== subject)
+      : [...formData.subjects, subject];
+    handleInputChange('subjects', newSubjects);
+  };
+
+  const handleClassChange = (className) => {
+    const newClasses = formData.classes.includes(className)
+      ? formData.classes.filter(c => c !== className)
+      : [...formData.classes, className];
+    handleInputChange('classes', newClasses);
   };
 
   if (!isOpen) return null;
 
-  const renderBasicFields = () => (
-    <>
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            First Name *
-          </label>
-          <input
-            type="text"
-            name="firstName"
-            value={formData.firstName}
-            onChange={handleChange}
-            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-              errors.firstName ? 'border-red-300' : 'border-gray-300'
-            }`}
-            placeholder="Enter first name"
-          />
-          {errors.firstName && <p className="text-red-500 text-xs mt-1">{errors.firstName}</p>}
-        </div>
-        
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Last Name *
-          </label>
-          <input
-            type="text"
-            name="lastName"
-            value={formData.lastName}
-            onChange={handleChange}
-            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-              errors.lastName ? 'border-red-300' : 'border-gray-300'
-            }`}
-            placeholder="Enter last name"
-          />
-          {errors.lastName && <p className="text-red-500 text-xs mt-1">{errors.lastName}</p>}
-        </div>
-      </div>
-
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Email *
-          </label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-              errors.email ? 'border-red-300' : 'border-gray-300'
-            }`}
-            placeholder="Enter email address"
-          />
-          {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
-        </div>
-        
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Phone *
-          </label>
-          <input
-            type="tel"
-            name="phone"
-            value={formData.phone}
-            onChange={handleChange}
-            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-              errors.phone ? 'border-red-300' : 'border-gray-300'
-            }`}
-            placeholder="Enter phone number"
-          />
-          {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
-        </div>
-      </div>
-
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Date of Birth
-          </label>
-          <input
-            type="date"
-            name="dateOfBirth"
-            value={formData.dateOfBirth}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-        
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Gender *
-          </label>
-          <select
-            name="gender"
-            value={formData.gender}
-            onChange={handleChange}
-            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-              errors.gender ? 'border-red-300' : 'border-gray-300'
-            }`}
-          >
-            <option value="">Select gender</option>
-            <option value="male">Male</option>
-            <option value="female">Female</option>
-            <option value="other">Other</option>
-          </select>
-          {errors.gender && <p className="text-red-500 text-xs mt-1">{errors.gender}</p>}
-        </div>
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Address
-        </label>
-        <textarea
-          name="address"
-          value={formData.address}
-          onChange={handleChange}
-          rows={3}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder="Enter full address"
-        />
-      </div>
-    </>
-  );
-
-  const renderStudentFields = () => (
-    <>
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Student ID
-          </label>
-          <input
-            type="text"
-            name="studentId"
-            value={formData.studentId}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Auto-generated"
-            readOnly
-          />
-        </div>
-        
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Class *
-          </label>
-          <select
-            name="classId"
-            value={formData.classId}
-            onChange={handleChange}
-            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-              errors.classId ? 'border-red-300' : 'border-gray-300'
-            }`}
-          >
-            <option value="">Select class</option>
-            <option value="1">Grade 1-A</option>
-            <option value="2">Grade 2-B</option>
-            <option value="3">Grade 3-A</option>
-          </select>
-          {errors.classId && <p className="text-red-500 text-xs mt-1">{errors.classId}</p>}
-        </div>
-      </div>
-
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Parent/Guardian
-          </label>
-          <select
-            name="parentId"
-            value={formData.parentId}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="">Select parent</option>
-            <option value="1">John Smith</option>
-            <option value="2">Mary Johnson</option>
-          </select>
-        </div>
-        
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Admission Date *
-          </label>
-          <input
-            type="date"
-            name="admissionDate"
-            value={formData.admissionDate}
-            onChange={handleChange}
-            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-              errors.admissionDate ? 'border-red-300' : 'border-gray-300'
-            }`}
-          />
-          {errors.admissionDate && <p className="text-red-500 text-xs mt-1">{errors.admissionDate}</p>}
-        </div>
-      </div>
-    </>
-  );
-
-  const renderTeacherFields = () => (
-    <>
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Employee ID
-          </label>
-          <input
-            type="text"
-            name="employeeId"
-            value={formData.employeeId}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Auto-generated"
-            readOnly
-          />
-        </div>
-        
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Qualification *
-          </label>
-          <input
-            type="text"
-            name="qualification"
-            value={formData.qualification}
-            onChange={handleChange}
-            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-              errors.qualification ? 'border-red-300' : 'border-gray-300'
-            }`}
-            placeholder="e.g., M.Ed, B.A"
-          />
-          {errors.qualification && <p className="text-red-500 text-xs mt-1">{errors.qualification}</p>}
-        </div>
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Experience (years)
-        </label>
-        <input
-          type="number"
-          name="experience"
-          value={formData.experience}
-          onChange={handleChange}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder="Years of experience"
-          min="0"
-        />
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          Subjects *
-        </label>
-        <div className="grid grid-cols-3 gap-2">
-          {['Mathematics', 'English', 'Science', 'History', 'Geography', 'Art'].map(subject => (
-            <label key={subject} className="flex items-center space-x-2">
-              <input
-                type="checkbox"
-                name="subjects"
-                value={subject}
-                checked={formData.subjects.includes(subject)}
-                onChange={handleChange}
-                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-              />
-              <span className="text-sm">{subject}</span>
-            </label>
-          ))}
-        </div>
-        {errors.subjects && <p className="text-red-500 text-xs mt-1">{errors.subjects}</p>}
-      </div>
-    </>
-  );
-
-  const renderParentFields = () => (
-    <>
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Occupation
-        </label>
-        <input
-          type="text"
-          name="occupation"
-          value={formData.occupation}
-          onChange={handleChange}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder="Enter occupation"
-        />
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          Children (Students)
-        </label>
-        <div className="border border-gray-300 rounded-md p-3 max-h-32 overflow-y-auto">
-          {['Alice Johnson', 'Bob Johnson', 'Charlie Smith'].map(child => (
-            <label key={child} className="flex items-center space-x-2 mb-1">
-              <input
-                type="checkbox"
-                name="children"
-                value={child}
-                checked={formData.children.includes(child)}
-                onChange={handleChange}
-                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-              />
-              <span className="text-sm">{child}</span>
-            </label>
-          ))}
-        </div>
-      </div>
-    </>
-  );
-
-  const renderAdminFields = () => (
-    <>
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Department *
-        </label>
-        <select
-          name="department"
-          value={formData.department}
-          onChange={handleChange}
-          className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-            errors.department ? 'border-red-300' : 'border-gray-300'
-          }`}
-        >
-          <option value="">Select department</option>
-          <option value="academics">Academics</option>
-          <option value="administration">Administration</option>
-          <option value="finance">Finance</option>
-          <option value="hr">Human Resources</option>
-        </select>
-        {errors.department && <p className="text-red-500 text-xs mt-1">{errors.department}</p>}
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          Permissions
-        </label>
-        <div className="grid grid-cols-2 gap-2">
-          {['Manage Users', 'Manage Classes', 'View Reports', 'Manage Content', 'System Settings', 'Billing'].map(permission => (
-            <label key={permission} className="flex items-center space-x-2">
-              <input
-                type="checkbox"
-                name="permissions"
-                value={permission}
-                checked={formData.permissions.includes(permission)}
-                onChange={handleChange}
-                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-              />
-              <span className="text-sm">{permission}</span>
-            </label>
-          ))}
-        </div>
-      </div>
-    </>
-  );
-
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-4xl max-h-screen overflow-hidden">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-xl w-full max-w-4xl max-h-[90vh] overflow-hidden">
         {/* Header */}
-        <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <User className="h-5 w-5 text-blue-600" />
-            <h3 className="text-lg font-medium text-gray-900">
-              {user ? `Edit ${userType}` : `Add New ${userType}`}
-            </h3>
+        <div className="flex items-center justify-between p-6 border-b border-gray-200">
+          <div>
+            <h2 className="text-xl font-semibold text-gray-900">
+              {user ? 'Edit User' : 'Create New User'}
+            </h2>
+            <p className="text-gray-600 mt-1">
+              {user ? 'Update user information and permissions' : 'Add a new user to the system'}
+            </p>
           </div>
           <button
-            onClick={onCancel}
-            className="text-gray-400 hover:text-gray-600"
+            onClick={onClose}
+            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
           >
-            <X className="h-6 w-6" />
+            <X className="w-5 h-5 text-gray-500" />
           </button>
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="p-6 overflow-y-auto max-h-96">
-          <div className="space-y-6">
+        <form onSubmit={handleSubmit} className="overflow-y-auto max-h-[calc(90vh-140px)]">
+          <div className="p-6 space-y-6">
             {/* Basic Information */}
             <div>
-              <h4 className="text-md font-medium text-gray-900 mb-4 flex items-center">
-                <User className="h-4 w-4 mr-2" />
+              <h3 className="text-lg font-medium text-gray-900 mb-4 flex items-center gap-2">
+                <User className="w-5 h-5 text-blue-600" />
                 Basic Information
-              </h4>
-              {renderBasicFields()}
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    First Name *
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.firstName}
+                    onChange={(e) => handleInputChange('firstName', e.target.value)}
+                    className={`input-base w-full ${errors.firstName ? 'input-error' : ''}`}
+                    placeholder="Enter first name"
+                  />
+                  {errors.firstName && <p className="text-red-500 text-sm mt-1">{errors.firstName}</p>}
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Last Name *
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.lastName}
+                    onChange={(e) => handleInputChange('lastName', e.target.value)}
+                    className={`input-base w-full ${errors.lastName ? 'input-error' : ''}`}
+                    placeholder="Enter last name"
+                  />
+                  {errors.lastName && <p className="text-red-500 text-sm mt-1">{errors.lastName}</p>}
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Email Address *
+                  </label>
+                  <input
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) => handleInputChange('email', e.target.value)}
+                    className={`input-base w-full ${errors.email ? 'input-error' : ''}`}
+                    placeholder="user@school.edu.ng"
+                  />
+                  {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Phone Number *
+                  </label>
+                  <input
+                    type="tel"
+                    value={formData.phone}
+                    onChange={(e) => handleInputChange('phone', e.target.value)}
+                    className={`input-base w-full ${errors.phone ? 'input-error' : ''}`}
+                    placeholder="+234 XXX XXX XXXX"
+                  />
+                  {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Date of Birth
+                  </label>
+                  <input
+                    type="date"
+                    value={formData.dateOfBirth}
+                    onChange={(e) => handleInputChange('dateOfBirth', e.target.value)}
+                    className="input-base w-full"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Gender
+                  </label>
+                  <select
+                    value={formData.gender}
+                    onChange={(e) => handleInputChange('gender', e.target.value)}
+                    className="input-base w-full"
+                  >
+                    <option value="">Select Gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                  </select>
+                </div>
+              </div>
             </div>
 
-            {/* Role-specific fields */}
-            {userType === 'student' && (
+            {/* Role & Permissions */}
+            <div>
+              <h3 className="text-lg font-medium text-gray-900 mb-4 flex items-center gap-2">
+                <Shield className="w-5 h-5 text-blue-600" />
+                Role & Permissions
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    User Role *
+                  </label>
+                  <select
+                    value={formData.role}
+                    onChange={(e) => handleInputChange('role', e.target.value)}
+                    className="input-base w-full"
+                  >
+                    {roles.map(role => (
+                      <option key={role.value} value={role.value}>
+                        {role.label}
+                      </option>
+                    ))}
+                  </select>
+                  <p className="text-sm text-gray-500 mt-1">
+                    {roles.find(r => r.value === formData.role)?.description}
+                  </p>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Account Status
+                  </label>
+                  <select
+                    value={formData.status}
+                    onChange={(e) => handleInputChange('status', e.target.value)}
+                    className="input-base w-full"
+                  >
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                    <option value="suspended">Suspended</option>
+                  </select>
+                </div>
+
+                {formData.role === 'teacher' && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Employee ID
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.employeeId}
+                      onChange={(e) => handleInputChange('employeeId', e.target.value)}
+                      className="input-base w-full"
+                      placeholder="TCH001"
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Teacher Specific Fields */}
+            {formData.role === 'teacher' && (
               <div>
-                <h4 className="text-md font-medium text-gray-900 mb-4 flex items-center">
-                  <BookOpen className="h-4 w-4 mr-2" />
-                  Student Information
-                </h4>
-                {renderStudentFields()}
+                <h3 className="text-lg font-medium text-gray-900 mb-4">Teaching Assignment</h3>
+                
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Subjects *
+                    </label>
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-2 max-h-32 overflow-y-auto border border-gray-200 rounded-lg p-3">
+                      {subjects.map(subject => (
+                        <label key={subject} className="flex items-center space-x-2 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={formData.subjects.includes(subject)}
+                            onChange={() => handleSubjectChange(subject)}
+                            className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                          />
+                          <span className="text-sm text-gray-700">{subject}</span>
+                        </label>
+                      ))}
+                    </div>
+                    {errors.subjects && <p className="text-red-500 text-sm mt-1">{errors.subjects}</p>}
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Classes *
+                    </label>
+                    <div className="grid grid-cols-3 md:grid-cols-4 gap-2 max-h-32 overflow-y-auto border border-gray-200 rounded-lg p-3">
+                      {classes.map(className => (
+                        <label key={className} className="flex items-center space-x-2 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={formData.classes.includes(className)}
+                            onChange={() => handleClassChange(className)}
+                            className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                          />
+                          <span className="text-sm text-gray-700">{className}</span>
+                        </label>
+                      ))}
+                    </div>
+                    {errors.classes && <p className="text-red-500 text-sm mt-1">{errors.classes}</p>}
+                  </div>
+                </div>
               </div>
             )}
 
-            {userType === 'teacher' && (
+            {/* Password Section */}
+            {!user && (
               <div>
-                <h4 className="text-md font-medium text-gray-900 mb-4 flex items-center">
-                  <BookOpen className="h-4 w-4 mr-2" />
-                  Teacher Information
-                </h4>
-                {renderTeacherFields()}
+                <h3 className="text-lg font-medium text-gray-900 mb-4">Account Security</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Password *
+                    </label>
+                    <div className="relative">
+                      <input
+                        type={showPassword ? 'text' : 'password'}
+                        value={formData.password}
+                        onChange={(e) => handleInputChange('password', e.target.value)}
+                        className={`input-base w-full pr-10 ${errors.password ? 'input-error' : ''}`}
+                        placeholder="Enter password"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                      >
+                        {showPassword ? (
+                          <EyeOff className="w-4 h-4 text-gray-400" />
+                        ) : (
+                          <Eye className="w-4 h-4 text-gray-400" />
+                        )}
+                      </button>
+                    </div>
+                    {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Confirm Password *
+                    </label>
+                    <input
+                      type="password"
+                      value={formData.confirmPassword}
+                      onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
+                      className={`input-base w-full ${errors.confirmPassword ? 'input-error' : ''}`}
+                      placeholder="Confirm password"
+                    />
+                    {errors.confirmPassword && <p className="text-red-500 text-sm mt-1">{errors.confirmPassword}</p>}
+                  </div>
+                </div>
               </div>
             )}
 
-            {userType === 'parent' && (
+            {/* Address */}
+            <div>
+              <h3 className="text-lg font-medium text-gray-900 mb-4 flex items-center gap-2">
+                <MapPin className="w-5 h-5 text-blue-600" />
+                Contact Information
+              </h3>
               <div>
-                <h4 className="text-md font-medium text-gray-900 mb-4 flex items-center">
-                  <Users className="h-4 w-4 mr-2" />
-                  Parent Information
-                </h4>
-                {renderParentFields()}
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Address
+                </label>
+                <textarea
+                  value={formData.address}
+                  onChange={(e) => handleInputChange('address', e.target.value)}
+                  className="input-base w-full h-24 resize-none"
+                  placeholder="Enter complete address"
+                />
               </div>
-            )}
+            </div>
+          </div>
 
-            {userType === 'admin' && (
-              <div>
-                <h4 className="text-md font-medium text-gray-900 mb-4 flex items-center">
-                  <User className="h-4 w-4 mr-2" />
-                  Admin Information
-                </h4>
-                {renderAdminFields()}
-              </div>
-            )}
+          {/* Actions */}
+          <div className="flex items-center justify-end gap-3 p-6 border-t border-gray-200">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={saving}
+              className="btn-primary px-6 py-2 rounded-lg font-medium disabled:opacity-50"
+            >
+              {saving ? 'Saving...' : user ? 'Update User' : 'Create User'}
+            </button>
           </div>
         </form>
-
-        {/* Footer */}
-        <div className="px-6 py-4 border-t border-gray-200 flex items-center justify-end space-x-3">
-          <button
-            type="button"
-            onClick={onCancel}
-            className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            onClick={handleSubmit}
-            disabled={loading}
-            className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
-          >
-            {loading ? (
-              <>
-                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                Saving...
-              </>
-            ) : (
-              <>
-                <Save className="h-4 w-4 mr-2" />
-                {user ? 'Update' : 'Create'} {userType}
-              </>
-            )}
-          </button>
-        </div>
       </div>
     </div>
   );

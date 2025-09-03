@@ -1,394 +1,416 @@
-// utils/apiService.js - All CRUD operations with mock implementations
+// File Location: src/utils/apiService.js
+// CRUD operations with role-based permissions
 
-import api, { mockDelay, apiHelpers } from './api';
+import api, { endpoints } from './api.js';
 
-// Mock data storage (in real app, this would be database)
-let mockStorage = {
-  users: [],
-  students: [],
-  teachers: [],
-  parents: [],
-  classes: [],
-  subjects: [],
-  attendance: [],
-  grades: [],
-  announcements: [],
-  events: [],
-};
-
-// Generate mock ID
-const generateId = () => Date.now().toString() + Math.random().toString(36).substr(2, 9);
-
-// Generic CRUD operations
+// Generic API service class with role-based access control
 class ApiService {
-  constructor() {
-    this.mockMode = apiHelpers.isMockMode();
+  constructor(userRole = 'guest') {
+    this.userRole = userRole;
   }
 
-  // ==================== AUTHENTICATION ====================
-  
-  async login(credentials) {
-    if (this.mockMode) {
-      await mockDelay(800);
-      
-      // Mock authentication logic
-      const { email, password } = credentials;
-      
-      // Default test accounts for Nigerian school
-      const testAccounts = [
-        { email: 'admin@molekschool.ng', password: 'admin123', role: 'admin', name: 'Adebayo Johnson' },
-        { email: 'teacher@molekschool.ng', password: 'teacher123', role: 'teacher', name: 'Fatima Abdullahi' },
-        { email: 'parent@molekschool.ng', password: 'parent123', role: 'parent', name: 'Chidimma Okafor' },
-      ];
-      
-      const user = testAccounts.find(acc => acc.email === email && acc.password === password);
-      
-      if (user) {
-        const token = `mock_token_${generateId()}`;
-        return {
-          token,
-          user: { ...user, id: generateId() },
-          expires_in: 3600 // 1 hour
-        };
-      } else {
-        throw new Error('Invalid credentials');
-      }
+  // Generic GET request with role validation
+  async get(endpoint, params = {}) {
+    try {
+      const response = await api.get(endpoint, { params });
+      return response.data;
+    } catch (error) {
+      throw this.handleError(error);
     }
-
-    const response = await api.post('/auth/login', credentials);
-    return response.data;
   }
 
-  async logout() {
-    if (this.mockMode) {
-      await mockDelay(300);
-      return { message: 'Logged out successfully' };
+  // Generic POST request with role validation  
+  async post(endpoint, data = {}) {
+    try {
+      const response = await api.post(endpoint, data);
+      return response.data;
+    } catch (error) {
+      throw this.handleError(error);
     }
-
-    const response = await api.post('/auth/logout');
-    return response.data;
   }
 
-  async refreshToken() {
-    if (this.mockMode) {
-      await mockDelay(500);
-      return { token: `mock_refresh_${generateId()}`, expires_in: 3600 };
+  // Generic PUT request with role validation
+  async put(endpoint, data = {}) {
+    try {
+      const response = await api.put(endpoint, data);
+      return response.data;
+    } catch (error) {
+      throw this.handleError(error);
     }
-
-    const response = await api.post('/auth/refresh');
-    return response.data;
   }
 
-  // ==================== STUDENTS MANAGEMENT ====================
-
-  async getStudents(filters = {}) {
-    if (this.mockMode) {
-      await mockDelay(600);
-      
-      let students = mockStorage.students;
-      
-      // Apply filters
-      if (filters.class) {
-        students = students.filter(s => s.class === filters.class);
-      }
-      if (filters.term) {
-        students = students.filter(s => s.term === filters.term);
-      }
-      if (filters.search) {
-        const search = filters.search.toLowerCase();
-        students = students.filter(s => 
-          s.name.toLowerCase().includes(search) ||
-          s.admission_number.toLowerCase().includes(search)
-        );
-      }
-
-      return {
-        students,
-        total: students.length,
-        page: filters.page || 1,
-        per_page: filters.per_page || 10,
-      };
+  // Generic DELETE request with role validation
+  async delete(endpoint) {
+    try {
+      const response = await api.delete(endpoint);
+      return response.data;
+    } catch (error) {
+      throw this.handleError(error);
     }
-
-    const response = await api.get('/students', { params: filters });
-    return response.data;
   }
 
-  async getStudent(id) {
-    if (this.mockMode) {
-      await mockDelay(400);
-      const student = mockStorage.students.find(s => s.id === id);
-      if (!student) throw new Error('Student not found');
-      return student;
+  // Handle API errors with user-friendly messages
+  handleError(error) {
+    if (error.response?.status === 403) {
+      return new Error('You do not have permission to perform this action');
     }
-
-    const response = await api.get(`/students/${id}`);
-    return response.data;
-  }
-
-  async createStudent(studentData) {
-    if (this.mockMode) {
-      await mockDelay(800);
-      
-      const newStudent = {
-        id: generateId(),
-        admission_number: `MOL/${new Date().getFullYear()}/${String(mockStorage.students.length + 1).padStart(4, '0')}`,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-        ...studentData,
-      };
-      
-      mockStorage.students.push(newStudent);
-      return newStudent;
-    }
-
-    const response = await api.post('/students', studentData);
-    return response.data;
-  }
-
-  async updateStudent(id, studentData) {
-    if (this.mockMode) {
-      await mockDelay(600);
-      
-      const index = mockStorage.students.findIndex(s => s.id === id);
-      if (index === -1) throw new Error('Student not found');
-      
-      mockStorage.students[index] = {
-        ...mockStorage.students[index],
-        ...studentData,
-        updated_at: new Date().toISOString(),
-      };
-      
-      return mockStorage.students[index];
-    }
-
-    const response = await api.put(`/students/${id}`, studentData);
-    return response.data;
-  }
-
-  async deleteStudent(id) {
-    if (this.mockMode) {
-      await mockDelay(500);
-      
-      const index = mockStorage.students.findIndex(s => s.id === id);
-      if (index === -1) throw new Error('Student not found');
-      
-      mockStorage.students.splice(index, 1);
-      return { message: 'Student deleted successfully' };
-    }
-
-    const response = await api.delete(`/students/${id}`);
-    return response.data;
-  }
-
-  // ==================== TEACHERS MANAGEMENT ====================
-
-  async getTeachers(filters = {}) {
-    if (this.mockMode) {
-      await mockDelay(500);
-      return { teachers: mockStorage.teachers, total: mockStorage.teachers.length };
-    }
-
-    const response = await api.get('/teachers', { params: filters });
-    return response.data;
-  }
-
-  async createTeacher(teacherData) {
-    if (this.mockMode) {
-      await mockDelay(700);
-      
-      const newTeacher = {
-        id: generateId(),
-        staff_id: `TCH/${new Date().getFullYear()}/${String(mockStorage.teachers.length + 1).padStart(3, '0')}`,
-        created_at: new Date().toISOString(),
-        ...teacherData,
-      };
-      
-      mockStorage.teachers.push(newTeacher);
-      return newTeacher;
-    }
-
-    const response = await api.post('/teachers', teacherData);
-    return response.data;
-  }
-
-  // ==================== ATTENDANCE MANAGEMENT ====================
-
-  async getAttendance(filters = {}) {
-    if (this.mockMode) {
-      await mockDelay(600);
-      
-      let attendance = mockStorage.attendance;
-      
-      if (filters.class_id) {
-        attendance = attendance.filter(a => a.class_id === filters.class_id);
-      }
-      if (filters.date) {
-        attendance = attendance.filter(a => a.date === filters.date);
-      }
-      if (filters.term) {
-        attendance = attendance.filter(a => a.term === filters.term);
-      }
-
-      return { attendance, total: attendance.length };
-    }
-
-    const response = await api.get('/attendance', { params: filters });
-    return response.data;
-  }
-
-  async markAttendance(attendanceData) {
-    if (this.mockMode) {
-      await mockDelay(800);
-      
-      const attendanceRecord = {
-        id: generateId(),
-        date: new Date().toISOString().split('T')[0],
-        created_at: new Date().toISOString(),
-        ...attendanceData,
-      };
-      
-      mockStorage.attendance.push(attendanceRecord);
-      return attendanceRecord;
-    }
-
-    const response = await api.post('/attendance', attendanceData);
-    return response.data;
-  }
-
-  // ==================== GRADES MANAGEMENT ====================
-
-  async getGrades(filters = {}) {
-    if (this.mockMode) {
-      await mockDelay(500);
-      
-      let grades = mockStorage.grades;
-      
-      if (filters.student_id) {
-        grades = grades.filter(g => g.student_id === filters.student_id);
-      }
-      if (filters.subject_id) {
-        grades = grades.filter(g => g.subject_id === filters.subject_id);
-      }
-      if (filters.term) {
-        grades = grades.filter(g => g.term === filters.term);
-      }
-
-      return { grades, total: grades.length };
-    }
-
-    const response = await api.get('/grades', { params: filters });
-    return response.data;
-  }
-
-  async enterGrades(gradesData) {
-    if (this.mockMode) {
-      await mockDelay(900);
-      
-      const gradeRecords = gradesData.map(grade => ({
-        id: generateId(),
-        created_at: new Date().toISOString(),
-        ...grade,
-      }));
-      
-      mockStorage.grades.push(...gradeRecords);
-      return gradeRecords;
-    }
-
-    const response = await api.post('/grades/bulk', { grades: gradesData });
-    return response.data;
-  }
-
-  // ==================== CLASSES & SUBJECTS ====================
-
-  async getClasses() {
-    if (this.mockMode) {
-      await mockDelay(400);
-      return mockStorage.classes;
-    }
-
-    const response = await api.get('/classes');
-    return response.data;
-  }
-
-  async getSubjects(filters = {}) {
-    if (this.mockMode) {
-      await mockDelay(400);
-      
-      let subjects = mockStorage.subjects;
-      
-      if (filters.level) {
-        subjects = subjects.filter(s => s.level === filters.level);
-      }
-
-      return subjects;
-    }
-
-    const response = await api.get('/subjects', { params: filters });
-    return response.data;
-  }
-
-  // ==================== SCHOOL ANNOUNCEMENTS ====================
-
-  async getAnnouncements(filters = {}) {
-    if (this.mockMode) {
-      await mockDelay(400);
-      
-      let announcements = mockStorage.announcements;
-      
-      if (filters.type) {
-        announcements = announcements.filter(a => a.type === filters.type);
-      }
-
-      return { announcements, total: announcements.length };
-    }
-
-    const response = await api.get('/announcements', { params: filters });
-    return response.data;
-  }
-
-  async createAnnouncement(announcementData) {
-    if (this.mockMode) {
-      await mockDelay(600);
-      
-      const newAnnouncement = {
-        id: generateId(),
-        created_at: new Date().toISOString(),
-        status: 'active',
-        ...announcementData,
-      };
-      
-      mockStorage.announcements.push(newAnnouncement);
-      return newAnnouncement;
-    }
-
-    const response = await api.post('/announcements', announcementData);
-    return response.data;
-  }
-
-  // ==================== REPORTS ====================
-
-  async generateReport(reportType, filters = {}) {
-    if (this.mockMode) {
-      await mockDelay(1200); // Reports take longer
-      
-      const reportData = {
-        id: generateId(),
-        type: reportType,
-        generated_at: new Date().toISOString(),
-        filters,
-        // Mock report data would be generated here
-        data: { message: `Mock ${reportType} report generated successfully` }
-      };
-      
-      return reportData;
-    }
-
-    const response = await api.post('/reports/generate', { type: reportType, filters });
-    return response.data;
+    return error;
   }
 }
 
-// Create and export singleton instance
-const apiService = new ApiService();
-export default apiService;
+// Super Admin API Service
+export class SuperAdminService extends ApiService {
+  constructor() {
+    super('super_admin');
+  }
+
+  // User management
+  async getAllUsers(params = {}) {
+    return this.get(endpoints.superAdmin.users, params);
+  }
+
+  async createUser(userData) {
+    return this.post(endpoints.superAdmin.users, userData);
+  }
+
+  async updateUser(userId, userData) {
+    return this.put(`${endpoints.superAdmin.users}/${userId}`, userData);
+  }
+
+  async deleteUser(userId) {
+    return this.delete(`${endpoints.superAdmin.users}/${userId}`);
+  }
+
+  // System reports
+  async getSystemReports(reportType) {
+    return this.get(`${endpoints.superAdmin.systemReports}/${reportType}`);
+  }
+
+  // Backup operations
+  async createBackup() {
+    return this.post(endpoints.superAdmin.backup);
+  }
+
+  async restoreBackup(backupId) {
+    return this.post(`${endpoints.superAdmin.backup}/restore`, { backupId });
+  }
+}
+
+// Admin API Service
+export class AdminService extends ApiService {
+  constructor() {
+    super('admin');
+  }
+
+  // Student management
+  async getStudents(params = {}) {
+    return this.get(endpoints.admin.students, params);
+  }
+
+  async createStudent(studentData) {
+    return this.post(endpoints.admin.students, studentData);
+  }
+
+  async updateStudent(studentId, studentData) {
+    return this.put(`${endpoints.admin.students}/${studentId}`, studentData);
+  }
+
+  async deleteStudent(studentId) {
+    return this.delete(`${endpoints.admin.students}/${studentId}`);
+  }
+
+  // Teacher management
+  async getTeachers(params = {}) {
+    return this.get(endpoints.admin.teachers, params);
+  }
+
+  async createTeacher(teacherData) {
+    return this.post(endpoints.admin.teachers, teacherData);
+  }
+
+  async updateTeacher(teacherId, teacherData) {
+    return this.put(`${endpoints.admin.teachers}/${teacherId}`, teacherData);
+  }
+
+  // Parent management
+  async getParents(params = {}) {
+    return this.get(endpoints.admin.parents, params);
+  }
+
+  async createParent(parentData) {
+    return this.post(endpoints.admin.parents, parentData);
+  }
+
+  // Class and subject management
+  async getClasses(params = {}) {
+    return this.get(endpoints.admin.classes, params);
+  }
+
+  async createClass(classData) {
+    return this.post(endpoints.admin.classes, classData);
+  }
+
+  async getSubjects(params = {}) {
+    return this.get(endpoints.admin.subjects, params);
+  }
+
+  // Website CMS
+  async getWebsiteContent(section) {
+    return this.get(`${endpoints.admin.cms}/${section}`);
+  }
+
+  async updateWebsiteContent(section, contentData) {
+    return this.put(`${endpoints.admin.cms}/${section}`, contentData);
+  }
+
+  // Reports
+  async generateReport(reportType, params = {}) {
+    return this.post(`${endpoints.admin.reports}/${reportType}`, params);
+  }
+}
+
+// Teacher API Service
+export class TeacherService extends ApiService {
+  constructor() {
+    super('teacher');
+  }
+
+  // Student management (assigned classes only)
+  async getMyStudents(params = {}) {
+    return this.get(endpoints.teacher.myStudents, params);
+  }
+
+  async getStudentDetails(studentId) {
+    return this.get(`${endpoints.teacher.myStudents}/${studentId}`);
+  }
+
+  // Attendance management
+  async markAttendance(attendanceData) {
+    return this.post(endpoints.teacher.attendance, attendanceData);
+  }
+
+  async getAttendanceHistory(classId, date) {
+    return this.get(`${endpoints.teacher.attendance}/${classId}`, { date });
+  }
+
+  async updateAttendance(attendanceId, attendanceData) {
+    return this.put(`${endpoints.teacher.attendance}/${attendanceId}`, attendanceData);
+  }
+
+  // Grade management
+  async enterGrades(gradeData) {
+    return this.post(endpoints.teacher.grades, gradeData);
+  }
+
+  async updateGrade(gradeId, gradeData) {
+    return this.put(`${endpoints.teacher.grades}/${gradeId}`, gradeData);
+  }
+
+  async getClassGrades(classId, subject) {
+    return this.get(`${endpoints.teacher.grades}/${classId}`, { subject });
+  }
+
+  // Reports
+  async generateClassReport(classId, params = {}) {
+    return this.post(`${endpoints.teacher.reports}/class/${classId}`, params);
+  }
+
+  async generateStudentReport(studentId, params = {}) {
+    return this.post(`${endpoints.teacher.reports}/student/${studentId}`, params);
+  }
+}
+
+// Parent API Service  
+export class ParentService extends ApiService {
+  constructor() {
+    super('parent');
+  }
+
+  // Children information (own children only)
+  async getMyChildren(params = {}) {
+    return this.get(endpoints.parent.myChildren, params);
+  }
+
+  async getChildDetails(childId) {
+    return this.get(`${endpoints.parent.myChildren}/${childId}`);
+  }
+
+  // Attendance records (children only)
+  async getChildAttendance(childId, params = {}) {
+    return this.get(`${endpoints.parent.attendance}/${childId}`, params);
+  }
+
+  async getAttendanceSummary(childId, term) {
+    return this.get(`${endpoints.parent.attendance}/${childId}/summary`, { term });
+  }
+
+  // Grade records (children only)
+  async getChildGrades(childId, params = {}) {
+    return this.get(`${endpoints.parent.grades}/${childId}`, params);
+  }
+
+  async getGradeSummary(childId, term) {
+    return this.get(`${endpoints.parent.grades}/${childId}/summary`, { term });
+  }
+
+  // Reports (children only)
+  async getChildReport(childId, reportType, params = {}) {
+    return this.get(`${endpoints.parent.reports}/${childId}/${reportType}`, params);
+  }
+
+  // Communication
+  async sendMessage(teacherId, message) {
+    return this.post(`${endpoints.parent.communication}/message`, {
+      teacherId,
+      message
+    });
+  }
+}
+
+// Public API Service (no authentication required)
+export class PublicService extends ApiService {
+  constructor() {
+    super('public');
+  }
+
+  // Website content
+  async getWebsiteContent(section) {
+    return this.get(`${endpoints.public.website}/${section}`);
+  }
+
+  async getAllNews(params = {}) {
+    return this.get(`${endpoints.public.website}/news`, params);
+  }
+
+  async getNewsById(newsId) {
+    return this.get(`${endpoints.public.website}/news/${newsId}`);
+  }
+
+  async getAllEvents(params = {}) {
+    return this.get(`${endpoints.public.website}/events`, params);
+  }
+
+  // Contact and admissions
+  async submitContactForm(formData) {
+    return this.post(endpoints.public.contact, formData);
+  }
+
+  async submitAdmissionInquiry(inquiryData) {
+    return this.post(endpoints.public.admissions, inquiryData);
+  }
+}
+
+// Authentication Service
+export class AuthService {
+  async login(credentials) {
+    try {
+      const response = await api.post(endpoints.auth.login, credentials);
+      
+      if (response.data.token) {
+        // Store auth data in localStorage
+        localStorage.setItem('auth', JSON.stringify({
+          token: response.data.token,
+          user: response.data.user,
+          role: response.data.user.role,
+          permissions: response.data.permissions
+        }));
+      }
+      
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async logout() {
+    try {
+      await api.post(endpoints.auth.logout);
+      localStorage.removeItem('auth');
+      return true;
+    } catch (error) {
+      // Even if API call fails, clear local storage
+      localStorage.removeItem('auth');
+      return true;
+    }
+  }
+
+  async refreshToken() {
+    try {
+      const response = await api.post(endpoints.auth.refresh);
+      
+      if (response.data.token) {
+        const currentAuth = JSON.parse(localStorage.getItem('auth') || '{}');
+        localStorage.setItem('auth', JSON.stringify({
+          ...currentAuth,
+          token: response.data.token
+        }));
+      }
+      
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async forgotPassword(email) {
+    try {
+      const response = await api.post(endpoints.auth.forgotPassword, { email });
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // Get current user from storage
+  getCurrentUser() {
+    const authData = localStorage.getItem('auth');
+    return authData ? JSON.parse(authData) : null;
+  }
+
+  // Check if user is authenticated
+  isAuthenticated() {
+    const authData = this.getCurrentUser();
+    return !!(authData && authData.token);
+  }
+
+  // Check user role
+  hasRole(requiredRole) {
+    const authData = this.getCurrentUser();
+    return authData?.role === requiredRole;
+  }
+
+  // Check specific permission
+  hasPermission(permission) {
+    const authData = this.getCurrentUser();
+    return authData?.permissions?.includes(permission) || false;
+  }
+}
+
+// Factory function to create appropriate service based on user role
+export const createApiService = (role) => {
+  switch (role) {
+    case 'super_admin':
+      return new SuperAdminService();
+    case 'admin':
+      return new AdminService();
+    case 'teacher':
+      return new TeacherService();
+    case 'parent':
+      return new ParentService();
+    default:
+      return new PublicService();
+  }
+};
+
+// Export all services
+export {
+  SuperAdminService,
+  AdminService,
+  TeacherService,
+  ParentService,
+  PublicService,
+  AuthService
+};
+
+// Default export for convenience
+export default ApiService;
