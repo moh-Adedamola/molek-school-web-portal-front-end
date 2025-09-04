@@ -56,7 +56,7 @@ const Footer = () => {
                 <GraduationCap className="h-6 w-6 text-primary-600" />
               </div>
               <div>
-                <h3 className="text-lg font-bold">Nigerian Secondary School</h3>
+                <h3 className="text-lg font-bold">Molek Schools</h3>
                 <p className="text-primary-200 text-sm">Excellence in Education</p>
               </div>
             </div>
@@ -162,11 +162,11 @@ const Footer = () => {
             </div>
             <div className="flex items-center justify-center md:justify-start space-x-2">
               <Mail className="h-4 w-4 text-primary-300" />
-              <span className="text-primary-100 text-sm">info@nigerianschool.edu.ng</span>
+              <span className="text-primary-100 text-sm">info@molekschools.edu.ng</span>
             </div>
             <div className="flex items-center justify-center md:justify-start space-x-2">
               <MapPin className="h-4 w-4 text-primary-300" />
-              <span className="text-primary-100 text-sm">Victoria Island, Lagos, Nigeria</span>
+              <span className="text-primary-100 text-sm">10 Haliru Mohammed Street, Ofatedo, Osogbo, Osun State</span>
             </div>
           </div>
         </div>

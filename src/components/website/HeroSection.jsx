@@ -17,11 +17,6 @@ const HeroSection = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Left Content */}
           <div className="text-center lg:text-left">
-            <div className="mb-6">
-              <span className="inline-block bg-accent-600 text-white px-4 py-2 rounded-full text-sm font-semibold mb-4">
-                🇳🇬 Proudly Nigerian
-              </span>
-            </div>
 
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-balance leading-tight">
               Excellence in
