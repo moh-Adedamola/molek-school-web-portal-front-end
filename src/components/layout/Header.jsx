@@ -9,26 +9,42 @@ import PublicNavigation from './PublicNavigation';
 const Header = () => {
   return (
     <header className="bg-white shadow-sm">
-      {/* Top Info Bar */}
-      <div className="bg-primary-800 text-white py-2 hidden md:block">
-        <div className="container-max">
-          <div className="flex justify-between items-center text-sm">
-            <div className="flex items-center space-x-6">
+      {/* Top Info Bar - Scrolling */}
+      <div className="bg-primary-800 text-white py-2 overflow-hidden">
+        <div className="relative">
+          <div className="animate-marquee whitespace-nowrap">
+            <div className="inline-flex items-center space-x-8 text-sm">
               <div className="flex items-center space-x-2">
                 <Phone className="h-4 w-4" />
-                <span>+234 803 123 4567</span>
+                <span>[PHONE_NUMBER_NEEDED]</span>
               </div>
               <div className="flex items-center space-x-2">
                 <Mail className="h-4 w-4" />
-                <span>info@nigerianschool.edu.ng</span>
+                <span>[EMAIL_ADDRESS_NEEDED]</span>
               </div>
               <div className="flex items-center space-x-2">
                 <MapPin className="h-4 w-4" />
-                <span>Lagos, Nigeria</span>
+                <span>NO 10 Haliru Mohammed Street, Ofatedo, Osogbo, Osun State</span>
               </div>
-            </div>
-            <div className="text-primary-200">
-              Academic Year 2024/2025
+              <div className="text-primary-200">
+                Academic Year 2024/2025
+              </div>
+              {/* Duplicate content for seamless scrolling */}
+              <div className="flex items-center space-x-2">
+                <Phone className="h-4 w-4" />
+                <span>[PHONE_NUMBER_NEEDED]</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Mail className="h-4 w-4" />
+                <span>[EMAIL_ADDRESS_NEEDED]</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <MapPin className="h-4 w-4" />
+                <span>10 Haliru Mohammed Street, Ofatedo, Osogbo, Osun State</span>
+              </div>
+              <div className="text-primary-200">
+                Academic Year 2024/2025
+              </div>
             </div>
           </div>
         </div>
@@ -45,7 +61,7 @@ const Header = () => {
               </div>
               <div className="hidden sm:block">
                 <h1 className="text-xl md:text-2xl font-bold text-primary-800">
-                  Nigerian Secondary School
+                  Molek Schools
                 </h1>
                 <p className="text-secondary-600 text-sm font-medium">
                   Excellence • Integrity • Innovation
@@ -72,7 +88,7 @@ const Header = () => {
             {/* Mobile School Name */}
             <div className="sm:hidden flex-1 text-center">
               <h1 className="text-lg font-bold text-primary-800">
-                Nigerian Secondary
+                Molek Schools
               </h1>
             </div>
           </div>

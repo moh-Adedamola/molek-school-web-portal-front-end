@@ -446,6 +446,48 @@ body {
 }
 
 /* ========================================
+   MARQUEE ANIMATION FOR HEADER SCROLLING
+   ======================================== */
+
+/* Marquee Animation for Header Info Bar */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 30s linear infinite;
+}
+
+/* Pause animation on hover for better UX */
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* Smooth marquee for mobile devices */
+@media (max-width: 768px) {
+  .animate-marquee {
+    animation: marquee 20s linear infinite;
+  }
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee {
+    animation: none;
+  }
+  
+  .animate-marquee {
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}
+
+/* ========================================
    RESPONSIVE DESIGN HELPERS
    ======================================== */
 
@@ -500,6 +542,11 @@ body {
   .card-base {
     border: 2px solid var(--color-neutral-300) !important;
     box-shadow: none !important;
+  }
+  
+  /* Disable marquee for print */
+  .animate-marquee {
+    animation: none !important;
   }
 }
 
