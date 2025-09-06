@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@headlessui/react": "^2.2.7",
+    "@heroicons/react": "^2.2.0",
     "@hookform/resolvers": "^5.2.1",
     "@tailwindcss/vite": "^4.1.12",
     "autoprefixer": "^10.4.21",
@@ -19,10 +20,13 @@
     "lucide-react": "^0.540.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
+    "react-hamburger-menu": "^1.2.1",
     "react-hook-form": "^7.62.0",
+    "react-icons": "^5.5.0",
     "react-router-dom": "^7.8.1",
     "react-toastify": "^11.0.5",
     "recharts": "^3.1.2",
+    "swiper": "^11.2.10",
     "tailwindcss": "^4.1.12",
     "yup": "^1.7.0"
   },
