@@ -1,6 +1,19 @@
+import Footer from "../components/Footer.jsx";
+import Header from "../components/Landingpage/Header.jsx";
+import AboutSchool from "../components/About/AboutSchool.jsx";
+import GuidingPrinciples from "../components/About/GuidingPrinciples.jsx";
+import SchoolHistory from "../components/About/SchoolHistory.jsx";
+
 const About = () => {
     return(
-        <h1>what do u want to know about us</h1>
+        <>
+            <Header />
+            <AboutSchool />
+            <GuidingPrinciples />
+            <SchoolHistory />
+            <Footer />
+        </>
+
     )
 }
 
