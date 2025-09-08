@@ -42,7 +42,7 @@ const SchoolHistory = () => {
                             viewport={{ once: true }}
                         >
                             <h3 className="text-lg font-bold flex items-center gap-2 mb-2">
-                                {item.year} <Icon className="text-green-600" />
+                                {item.year} <Icon className="text-red-600" />
                             </h3>
                             <p className="font-semibold">{item.title}</p>
                             <p className="text-sm text-gray-700 mt-1">{item.desc}</p>

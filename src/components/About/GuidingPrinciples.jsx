@@ -1,20 +1,22 @@
 import { motion } from "framer-motion";
 import {
-    FaStar, FaShieldAlt, FaUsers, FaLightbulb, FaHandHoldingHeart, FaUserTie
+    FaStar, FaShieldAlt, FaUsers, FaLightbulb,
+    FaHandHoldingHeart, FaUserTie
 } from "react-icons/fa";
 
-const values = [
-    { title: "Excellence", icon: <FaStar className="text-yellow-500 text-xl" /> },
-    { title: "Integrity", icon: <FaShieldAlt className="text-red-500 text-xl" /> },
-    { title: "Respect", icon: <FaUsers className="text-green-500 text-xl" /> },
-    { title: "Innovation", icon: <FaLightbulb className="text-purple-500 text-xl" /> },
-    { title: "Responsibility", icon: <FaHandHoldingHeart className="text-pink-500 text-xl" /> },
-    { title: "Leadership", icon: <FaUserTie className="text-blue-500 text-xl" /> },
+const principles = [
+    { label: "Excellence", icon: <FaStar className="text-yellow-500 text-2xl" /> },
+    { label: "Integrity", icon: <FaShieldAlt className="text-red-500 text-2xl" /> },
+    { label: "Respect", icon: <FaUsers className="text-green-500 text-2xl" /> },
+    { label: "Innovation", icon: <FaLightbulb className="text-purple-500 text-2xl" /> },
+    { label: "Responsibility", icon: <FaHandHoldingHeart className="text-pink-500 text-2xl" /> },
+    { label: "Leadership", icon: <FaUserTie className="text-blue-500 text-2xl" /> },
 ];
 
 const GuidingPrinciples = () => {
     return (
         <section className="bg-blue-50 text-blue-900 px-6 md:px-12 lg:px-24 py-16">
+            {/* Header */}
             <motion.h2
                 className="text-3xl font-bold text-center mb-8"
                 initial={{ opacity: 0, y: -20 }}
@@ -25,8 +27,9 @@ const GuidingPrinciples = () => {
                 🎯 Vision, Mission & Values
             </motion.h2>
 
+            {/* Vision & Mission */}
             <motion.div
-                className="max-w-4xl mx-auto text-center space-y-4 text-gray-700"
+                className="max-w-4xl mx-auto text-center space-y-6 text-lg font-semibold text-gray-800"
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 transition={{ duration: 0.6 }}
@@ -37,6 +40,7 @@ const GuidingPrinciples = () => {
                 <p><strong>Philosophy:</strong> We develop the whole child—intellectually, emotionally, socially, and morally.</p>
             </motion.div>
 
+            {/* Core Values */}
             <motion.div
                 className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-6 mt-12 text-center"
                 initial="hidden"
@@ -51,10 +55,14 @@ const GuidingPrinciples = () => {
                     },
                 }}
             >
-                {values.map((value, index) => (
-                    <motion.div key={index} className="bg-white p-4 rounded shadow" variants={{ hidden: { opacity: 0 }, visible: { opacity: 1 } }}>
-                        <div className="mb-2">{value.icon}</div>
-                        <p className="text-sm font-semibold">{value.title}</p>
+                {principles.map((item, index) => (
+                    <motion.div
+                        key={index}
+                        className="flex flex-col items-center gap-2"
+                        variants={{ hidden: { opacity: 0 }, visible: { opacity: 1 } }}
+                    >
+                        {item.icon}
+                        <span className="font-bold text-lg">{item.label}</span>
                     </motion.div>
                 ))}
             </motion.div>

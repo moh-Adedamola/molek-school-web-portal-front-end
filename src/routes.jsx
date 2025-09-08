@@ -1,6 +1,7 @@
 import About from './pages/About';
 import Homepage from "./pages/Homepage.jsx";
 import Academics from "./pages/Academics.jsx"
+import ContactUs from "./pages/ContactUs.jsx";
 
 
 const routes = [
@@ -15,6 +16,10 @@ const routes = [
     {
         path: '/academics',
         element: <Academics />,
+    },
+    {
+        path: '/contact',
+        element: <ContactUs />,
     }
 
 ];

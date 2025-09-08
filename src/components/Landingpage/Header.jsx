@@ -17,7 +17,7 @@ const navLinks = [
     { href: '/academics', label: 'Academics', icon: AcademicCapIcon },
     { href: '#news', label: 'News & Events', icon: NewspaperIcon },
     { href: '#gallery', label: 'Gallery', icon: PhotoIcon },
-    { href: '#contact', label: 'Contact', icon: PhoneIcon },
+    { href: '/contact', label: 'Contact', icon: PhoneIcon },
 ];
 
 const Header = () => {
