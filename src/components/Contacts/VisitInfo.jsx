@@ -14,10 +14,10 @@ const VisitInfo = () => {
             <div className="max-w-3xl mx-auto text-center text-gray-700 space-y-4">
                 <p>We welcome visitors during our office hours. For the safety and security of our students, all visitors must report to the main office upon arrival.</p>
                 <p className="flex justify-center items-center gap-2">
-                    <FaClock className="text-blue-600" /> Weekdays: 8:00 AM – 5:00 PM
+                    <FaClock className="text-blue-600" /> Weekdays: 9:00 AM – 3:00 PM
                 </p>
                 <p className="flex justify-center items-center gap-2">
-                    <FaClock className="text-green-600" /> Saturdays: 9:00 AM – 2:00 PM
+                    <FaClock className="text-green-600" /> Saturdays: 9:00 AM – 1:00 PM
                 </p>
             </div>
         </motion.section>

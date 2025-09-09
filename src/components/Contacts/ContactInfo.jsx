@@ -17,8 +17,8 @@ const ContactInfo = () => {
                     <h3 className="text-xl font-semibold flex items-center gap-2 mb-2">
                         <FaMapMarkerAlt className="text-green-600" /> School Address
                     </h3>
-                    <p>123 Education Avenue</p>
-                    <p>Lagos Island, Lagos State</p>
+                    <p>10 Haliru Mohammed Street</p>
+                    <p>Ofatedo, Osogbo, Osun State</p>
                     <p>Nigeria</p>
                 </div>
 
@@ -42,10 +42,10 @@ const ContactInfo = () => {
 
                 <div>
                     <h3 className="text-xl font-semibold flex items-center gap-2 mb-2">
-                        <FaClock className="text-blue-600" /> Office Hours
+                        <FaClock className="text-blue-600" /> School Hours
                     </h3>
-                    <p>Monday – Friday: 8:00 AM – 5:00 PM</p>
-                    <p>Saturday: 9:00 AM – 2:00 PM</p>
+                    <p>Monday – Thursday: 8:00 AM – 3:45 PM</p>
+                    <p>Friday: 8:00 AM – 1:20 PM</p>
                     <p>Sunday: Closed</p>
                 </div>
             </div>
