@@ -1,6 +1,6 @@
 import Header from "../components/Landingpage/Header.jsx";
-import AdmissionRequirements from "../components/Admissions/AdmissionRequirements.jsx";
 import Footer from "../components/Footer.jsx";
+import AdmissionRequirements from "../components/Admissions/AdmissionRequirements.jsx";
 
 const Admissions = () => {
     return(

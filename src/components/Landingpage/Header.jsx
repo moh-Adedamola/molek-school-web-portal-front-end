@@ -13,7 +13,7 @@ import {
 
 const navLinks = [
     { href: '/about', label: 'About Us', icon: InformationCircleIcon },
-    { href: '#admissions', label: 'Admissions', icon: UserGroupIcon },
+    { href: '/admissions', label: 'Admissions', icon: UserGroupIcon },
     { href: '/academics', label: 'Academics', icon: AcademicCapIcon },
     { href: '#news', label: 'News & Events', icon: NewspaperIcon },
     { href: '#gallery', label: 'Gallery', icon: PhotoIcon },
