@@ -23,7 +23,8 @@ const AboutSchool = () => {
                 transition={{ duration: 0.6 }}
                 viewport={{ once: true }}
             >
-                Welcome to Our Institution. For over 15 years, we’ve provided quality education that prepares students for WAEC and NECO success, while nurturing character and leadership. Our JSS and SSS programs follow the Nigerian curriculum, taught by passionate and experienced educators.
+                  MOLEK Schools are a group of schools offering both Western and Islamic education from Pre-Nursery through Primary to the Secondary Classes.
+                  The school is co-educational, and admits children of all religious faiths, who are ready to abide by the school Rules and Regulations in line with Islamic way of life. No child is compelled or induced to embrace Islam as “there is no compulsion in religion”.
             </motion.p>
         </section>
     );

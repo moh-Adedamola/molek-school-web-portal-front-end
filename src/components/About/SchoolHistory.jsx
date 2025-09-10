@@ -1,19 +1,64 @@
 import { motion } from "framer-motion";
 import {
-    FaSchool, FaChartLine, FaFlask, FaUsers, FaAward,
-    FaLaptop, FaVirus, FaCheckCircle, FaBirthdayCake
+    FaSchool, FaUserGraduate, FaCertificate, FaUsers, FaAward,
+    FaChartLine, FaBook, FaSeedling, FaPray
 } from "react-icons/fa";
 
 const milestones = [
-    { year: "2009", title: "School Foundation", desc: "Started with 120 students and 12 staff.", icon: FaSchool },
-    { year: "2011", title: "First WAEC Results", desc: "85% pass rate in our first WAEC.", icon: FaChartLine },
-    { year: "2013", title: "Infrastructure Expansion", desc: "New labs and library opened.", icon: FaFlask },
-    { year: "2015", title: "Student Population Growth", desc: "Reached 400 students across JSS and SSS.", icon: FaUsers },
-    { year: "2017", title: "Excellence Recognition", desc: "Best Secondary School in Lagos State.", icon: FaAward },
-    { year: "2019", title: "Digital Learning Initiative", desc: "Smart classrooms and e-learning launched.", icon: FaLaptop },
-    { year: "2021", title: "COVID-19 Adaptation", desc: "Seamless transition to online learning.", icon: FaVirus },
-    { year: "2023", title: "95% WAEC Pass Rate", desc: "Record-breaking performance.", icon: FaCheckCircle },
-    { year: "2024", title: "15 Years of Excellence", desc: "Celebrating 2,000+ graduates.", icon: FaBirthdayCake },
+    { 
+        year: "2007", 
+        title: "Foundation & First Day", 
+        desc: "MOLEK Schools commenced operation on September 3rd with 2 pupils and 6 staff members.", 
+        icon: FaSeedling 
+    },
+    { 
+        year: "2008", 
+        title: "Government Recognition", 
+        desc: "Nursery School officially recognized and approved by Osun State government in April.", 
+        icon: FaCertificate 
+    },
+    { 
+        year: "2008", 
+        title: "Early Growth", 
+        desc: "Student population grew from 2 to 19 pupils by end of first academic session.", 
+        icon: FaChartLine 
+    },
+    { 
+        year: "2010", 
+        title: "First Graduate", 
+        desc: "Master Ismail Oyelude became the first pupil to graduate from MOLEK Primary School.", 
+        icon: FaUserGraduate 
+    },
+    { 
+        year: "2012", 
+        title: "Primary School Recognition", 
+        desc: "Primary School section officially recognized and approved by Osun State government.", 
+        icon: FaSchool 
+    },
+    { 
+        year: "2013", 
+        title: "Secondary School & First BECE", 
+        desc: "Secondary School approved by government. First JSS3 students achieved 100% pass rate in BECE.", 
+        icon: FaAward 
+    },
+    { 
+        year: "2016", 
+        title: "WAEC & NECO Success", 
+        desc: "First SS3 students sat for WAEC and NECO examinations with excellent results.", 
+        icon: FaCertificate 
+    },
+    { 
+        year: "2016", 
+        title: "NECO BECE Achievement", 
+        desc: "100% pass rate achieved in NECO Basic Education Certificate Examination.", 
+        icon: FaBook 
+    },
+    { 
+        year: "2019", 
+        title: "Major Expansion", 
+        desc: "Student population reached nearly 900 with 78 staff members (61 teaching, 17 non-teaching).", 
+        icon: FaUsers 
+    }
 ];
 
 const SchoolHistory = () => {
@@ -28,6 +73,29 @@ const SchoolHistory = () => {
             >
                 🕰️ Our History
             </motion.h2>
+
+            {/* Foundation Story */}
+            <motion.div
+                className="bg-green-50 border-l-4 border-green-500 p-6 rounded-r mb-12 max-w-4xl mx-auto"
+                initial={{ opacity: 0, x: -30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6 }}
+                viewport={{ once: true }}
+            >
+                <div className="flex items-center gap-2 mb-3">
+                    <FaPray className="text-green-600 text-xl" />
+                    <h3 className="text-lg font-bold text-green-800">Foundation Story</h3>
+                </div>
+                <p className="text-gray-700 mb-2">
+                    <strong>MOLEK Schools</strong> - derived from ADEMOLA and AYANLEKAN (the Proprietors). 
+                    The journey began with a special prayer on Sunday, September 2nd, 2007, followed by the 
+                    official commencement on Monday, September 3rd, 2007.
+                </p>
+                <p className="text-gray-700 text-sm">
+                    Our first students were Raji Abdul-Samad Ayodeji (Primary 1) and Raji AbdulBasit Ayomide (Primary 3), 
+                    supported by our founding team of dedicated educators.
+                </p>
+            </motion.div>
 
             <div className="space-y-10">
                 {milestones.map((item, index) => {
@@ -58,8 +126,8 @@ const SchoolHistory = () => {
                 transition={{ duration: 0.6 }}
                 viewport={{ once: true }}
             >
-                <p><strong>Legacy:</strong> Over 2,000 alumni excelling in careers and leadership roles.</p>
-                <p><strong>Looking Forward:</strong> We continue to innovate and invest in education for the future.</p>
+                 
+                <p className="text-sm italic">"Alhamdulillah - Glory be to God for the growth from 2 students to nearly 900!"</p>
             </motion.div>
         </section>
     );

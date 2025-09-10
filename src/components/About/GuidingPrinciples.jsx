@@ -35,8 +35,10 @@ const GuidingPrinciples = () => {
                 transition={{ duration: 0.6 }}
                 viewport={{ once: true }}
             >
-                <p><strong>Vision:</strong> To be Nigeria’s leading secondary school known for excellence and leadership.</p>
-                <p><strong>Mission:</strong> To provide holistic education that builds academic strength, character, and leadership.</p>
+                <p><strong>Mission:</strong> 
+                    To provide qualitative, functional and moral education with sound Islamic values at affordable cost, employing Montessori Method of teaching.</p>
+                <p><strong>Vision:</strong> To be among the foremost privately-owned educational institutions in Nigeria, operating in line with the esteemed expectation of parents, the society, as well as statutory and administrative (government) guidelines.</p>
+
                 <p><strong>Philosophy:</strong> We develop the whole child—intellectually, emotionally, socially, and morally.</p>
             </motion.div>
 
