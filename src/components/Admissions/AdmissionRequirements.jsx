@@ -113,7 +113,7 @@ const AdmissionRequirements = () => {
     };
 
     return (
-        <section className="bg-white text-blue-900 px-6 md:px-12 lg:px-24 py-16">
+        <section className="bg-white text-blue-900 px-6 md:px-12 lg:px-24 py-16 pt-[150px]">
             <motion.div
                 initial={{ opacity: 0, y: -20 }}
                 whileInView={{ opacity: 1, y: 0 }}

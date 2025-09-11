@@ -43,7 +43,18 @@ const Header = () => {
 
                 {/* Main Header */}
                 <div className="flex items-center justify-between px-6 py-4">
-                    <div className="text-xl font-bold text-blue-900">Molek Schools</div>
+                    {/* Logo + School Name */}
+                    <div className="flex items-center gap-2">
+                        <img
+                            src="/logo.webp"
+                            alt="Molek Schools Logo"
+                            className="h-10 w-auto"
+                        />
+                        <span className="text-xl font-bold text-blue-900">
+                            Molek Schools
+                        </span>
+                    </div>
+
 
                     {/* Desktop Nav */}
                     <nav className="hidden md:flex items-center space-x-6">
@@ -131,35 +142,8 @@ const Header = () => {
                                     placeholder="you@example.com"
                                 />
                             </div>
-                            {/*<div>*/}
-                            {/*    <label className="block text-sm font-medium text-gray-700">Admission Number</label>*/}
-                            {/*    <input*/}
-                            {/*        type="text"*/}
-                            {/*        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm px-3 py-2 focus:ring-blue-500 focus:border-blue-500"*/}
-                            {/*        placeholder="e.g. 2024/SSS/001"*/}
-                            {/*    />*/}
-                            {/*</div>*/}
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700">Password</label>
-                                <input
-                                    type="password"
-                                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm px-3 py-2 focus:ring-blue-500 focus:border-blue-500"
-                                    placeholder="••••••••"
-                                />
-                            </div>
-                            <button
-                                type="submit"
-                                className="w-full bg-blue-900 text-white py-2 rounded hover:bg-blue-800 transition-colors duration-200"
-                            >
-                                Login
-                            </button>
+                            {/* Add password field and submit button as needed */}
                         </form>
-                        <button
-                            onClick={() => setShowModal(false)}
-                            className="mt-4 text-sm text-blue-700 hover:underline"
-                        >
-                            Cancel
-                        </button>
                     </div>
                 </div>
             )}

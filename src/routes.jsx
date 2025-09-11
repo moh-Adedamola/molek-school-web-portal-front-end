@@ -3,6 +3,7 @@ import Homepage from "./pages/Homepage.jsx";
 import Academics from "./pages/Academics.jsx";
 import ContactUs from "./pages/ContactUs.jsx";
 import Admissions from './pages/Admissions.jsx';
+import Dashboard from "./components/Dashboard/Dashboard.jsx";
 
 
 const routes = [
@@ -25,6 +26,10 @@ const routes = [
     {
         path: '/contact',
         element: <ContactUs />,
+    },
+    {
+        path:'/dashboard',
+        element: <Dashboard />,
     }
 
 ];
