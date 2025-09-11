@@ -3,6 +3,7 @@ import Header from "../components/Landingpage/Header.jsx";
 import AboutSchool from "../components/About/AboutSchool.jsx";
 import GuidingPrinciples from "../components/About/GuidingPrinciples.jsx";
 import SchoolHistory from "../components/About/SchoolHistory.jsx";
+import StaffQualityWelfare from "../components/About/StaffQualityWelfare.jsx";
 
 const About = () => {
     return(
@@ -11,6 +12,7 @@ const About = () => {
             <AboutSchool />
             <GuidingPrinciples />
             <SchoolHistory />
+            <StaffQualityWelfare />
             <Footer />
         </>
 

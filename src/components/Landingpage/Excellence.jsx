@@ -64,7 +64,7 @@ const Excellence = () => {
             >
                 {[
                     { value: "15+", label: "Years of Excellence" },
-                    { value: "500+", label: "Active Students" },
+                    { value: "900+", label: "Active Students" },
                     { value: "95%", label: "WAEC Pass Rate" },
                 ].map((stat, index) => (
                     <motion.div
