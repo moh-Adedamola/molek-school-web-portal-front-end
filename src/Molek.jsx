@@ -1,9 +1,11 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import routes from './routes';
+import ErrorBoundary from "./components/ErrorBoundary.jsx";
 
 function App() {
     return (
+        <ErrorBoundary>
         <Routes>
             {routes.map((route, index) => (
                 <Route
@@ -22,6 +24,7 @@ function App() {
                 </Route>
             ))}
         </Routes>
+        </ErrorBoundary>
     );
 }
 
