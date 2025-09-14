@@ -4,7 +4,9 @@ import Academics from "./pages/Academics.jsx";
 import ContactUs from "./pages/ContactUs.jsx";
 import Admissions from './pages/Admissions.jsx';
 import Dashboard from "./components/Dashboard/Dashboard.jsx";
-
+import Payment from "./components/Dashboard/Payment.jsx";
+import Layout from "./components/Dashboard/Layout.jsx";
+import Grade from "./components/Dashboard/Grade.jsx";
 
 const routes = [
     {
@@ -13,11 +15,11 @@ const routes = [
     },
     {
         path: '/about',
-        element: <About/>,
+        element: <About />,
     },
-     {
+    {
         path: '/admissions',
-        element: <Admissions/>,
+        element: <Admissions />,
     },
     {
         path: '/academics',
@@ -28,9 +30,14 @@ const routes = [
         element: <ContactUs />,
     },
     {
-        path:'/dashboard',
-        element: <Dashboard />,
-    }
+        path: '/dashboard',
+        element: <Layout />,
+        children: [
+            { index: true, element: <Dashboard /> },
+            { path: 'payment', element: <Payment /> },
+            { path: 'grades', element: <Grade />}
+        ],
+    },
 
 ];
 

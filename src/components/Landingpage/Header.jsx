@@ -131,7 +131,7 @@ const Header = () => {
             {/* Login Modal */}
             {showModal && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-                    <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md mx-4">
+                    <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md mx-4 text-center">
                         <h2 className="text-xl font-bold text-blue-900 mb-4">Login to Your Portal</h2>
                         <form className="space-y-4">
                             <div>
@@ -142,7 +142,20 @@ const Header = () => {
                                     placeholder="you@example.com"
                                 />
                             </div>
-                            {/* Add password field and submit button as needed */}
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700">Password</label>
+                                <input
+                                    type={'password'}
+                                    className={'mt-1 block w-full border border-gray-300 rounded-md shadow-sm px-3 py-2 focus:ring-blue-500 focus:border-blue-500'}
+                                    placeholder={'*****************'}
+                                />
+                            </div>
+                            <div>
+                                <button
+                                    className={'bg-blue-900 hover:bg-blue-200 text-white py-2 px-4 rounded w-full'}>
+                                    Login
+                                </button>
+                            </div>
                         </form>
                     </div>
                 </div>

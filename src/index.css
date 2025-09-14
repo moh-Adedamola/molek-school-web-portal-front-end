@@ -1,8 +1,8 @@
+/* index.css */
 @import "tailwindcss";
 
-/* Custom marquee animation */
+/* Custom Animations */
 @layer utilities {
-
     @keyframes fade-in {
         from { opacity: 0; transform: translateY(20px); }
         to { opacity: 1; transform: translateY(0); }
@@ -13,12 +13,8 @@
     }
 
     @keyframes marquee {
-        0% {
-            transform: translateX(100%);
-        }
-        100% {
-            transform: translateX(-100%);
-        }
+        0% { transform: translateX(100%); }
+        100% { transform: translateX(-100%); }
     }
 
     .animate-marquee {
@@ -32,7 +28,32 @@
     }
 }
 
-@layer utilities {
-
+/* Calendar Responsiveness */
+.react-calendar {
+    width: 100%;
+    max-width: 100%;
+    border: none !important;
+    font-size: 0.9rem;
 }
 
+@media (max-width: 768px) {
+    .react-calendar {
+        font-size: 0.85rem;
+    }
+}
+
+/* Fix for sidebar margin on mobile */
+@media (max-width: 768px) {
+    .ml-64 {
+        margin-left: 0 !important;
+    }
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+/* Prevent body from overflowing when header is fixed */
+/*body {*/
+/*    overflow-x: hidden;*/
+/*}*/
