@@ -7,6 +7,7 @@ import Dashboard from "./components/Dashboard/Dashboard.jsx";
 import Payment from "./components/Dashboard/Payment.jsx";
 import Layout from "./components/Dashboard/Layout.jsx";
 import Grade from "./components/Dashboard/Grade.jsx";
+// import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 const routes = [
     {
@@ -31,6 +32,7 @@ const routes = [
     },
     {
         path: '/dashboard',
+        // element: <ProtectedRoute element={<Layout />} />,
         element: <Layout />,
         children: [
             { index: true, element: <Dashboard /> },
