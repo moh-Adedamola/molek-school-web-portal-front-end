@@ -29,7 +29,7 @@ const Excellence = () => {
                     transition={{ duration: 0.6 }}
                     viewport={{ once: true }}
                 >
-                    <h2 className="text-3xl md:text-4xl font-bold text-blue-900 mb-4">
+                    <h2 className="text-3xl md:text-4xl font-bold text-blue-700 mb-4">
                         Excellence in Secondary Education
                     </h2>
                     <p className="text-gray-700 mb-6">
@@ -38,14 +38,14 @@ const Excellence = () => {
                     <div className="flex gap-4 flex-wrap">
                         <motion.button
                             whileHover={{ scale: 1.05 }}
-                            className="bg-blue-900 text-white px-6 py-2 rounded hover:bg-blue-800 transition"
+                            className="bg-blue-700 text-white px-6 py-2 rounded hover:bg-blue-500 transition"
                         >
                             Apply for Admission
                         </motion.button>
                         <Link to="/about">
                             <motion.button
                                 whileHover={{ scale: 1.05 }}
-                                className="border border-blue-900 text-blue-900 px-6 py-2 rounded hover:bg-blue-100 transition"
+                                className="border border-blue-700 text-blue-700 px-6 py-2 rounded hover:bg-blue-100 transition"
                             >
                                 Learn More About Us
                             </motion.button>
@@ -72,7 +72,7 @@ const Excellence = () => {
                         whileHover={{ scale: 1.05 }}
                         className="transition"
                     >
-                        <h3 className="text-3xl font-bold text-blue-900">{stat.value}</h3>
+                        <h3 className="text-3xl font-bold text-blue-700">{stat.value}</h3>
                         <p className="text-gray-600">{stat.label}</p>
                     </motion.div>
                 ))}
@@ -112,7 +112,7 @@ const Excellence = () => {
                         className="bg-white p-6 rounded-lg shadow hover:shadow-lg transition"
                         variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0 } }}
                     >
-                        <h4 className="text-xl font-semibold text-blue-900 mb-2">{card.title}</h4>
+                        <h4 className="text-xl font-semibold text-blue-700 mb-2">{card.title}</h4>
                         <p className="text-gray-600">{card.desc}</p>
                     </motion.div>
                 ))}

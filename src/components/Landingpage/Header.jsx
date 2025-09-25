@@ -80,16 +80,18 @@ const Header = () => {
                 {/* Main Header */}
                 <div className="flex items-center justify-between px-6 py-4">
                     {/* Logo + School Name */}
+                    <a href={'/'}>
                     <div className="flex items-center gap-2">
                         <img
                             src="/logo.webp"
                             alt="Molek Schools Logo"
                             className="h-10 w-auto"
                         />
-                        <span className="text-xl font-bold text-blue-900">
+                        <span className="text-xl font-bold text-blue-700">
               Molek Schools
             </span>
                     </div>
+                    </a>
 
                     {/* Desktop Nav */}
                     <nav className="hidden md:flex items-center space-x-6">
@@ -97,14 +99,14 @@ const Header = () => {
                             <a
                                 key={href}
                                 href={href}
-                                className="flex items-center gap-1 text-blue-900 hover:text-blue-700 transition-colors duration-200"
+                                className="flex items-center gap-1 text-blue-700 hover:text-blue-300 transition-colors duration-200"
                             >
                                 <Icon className="w-5 h-5" />
                                 {label}
                             </a>
                         ))}
                         <button
-                            className="flex items-center gap-2 bg-green-700 text-white px-4 py-2 rounded hover:bg-green-500 transition-colors duration-200"
+                            className="flex items-center gap-2 bg-blue-700 text-white px-4 py-2 rounded hover:bg-green-500 transition-colors duration-200"
                             onClick={() => setShowModal(true)}
                         >
                             <ArrowRightCircleIcon className="w-5 h-5" />
@@ -220,7 +222,7 @@ const Header = () => {
                                 <button
                                     type="submit"
                                     disabled={loading}
-                                    className="w-full bg-blue-900 hover:bg-blue-800 text-white py-3 rounded-md focus:ring-2 focus:ring-blue-500 transition-colors disabled:opacity-50"
+                                    className="w-full bg-blue-700 hover:bg-blue-500 text-white py-3 rounded-md focus:ring-2 focus:ring-blue-500 transition-colors disabled:opacity-50"
                                 >
                                     {loading ? 'Signing in...' : 'Login'}
                                 </button>
