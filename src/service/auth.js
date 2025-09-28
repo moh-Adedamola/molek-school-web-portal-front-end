@@ -41,3 +41,7 @@ export const logout = () => {
     localStorage.removeItem('access_token');
     window.location.href = '/';
 };
+
+export const getAccessToken = () => {
+    return localStorage.getItem('access_token');
+};

@@ -106,7 +106,7 @@ const Header = () => {
                             </a>
                         ))}
                         <button
-                            className="flex items-center gap-2 bg-blue-700 text-white px-4 py-2 rounded hover:bg-green-500 transition-colors duration-200"
+                            className="flex items-center gap-2 bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-500 transition-colors duration-200"
                             onClick={() => setShowModal(true)}
                         >
                             <ArrowRightCircleIcon className="w-5 h-5" />
@@ -176,7 +176,7 @@ const Header = () => {
                     <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md relative">
                         {/* ✅ CLOSE BUTTON — VISIBLE, CLICKABLE, PERFECTLY POSITIONED */}
                         <button
-                            onClick={() => setShowModal(false)} // ✅ Click to close
+                            onClick={() => setShowModal(false)}
                             className="absolute -top-2 -right-2 w-8 h-8 flex items-center justify-center text-gray-500 hover:text-gray-700 bg-white rounded-full shadow-md border-2 border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 z-10 transition-colors"
                             aria-label="Close modal"
                         >
