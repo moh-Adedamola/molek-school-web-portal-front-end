@@ -16,7 +16,7 @@ const Excellence = () => {
                 >
                     <img
                         src="/excel.webp"
-                        alt="Excellence in Education"
+                        alt="MOLEK Schools Excellence"
                         className="rounded-lg shadow-md w-full h-auto object-cover"
                     />
                 </motion.div>
@@ -30,18 +30,22 @@ const Excellence = () => {
                     viewport={{ once: true }}
                 >
                     <h2 className="text-3xl md:text-4xl font-bold text-blue-700 mb-4">
-                        Excellence in Secondary Education
+                        Excellence in Holistic Education
                     </h2>
                     <p className="text-gray-700 mb-6">
-                        Preparing students for WAEC, NECO, and university success with quality education rooted in Nigerian values and global standards.
+                        Building GOD-FEARING future leaders through quality education that combines Islamic values 
+                        with modern academic excellence. From Creche to Senior Secondary, we nurture the TOTAL CHILD 
+                        with Montessori-inspired teaching methods.
                     </p>
                     <div className="flex gap-4 flex-wrap">
-                        <motion.button
-                            whileHover={{ scale: 1.05 }}
-                            className="bg-blue-700 text-white px-6 py-2 rounded hover:bg-blue-500 transition"
-                        >
-                            Apply for Admission
-                        </motion.button>
+                        <Link to="/admissions">
+                            <motion.button
+                                whileHover={{ scale: 1.05 }}
+                                className="bg-blue-700 text-white px-6 py-2 rounded hover:bg-blue-500 transition"
+                            >
+                                Apply for Admission
+                            </motion.button>
+                        </Link>
                         <Link to="/about">
                             <motion.button
                                 whileHover={{ scale: 1.05 }}
@@ -63,9 +67,9 @@ const Excellence = () => {
                 viewport={{ once: true }}
             >
                 {[
-                    { value: "15+", label: "Years of Excellence" },
+                    { value: "17+", label: "Years of Excellence" },
                     { value: "900+", label: "Active Students" },
-                    { value: "95%", label: "WAEC Pass Rate" },
+                    { value: "100%", label: "WAEC/NECO Pass Rate" },
                 ].map((stat, index) => (
                     <motion.div
                         key={index}
@@ -95,16 +99,16 @@ const Excellence = () => {
             >
                 {[
                     {
-                        title: "WAEC Excellence",
-                        desc: "Consistent high performance in WAEC and NECO examinations with dedicated preparation programs.",
+                        title: "100% Exam Success",
+                        desc: "Consistent 100% pass rate in WAEC, NECO, and BECE examinations since our first students in 2013-2016.",
                     },
                     {
-                        title: "Qualified Teachers",
-                        desc: "Highly qualified teaching staff committed to academic excellence and character development.",
+                        title: "Montessori-Inspired Learning",
+                        desc: "We identify young talents, develop and modify them through active participation and discovery-based learning.",
                     },
                     {
-                        title: "Modern Curriculum",
-                        desc: "Comprehensive curriculum aligned with Nigerian educational standards and global best practices.",
+                        title: "Holistic Islamic Education",
+                        desc: "Complete curriculum including Arabic Studies, Islamic Studies, Tahafeez (Quran Memorization), and conventional subjects.",
                     },
                 ].map((card, index) => (
                     <motion.div
@@ -116,6 +120,26 @@ const Excellence = () => {
                         <p className="text-gray-600">{card.desc}</p>
                     </motion.div>
                 ))}
+            </motion.div>
+
+            {/* Additional Recognition */}
+            <motion.div
+                className="bg-green-50 border-l-4 border-green-500 p-6 rounded-r mt-12"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                viewport={{ once: true }}
+            >
+                <div className="text-center">
+                    <h3 className="text-xl font-bold text-green-800 mb-2">
+                        "Alhamdulillah - Glory be to Allah"
+                    </h3>
+                    <p className="text-green-700">
+                        From 2 students in 2007 to nearly 900 students in 2019, recognized and approved 
+                        by Osun State Government across all three sections: Nursery (2008), Primary (2012), 
+                        and Secondary (2013).
+                    </p>
+                </div>
             </motion.div>
         </section>
     );
