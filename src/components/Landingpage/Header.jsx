@@ -110,7 +110,7 @@ const Header = () => {
                             onClick={() => setShowModal(true)}
                         >
                             <ArrowRightCircleIcon className="w-5 h-5" />
-                            Student Login
+                            Get Started
                         </button>
                     </nav>
 
