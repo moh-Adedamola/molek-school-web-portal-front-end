@@ -6,7 +6,6 @@ const Footer = () => {
             {/* School Info */}
             <div className="mb-10 animate-fade-in">
                 <h2 className="text-2xl font-bold">Molek Schools</h2>
-                <p className="text-sm mt-2 text-gray-200">Building GOD-FEARING Future Leaders</p>
                 <p className="mt-4 max-w-xl text-gray-300">
                     Committed to providing quality holistic education from Creche to Senior Secondary, 
                     combining Islamic values with academic excellence. Preparing students for success 

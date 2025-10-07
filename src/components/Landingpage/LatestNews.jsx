@@ -5,11 +5,11 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 // ✅ Hardcoded fallback
 const fallbackNews = {
     id: 1,
-    title: 'Molek Students Shine at National Science Olympiad',
+    title: 'MOLEK Schools Resumes for 2025/2026 Academic Session',
     description:
-        'Our senior students secured top positions in the 2025 National Science Olympiad held in Abuja.',
+        'Alhamdulillah! MOLEK Schools officially resumes for the new academic session on Monday, September 22, 2025. All students from Nursery to Senior Secondary are expected to report to the school on this day. We look forward to another year of academic excellence and character development.',
     image_url: '/excel.webp',
-    timestamp: 'September 2, 2025',
+    timestamp: 'September 15, 2025',
 };
 
 const formatDate = (isoString) => {
