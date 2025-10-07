@@ -73,7 +73,7 @@ const Header = () => {
                 {/* Top Info Bar */}
                 <div className="bg-red-700 text-white text-sm py-2 overflow-hidden">
                     <div className="animate-marquee">
-                        10 Haliru Mohammed Street, Ofatedo, Osogbo, Osun State | Academic Year 2024/2025 | info@molekschools.edu.ng
+                        10 Haliru Mohammed Street, Ofatedo, Osogbo, Osun State | Academic Year 2025/2026 | info@molekschools.com
                     </div>
                 </div>
 
@@ -110,7 +110,7 @@ const Header = () => {
                             onClick={() => setShowModal(true)}
                         >
                             <ArrowRightCircleIcon className="w-5 h-5" />
-                            Get Started
+                            Student Login
                         </button>
                     </nav>
 

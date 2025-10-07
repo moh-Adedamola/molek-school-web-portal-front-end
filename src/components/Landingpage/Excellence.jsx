@@ -69,7 +69,7 @@ const Excellence = () => {
                 {[
                     { value: "17+", label: "Years of Excellence" },
                     { value: "900+", label: "Active Students" },
-                    { value: "100%", label: "WAEC/NECO Pass Rate" },
+                    { value: "95%", label: "WAEC/NECO Pass Rate" },
                 ].map((stat, index) => (
                     <motion.div
                         key={index}
@@ -99,7 +99,7 @@ const Excellence = () => {
             >
                 {[
                     {
-                        title: "100% Exam Success",
+                        title: "95% Exam Success",
                         desc: "Consistent 100% pass rate in WAEC, NECO, and BECE examinations since our first students in 2013-2016.",
                     },
                     {
