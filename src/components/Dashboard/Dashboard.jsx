@@ -46,14 +46,10 @@ const Dashboard = () => {
                 );
                 const data = await res.json();
 
-                if (Array.isArray(data)) {
-                    setAttendanceData(data);
-                } else {
-                    setAttendanceData([]);
-                }
+                setAttendanceData(Array.isArray(data) ? data : []);
             } catch (err) {
                 console.warn("Failed to load attendance:", err);
-                setAttendanceData([]); // Fallback to empty
+                setAttendanceData([]);
             }
         };
 

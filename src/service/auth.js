@@ -5,7 +5,7 @@ if (!API_BASE_URL) {
 }
 
 export const loginByAdmission = async (admissionNumber, password) => {
-    const response = await fetch(`${API_BASE_URL}/molek/users/login/admission/`, {
+    const response = await fetch(`${API_BASE_URL}/molek/users/login/student/`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
