@@ -11,7 +11,7 @@ export const loginByAdmission = async (admissionNumber, password) => {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            admission_number: admissionNumber,
+            username: admissionNumber,
             password,
         }),
     });
