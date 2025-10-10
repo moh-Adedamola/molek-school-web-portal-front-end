@@ -72,7 +72,7 @@ const Header = () => {
             <header className="w-full fixed top-0 z-50 bg-white shadow-md">
                 <div className="bg-red-700 text-white text-sm py-2 overflow-hidden">
                     <div className="animate-marquee">
-                        10 Haliru Mohammed Street, Ofatedo, Osogbo, Osun State | Academic Year 2025/2026 | info@molekschools.com
+                        10 Haliru Muhammed Street, Ofatedo, Osogbo, Osun State | Academic Year 2025/2026 | info@molekschools.com
                     </div>
                 </div>
                 <div className="flex items-center justify-between px-6 py-4">

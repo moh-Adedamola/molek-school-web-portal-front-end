@@ -35,7 +35,7 @@ const Excellence = () => {
                     <p className="text-gray-700 mb-6">
                         Building GOD-FEARING future leaders through quality education that combines Islamic values 
                         with modern academic excellence. From Creche to Senior Secondary, we nurture the TOTAL CHILD 
-                        with Montessori-inspired teaching methods.
+                        with Montessori Method of Teaching.
                     </p>
                     <div className="flex gap-4 flex-wrap">
                         <Link to="/admissions">
@@ -135,7 +135,7 @@ const Excellence = () => {
                         "Alhamdulillah - Glory be to Allah"
                     </h3>
                     <p className="text-green-700">
-                        From 2 students in 2007 to nearly 900 students in 2019, recognized and approved 
+                        From 19 pupils in 2007 to nearly 900 Students in 2025, recognized and approved 
                         by Osun State Government across all three sections: Nursery (2008), Primary (2012), 
                         and Secondary (2013).
                     </p>
