@@ -17,8 +17,8 @@ const navLinks = [
     { href: '/about', label: 'About Us', icon: InformationCircleIcon },
     { href: '/admissions', label: 'Admissions', icon: UserGroupIcon },
     { href: '/academics', label: 'Academics', icon: AcademicCapIcon },
-    { href: '#news', label: 'News & Events', icon: NewspaperIcon },
-    { href: '#gallery', label: 'Gallery', icon: PhotoIcon },
+    { href: '/news', label: 'News & Events', icon: NewspaperIcon },
+    // { href: '#gallery', label: 'Gallery', icon: PhotoIcon },
     { href: '/contact', label: 'Contact', icon: PhoneIcon },
 ];
 
@@ -44,9 +44,9 @@ const Header = () => {
         setError('');
         setLoading(true);
         try {
-            console.log('Attempting login with:', { admissionNumber, password });
+            // console.log('Attempting login with:', { admissionNumber, password });
             const result = await loginByAdmission(admissionNumber, password);
-            console.log('Login response:', result);
+            // console.log('Login response:', result);
             localStorage.setItem('user', JSON.stringify(result.user));
             localStorage.setItem('access_token', result.access);
             navigate('/dashboard');

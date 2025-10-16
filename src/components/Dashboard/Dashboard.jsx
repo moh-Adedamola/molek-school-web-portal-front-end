@@ -10,7 +10,6 @@ const VITE_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const Dashboard = () => {
     const [calendarDate, setCalendarDate] = useState(new Date());
     const [events, setEvents] = useState([]);
-    const [attendanceData, setAttendanceData] = useState([]);
 
     // Format today's date
     const today = new Date();
@@ -32,28 +31,6 @@ const Dashboard = () => {
             }
         };
         fetchEvents();
-    }, []);
-
-    // Fetch attendance stats
-    useEffect(() => {
-        const user = getUser();
-        if (!user?.admission_number) return;
-
-        const fetchAttendance = async () => {
-            try {
-                const res = await fetch(
-                    `${VITE_BASE_URL}/molek/attendance/stats/${user.admission_number}/monthly/`
-                );
-                const data = await res.json();
-
-                setAttendanceData(Array.isArray(data) ? data : []);
-            } catch (err) {
-                console.warn("Failed to load attendance:", err);
-                setAttendanceData([]);
-            }
-        };
-
-        fetchAttendance();
     }, []);
 
     const user = getUser();
@@ -110,7 +87,7 @@ const Dashboard = () => {
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 md:h-7 md:w-7 text-blue-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                         </svg>
-                        <span className="text-lg md:text-xl font-bold text-blue-800 bg-blue-50 px-4 py-2 rounded-full shadow-sm">
+                        <span className="text-xl md:text-xl font-bold text-blue-800 bg-blue-50 px-4 py-2 rounded-full shadow-sm">
                             {admissionNumber}
                         </span>
                     </div>
@@ -158,9 +135,8 @@ const Dashboard = () => {
                 </div>
             </div>
 
-            {/* Calendar & Attendance */}
+            {/* Calendar */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {/* Calendar */}
                 <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-5 md:p-6">
                     <h2 className="text-xl font-bold text-gray-800 mb-4 text-center">Calendar</h2>
                     <Calendar
@@ -174,38 +150,6 @@ const Dashboard = () => {
                                 : ''
                         }
                     />
-                </div>
-
-                {/* Attendance Chart */}
-                <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-5 md:p-6">
-                    <h2 className="text-xl font-bold text-gray-800 mb-4 text-center">Monthly Attendance Rate</h2>
-                    <div className="relative h-48 flex items-end justify-between gap-1">
-                        {attendanceData.length > 0 ? (
-                            attendanceData.map((item, idx) => (
-                                <div
-                                    key={idx}
-                                    className="flex flex-col items-center group flex-1 min-w-[50px]"
-                                    title={`${item.month}: ${item.rate}%`}
-                                >
-                                    <div
-                                        className={`w-full rounded-t transition-all duration-700 ease-out ${
-                                            item.rate >= 90 ? 'bg-green-500' :
-                                                item.rate >= 80 ? 'bg-blue-500' :
-                                                    'bg-red-500'
-                                        }`}
-                                        style={{ height: `${Math.max(item.rate, 10)}%`, minHeight: '10px' }}
-                                    ></div>
-                                    <span className="mt-2 text-xs md:text-sm font-medium text-gray-700 text-center w-full truncate">
-                                        {item.month}
-                                    </span>
-                                </div>
-                            ))
-                        ) : (
-                            <div className="w-full text-center py-6 text-gray-500">
-                                Loading...
-                            </div>
-                        )}
-                    </div>
                 </div>
             </div>
         </motion.main>

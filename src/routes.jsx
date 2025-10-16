@@ -8,6 +8,7 @@ import Payment from "./components/Dashboard/Payment.jsx";
 import Layout from "./components/Dashboard/Layout.jsx";
 import Grade from "./components/Dashboard/Grade.jsx";
 import Settings from "./components/Dashboard/Settings.jsx"
+import News from "./pages/News.jsx"
 // import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 const routes = [
@@ -30,6 +31,10 @@ const routes = [
     {
         path: '/contact',
         element: <ContactUs />,
+    },
+    {
+        path: '/news',
+        element: <News />,
     },
     {
         path: '/dashboard',
