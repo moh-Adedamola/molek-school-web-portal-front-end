@@ -78,33 +78,62 @@ export const fetchLatestNews = async () => {
 };
 
 export const loginByAdmission = async (admission_number, last_name) => {
+    // 🔍 LOG WHAT WE'RE ABOUT TO SEND
+    // console.log('📡 Sending login request to backend with:', {
+    //     admission_number,
+    //     last_name,
+    // });
+
     try {
         const response = await fetch(`${API_BASE_URL}/molek/users/login/student/`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ admission_number, last_name })
+            body: JSON.stringify({ admission_number, last_name }),
         });
 
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.detail || 'Login failed');
-        }
+        // 🔍 LOG RESPONSE STATUS & URL
+        // console.log('📨 Backend response:', {
+        //     status: response.status,
+        //     statusText: response.statusText,
+        //     url: response.url,
+        // });
 
         const data = await response.json();
+
+        // 🔍 LOG FULL RESPONSE BODY
+        // console.log('📦 Full response data:', data);
+
+        if (!response.ok) {
+            // Extract meaningful error
+            let errorMessage = 'Login failed';
+            if (data.detail) {
+                errorMessage = data.detail;
+            } else if (data.admission_number) {
+                errorMessage = Array.isArray(data.admission_number)
+                    ? data.admission_number[0]
+                    : data.admission_number;
+            } else if (data.last_name) {
+                errorMessage = Array.isArray(data.last_name)
+                    ? data.last_name[0]
+                    : data.last_name;
+            }
+
+            console.error('🔥 Backend validation error:', errorMessage);
+            throw new Error(errorMessage);
+        }
+
+        // Success
         const accessToken = data.token?.access || data.access;
         const refreshToken = data.token?.refresh || data.refresh;
         const userData = data.user;
 
-        if (!accessToken || !refreshToken || !userData) {
-            throw new Error('Invalid login response structure');
+        if (!accessToken || !userData) {
+            throw new Error('Invalid response structure from server');
         }
 
-        localStorage.setItem('access_token', accessToken);
-        localStorage.setItem('refresh_token', refreshToken);
-        localStorage.setItem('user', JSON.stringify(userData));
-        return data;
+        return { ...data, access: accessToken, refresh: refreshToken };
     } catch (error) {
-        console.error('Login error:', error.message);
+        console.error('💥 Final error thrown from loginByAdmission:', error);
         throw error;
     }
 };

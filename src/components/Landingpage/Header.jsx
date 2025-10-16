@@ -39,27 +39,44 @@ const Header = () => {
         };
     }, [menuOpen, showModal]);
 
-    const handleLogin = async (e) => {
-        e.preventDefault();
-        setError('');
-        setLoading(true);
-        try {
-            // console.log('Attempting login with:', { admissionNumber, password });
-            const result = await loginByAdmission(admissionNumber, password);
-            // console.log('Login response:', result);
-            localStorage.setItem('user', JSON.stringify(result.user));
-            localStorage.setItem('access_token', result.access);
-            navigate('/dashboard');
-            setShowModal(false);
-            setAdmissionNumber('');
-            setPassword('');
-        } catch (err) {
-            console.error('Login error:', err);
-            setError(err instanceof Error ? err.message : 'Login failed. Please try again.');
-        } finally {
-            setLoading(false);
-        }
-    };
+const handleLogin = async (e) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
+
+    // 🔍 LOG RAW INPUTS
+    console.log('Raw form inputs:', { admissionNumber, password });
+
+    const cleanAdmission = admissionNumber.trim().toUpperCase();
+    const cleanLastName = password.trim();
+
+    console.log('Cleaned inputs sent to loginByAdmission:', {
+        admission_number: cleanAdmission,
+        last_name: cleanLastName,
+    });
+
+    if (!cleanAdmission || !cleanLastName) {
+        setError('Please enter both admission number and last name');
+        setLoading(false);
+        return;
+    }
+
+    try {
+        const result = await loginByAdmission(cleanAdmission, cleanLastName);
+        console.log('✅ Login success - full response:', result);
+        localStorage.setItem('user', JSON.stringify(result.user));
+        localStorage.setItem('access_token', result.token?.access || result.access);
+        navigate('/dashboard');
+        setShowModal(false);
+        setAdmissionNumber('');
+        setPassword('');
+    } catch (err) {
+        console.error('❌ Login failed in Header.jsx:', err);
+        setError(err.message || 'Login failed. Please check your details and try again.');
+    } finally {
+        setLoading(false);
+    }
+};
 
     const handleBackdropClick = (e) => {
         if (e.target.id === 'modal-backdrop') {
@@ -144,7 +161,7 @@ const Header = () => {
                                 <input
                                     type="text"
                                     value={admissionNumber}
-                                    onChange={(e) => setAdmissionNumber(e.target.value.toUpperCase())}
+                                    onChange={(e) => setAdmissionNumber(e.target.value)}
                                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm px-3 py-2 focus:ring-blue-500 focus:border-blue-500"
                                     placeholder="e.g., 2025/SS1/001"
                                     required
@@ -156,7 +173,7 @@ const Header = () => {
                                 <input
                                     type="password"
                                     value={password}
-                                    onChange={(e) => setPassword(e.target.value.toLowerCase())}
+                                    onChange={(e) => setPassword(e.target.value)}
                                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm px-3 py-2 focus:ring-blue-500 focus:border-blue-500"
                                     placeholder="Enter your last name"
                                     required

@@ -52,7 +52,7 @@ const Dashboard = () => {
                     <div>
                         <p className="text-sm opacity-80">{formattedDate}</p>
                         <h1 className="text-2xl md:text-3xl font-bold mt-2">
-                            Welcome back, <span className="text-yellow-300">{fullName}</span>!
+                            Welcome back, <span className="text-yellow-300">{fullName}</span>! 
                         </h1>
                         <p className="mt-2 text-sm opacity-90">Always stay updated in your student portal</p>
                     </div>
@@ -87,7 +87,7 @@ const Dashboard = () => {
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 md:h-7 md:w-7 text-blue-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                         </svg>
-                        <span className="text-xl md:text-xl font-bold text-blue-800 bg-blue-50 px-4 py-2 rounded-full shadow-sm">
+                        <span className="text-sm md:text-base font-medium text-blue-700 bg-blue-50 px-3 py-1 rounded-full shadow-sm">
                             {admissionNumber}
                         </span>
                     </div>
@@ -97,7 +97,7 @@ const Dashboard = () => {
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 md:h-7 md:w-7 text-green-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.738 4h-13.738a2 2 0 01-2 2v4a2 2 0 012 2h13.738a2 2 0 012-2v-4a2 2 0 01-2-2z"/>
                         </svg>
-                        <span className="text-lg md:text-xl font-bold text-green-800 bg-green-50 px-4 py-2 rounded-full shadow-sm">
+                        <span className="text-sm md:text-base font-medium text-green-700 bg-green-50 px-3 py-1 rounded-full shadow-sm">
                             {role.charAt(0).toUpperCase() + role.slice(1)}
                         </span>
                     </div>
