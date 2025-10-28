@@ -259,17 +259,10 @@ const WhyChooseUs = () => {
             >
                 <div className="bg-gradient-to-r from-blue-900 to-indigo-800 text-white p-8 rounded-2xl shadow-lg">
                     <h3 className="text-2xl font-bold mb-4">Ready to Join the MOLEK Family?</h3>
-                    <p className="text-blue-100 mb-6 max-w-2xl mx-auto">
+                    <p className="text-blue-100 max-w-2xl mx-auto">
                         Give your child the foundation they deserve with our proven educational excellence, 
                         Islamic values, and comprehensive development programs.
                     </p>
-                    <motion.button 
-                        className="bg-white text-blue-900 px-8 py-3 rounded-full font-semibold hover:bg-blue-50 transition-colors duration-300"
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                    >
-                        Start Your Journey Today
-                    </motion.button>
                 </div>
             </motion.div>
         </section>

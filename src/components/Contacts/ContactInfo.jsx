@@ -1,7 +1,94 @@
-import { FaMapMarkerAlt, FaPhoneAlt, FaEnvelope, FaPaperPlane } from "react-icons/fa";
+import { FaMapMarkerAlt, FaPhoneAlt, FaEnvelope, FaWhatsapp } from "react-icons/fa";
 import { motion } from "framer-motion";
+import { useState } from "react";
 
 const ContactInfo = () => {
+    const [formData, setFormData] = useState({
+        fullName: "",
+        phoneNumber: "",
+        email: "",
+        message: ""
+    });
+
+    const [errors, setErrors] = useState({});
+
+    // Primary WhatsApp number (you can change this to your preferred number)
+    const WHATSAPP_NUMBER = "2347066277945"; // Format: country code + number (no + or spaces)
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }));
+        // Clear error for this field when user starts typing
+        if (errors[name]) {
+            setErrors(prev => ({
+                ...prev,
+                [name]: ""
+            }));
+        }
+    };
+
+    const validateForm = () => {
+        const newErrors = {};
+        
+        if (!formData.fullName.trim()) {
+            newErrors.fullName = "Full name is required";
+        }
+        
+        if (!formData.phoneNumber.trim()) {
+            newErrors.phoneNumber = "Phone number is required";
+        } else if (!/^[0-9+\-\s()]{10,}$/.test(formData.phoneNumber)) {
+            newErrors.phoneNumber = "Please enter a valid phone number";
+        }
+        
+        if (!formData.message.trim()) {
+            newErrors.message = "Message is required";
+        }
+
+        if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+            newErrors.email = "Please enter a valid email address";
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        
+        if (!validateForm()) {
+            return;
+        }
+
+        // Format the message for WhatsApp
+        let whatsappMessage = `*New Enquiry from MOLEK Schools Website*\n\n`;
+        whatsappMessage += `*Name:* ${formData.fullName}\n`;
+        whatsappMessage += `*Phone:* ${formData.phoneNumber}\n`;
+        if (formData.email) {
+            whatsappMessage += `*Email:* ${formData.email}\n`;
+        }
+        whatsappMessage += `\n*Message:*\n${formData.message}`;
+
+        // Encode the message for URL
+        const encodedMessage = encodeURIComponent(whatsappMessage);
+        
+        // Create WhatsApp URL
+        const whatsappURL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`;
+        
+        // Open WhatsApp in new tab
+        window.open(whatsappURL, '_blank');
+        
+        // Optional: Reset form after submission
+        setFormData({
+            fullName: "",
+            phoneNumber: "",
+            email: "",
+            message: ""
+        });
+    };
+
     return (
         <motion.section
             className="bg-white text-blue-900 px-6 md:px-12 lg:px-24 py-16 pt-[150px]"
@@ -53,10 +140,10 @@ const ContactInfo = () => {
                 {/* Contact Form */}
                 <div className="bg-blue-50 p-6 rounded-lg">
                     <h3 className="text-xl font-semibold flex items-center gap-2 mb-6">
-                        <FaPaperPlane className="text-blue-600" /> Send Us a Message
+                        <FaWhatsapp className="text-green-600" /> Send Us a Message via WhatsApp
                     </h3>
                     
-                    <form className="space-y-4">
+                    <div className="space-y-4">
                         <div>
                             <label htmlFor="fullName" className="block text-sm font-medium mb-1">
                                 Your Full Name *
@@ -65,10 +152,14 @@ const ContactInfo = () => {
                                 type="text"
                                 id="fullName"
                                 name="fullName"
-                                required
-                                className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                value={formData.fullName}
+                                onChange={handleChange}
+                                className={`w-full px-3 py-2 border ${errors.fullName ? 'border-red-500' : 'border-gray-300'} rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
                                 placeholder="Enter your full name"
                             />
+                            {errors.fullName && (
+                                <p className="text-red-500 text-xs mt-1">{errors.fullName}</p>
+                            )}
                         </div>
 
                         <div>
@@ -79,10 +170,14 @@ const ContactInfo = () => {
                                 type="tel"
                                 id="phoneNumber"
                                 name="phoneNumber"
-                                required
-                                className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                value={formData.phoneNumber}
+                                onChange={handleChange}
+                                className={`w-full px-3 py-2 border ${errors.phoneNumber ? 'border-red-500' : 'border-gray-300'} rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
                                 placeholder="Enter your phone number"
                             />
+                            {errors.phoneNumber && (
+                                <p className="text-red-500 text-xs mt-1">{errors.phoneNumber}</p>
+                            )}
                         </div>
 
                         <div>
@@ -93,9 +188,14 @@ const ContactInfo = () => {
                                 type="email"
                                 id="email"
                                 name="email"
-                                className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                value={formData.email}
+                                onChange={handleChange}
+                                className={`w-full px-3 py-2 border ${errors.email ? 'border-red-500' : 'border-gray-300'} rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
                                 placeholder="Enter your email address"
                             />
+                            {errors.email && (
+                                <p className="text-red-500 text-xs mt-1">{errors.email}</p>
+                            )}
                         </div>
 
                         <div>
@@ -105,21 +205,25 @@ const ContactInfo = () => {
                             <textarea
                                 id="message"
                                 name="message"
-                                required
-                                rows="4"
-                                className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                                value={formData.message}
+                                onChange={handleChange}
+                                rows={4}
+                                className={`w-full px-3 py-2 border ${errors.message ? 'border-red-500' : 'border-gray-300'} rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none`}
                                 placeholder="Enter your message or enquiry"
-                            ></textarea>
+                            />
+                            {errors.message && (
+                                <p className="text-red-500 text-xs mt-1">{errors.message}</p>
+                            )}
                         </div>
 
                         <button
-                            type="submit"
-                            className="w-full bg-blue-600 text-white py-2 px-4 rounded font-medium hover:bg-blue-700 transition-colors duration-200 flex items-center justify-center gap-2"
+                            onClick={handleSubmit}
+                            className="w-full bg-green-600 text-white py-2 px-4 rounded font-medium hover:bg-green-700 transition-colors duration-200 flex items-center justify-center gap-2"
                         >
-                            <FaPaperPlane className="text-sm" />
-                            Send Message
+                            <FaWhatsapp className="text-lg" />
+                            Send via WhatsApp
                         </button>
-                    </form>
+                    </div>
                 </div>
             </div>
         </motion.section>
