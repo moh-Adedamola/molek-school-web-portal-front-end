@@ -79,7 +79,7 @@ export const fetchLatestNews = async () => {
 
 export const fetchAllGalleries = async () => {
     try {
-        const response = await axios.get(`${API_BASE_URL}molek/galleries/`);
+        const response = await fetch(`${API_BASE_URL}molek/galleries/`);
         return response.data;
     } catch (error) {
         console.error('Error fetching galleries:', error);
