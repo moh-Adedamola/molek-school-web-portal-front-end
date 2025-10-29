@@ -77,32 +77,24 @@ export const fetchLatestNews = async () => {
     }
 };
 
-export const loginByAdmission = async (admission_number, last_name) => {
-    // 🔍 LOG WHAT WE'RE ABOUT TO SEND
-    // console.log('📡 Sending login request to backend with:', {
-    //     admission_number,
-    //     last_name,
-    // });
+export const fetchAllGalleries = async () => {
+    try {
+        const response = await axios.get(`${API_BASE_URL}molek/galleries/`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching galleries:', error);
+        throw error;
+    }
+};
 
+export const loginByAdmission = async (admission_number, last_name) => {
     try {
         const response = await fetch(`${API_BASE_URL}/molek/users/login/student/`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ admission_number, last_name }),
         });
-
-        // 🔍 LOG RESPONSE STATUS & URL
-        // console.log('📨 Backend response:', {
-        //     status: response.status,
-        //     statusText: response.statusText,
-        //     url: response.url,
-        // });
-
         const data = await response.json();
-
-        // 🔍 LOG FULL RESPONSE BODY
-        // console.log('📦 Full response data:', data);
-
         if (!response.ok) {
             // Extract meaningful error
             let errorMessage = 'Login failed';

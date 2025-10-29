@@ -18,7 +18,7 @@ const navLinks = [
     { href: '/admissions', label: 'Admissions', icon: UserGroupIcon },
     { href: '/academics', label: 'Academics', icon: AcademicCapIcon },
     { href: '/news', label: 'News & Events', icon: NewspaperIcon },
-    // { href: '#gallery', label: 'Gallery', icon: PhotoIcon },
+    { href: '/gallery', label: 'Gallery', icon: PhotoIcon },
     { href: '/contact', label: 'Contact', icon: PhoneIcon },
 ];
 
