@@ -52,7 +52,7 @@ const Galleries = () => {
       <motion.section
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="min-h-screen bg-gray-50 px-4 sm:px-6 lg:px-8 py-12"
+        className="bg-gray-50 px-4 sm:px-6 lg:px-8 py-12"  // Removed min-h-screen to avoid full-height dominance
       >
         <div className="max-w-6xl mx-auto text-center">
           <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-4">Loading Galleries...</h2>
@@ -68,7 +68,7 @@ const Galleries = () => {
       <motion.section
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="min-h-screen bg-gray-50 px-4 sm:px-6 lg:px-8 py-12"
+        className="bg-gray-50 px-4 sm:px-6 lg:px-8 py-12"  // Removed min-h-screen
       >
         <div className="max-w-2xl mx-auto text-center">
           <img src="/excel.webp" alt="Error" className="w-24 h-24 mx-auto mb-4 object-contain" />
@@ -85,7 +85,7 @@ const Galleries = () => {
       <motion.section
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="min-h-screen bg-gray-50 px-4 sm:px-6 lg:px-8 py-12"
+        className="bg-gray-50 px-4 sm:px-6 lg:px-8 py-12"  // Removed min-h-screen
       >
         <div className="max-w-2xl mx-auto text-center">
           <img src="/excel.webp" alt="No galleries" className="w-32 h-32 mx-auto mb-4 opacity-60" />
@@ -103,7 +103,7 @@ const Galleries = () => {
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: 'easeOut' }}
-      className="min-h-screen bg-gray-50 px-4 sm:px-6 lg:px-8 py-12"
+      className="bg-gray-50 px-4 sm:px-6 lg:px-8 pt-8 pb-12"  // Adjusted py-12 to pt-8 pb-12 for more balanced top spacing (2rem top, 3rem bottom); removed min-h-screen to let it flow naturally below Header
     >
       <div className="max-w-6xl mx-auto">
         <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-8 text-center">
