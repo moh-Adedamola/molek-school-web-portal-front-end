@@ -80,7 +80,13 @@ export const fetchLatestNews = async () => {
 export const fetchAllGalleries = async () => {
     try {
         const response = await fetch(`${API_BASE_URL}/molek/galleries/`);
-        return response.data;
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(`HTTP ${response.status}: ${errorData.detail || 'Unknown error'}`);
+        }
+        const data = await response.json();
+        console.log('Fetched galleries:', data);
+        return data;
     } catch (error) {
         console.error('Error fetching galleries:', error);
         throw error;
