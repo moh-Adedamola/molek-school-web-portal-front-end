@@ -15,37 +15,6 @@ const fallbackNews = {
     publish_date: '2025-09-15',
 };
 
-// export const fetchAllNews = async () => {
-//     try {
-//         const response = await fetch('http://127.0.0.1:8000/molek/content/public/?t=' + new Date().getTime());
-//         if (!response.ok) {
-//             const errorData = await response.json();
-//             throw new Error(`HTTP ${response.status}: ${errorData.detail || 'Unknown error'}`);
-//         }
-//         const data = await response.json();
-//         console.log('Fetched news:', data.results);
-//         return data.results;
-//     } catch (error) {
-//         console.error('Error fetching all news:', error.message);
-//         throw error;
-//     }
-// };
-
-// export const fetchLatestNews = async () => {
-//     try {
-//         const response = await fetch('http://127.0.0.1:8000/molek/content/public/?limit=1&t=' + new Date().getTime());
-//         if (!response.ok) {
-//             const errorData = await response.json();
-//             throw new Error(`HTTP ${response.status}: ${errorData.detail || 'Unknown error'}`);
-//         }
-//         const data = await response.json();
-//         console.log('Fetched latest news:', data.results);
-//         return data.results[0] || null;
-//     } catch (error) {
-//         console.error('Error fetching latest news:', error.message);
-//         throw error;
-//     }
-// };
 
 export const fetchAllNews = async () => {
     try {
@@ -78,19 +47,18 @@ export const fetchLatestNews = async () => {
 };
 
 export const fetchAllGalleries = async () => {
-    try {
-        const response = await fetch(`${API_BASE_URL}/molek/galleries/`);
-        if (!response.ok) {
-            const errorData = await response.json().catch(() => ({}));
-            throw new Error(`HTTP ${response.status}: ${errorData.detail || 'Unknown error'}`);
-        }
-        const data = await response.json();
-        console.log('Fetched galleries:', data);
-        return data;
-    } catch (error) {
-        console.error('Error fetching galleries:', error);
-        throw error;
+  try {
+    const response = await fetch(`${API_BASE_URL}/molek/galleries/`); 
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(`HTTP ${response.status}: ${errorData.error || 'Unknown error'}`);
     }
+    const data = await response.json();
+    return data;  
+  } catch (error) {
+    console.error('Error fetching galleries:', error.message);
+    return [];  
+  }
 };
 
 export const loginByAdmission = async (admission_number, last_name) => {
