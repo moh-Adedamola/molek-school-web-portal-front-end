@@ -35,9 +35,9 @@ const LatestNews = () => {
     }
 
     return (
-        <section className="w-full px-4 sm:px-6 lg:px-8 py-12 bg-gray-50">
-            <div className="max-w-6xl mx-auto bg-white shadow-md rounded-lg p-6">
-                <h2 className="text-2xl font-bold text-blue-900 mb-6">Latest News & Updates</h2>
+        <section className="w-full px-4 sm:px-6 lg:px-8 py-12 bg-[#FAFAFA]">
+            <div className="max-w-6xl mx-auto bg-white shadow-lg rounded-2xl p-6">
+                <h2 className="text-2xl font-bold  text-[#3B82F6] mb-6">Latest News & Updates</h2>
 
                 <div className="flex flex-col md:flex-row gap-6">
                     {/* Media */}
@@ -46,7 +46,7 @@ const LatestNews = () => {
                             <img
                                 src={news.media_url || '/excel.webp'}
                                 alt={news.title}
-                                className="w-full h-64 object-cover rounded-md"
+                                className="w-full h-64 object-cover rounded-2xl"
                                 loading="lazy"
                                 onError={(e) => {
                                     e.target.src = '/excel.webp';
@@ -54,7 +54,7 @@ const LatestNews = () => {
                             />
                         ) : (
                             <video
-                                className="w-full h-64 object-cover rounded-md"
+                                className="w-full h-64 object-cover rounded-2xl"
                                 autoPlay
                                 muted
                                 loop
@@ -71,10 +71,10 @@ const LatestNews = () => {
 
                     {/* Content */}
                     <div className="w-full md:w-1/2 flex flex-col justify-center">
-                        <h3 className="text-xl font-semibold text-green-700">{news.title}</h3>
-                        <p className="text-gray-700 mt-2">{news.description}</p>
+                        <h3 className="text-xl font-semibold text-[#3B82F6]">{news.title}</h3>
+                        <p className="text-[#2D2D2D] mt-2">{news.description}</p>
                         <p className="text-sm text-gray-500 mt-4">
-                            🕒 {news.publish_date ? formatDate(news.publish_date) : news.timestamp}
+                            🕐 {news.publish_date ? formatDate(news.publish_date) : news.timestamp}
                         </p>
                     </div>
                 </div>

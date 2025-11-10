@@ -9,9 +9,9 @@ export default function Homepage(){
     return(
         <>
             <Header />
+            <LatestNews />
             <Excellence />
             <WhyChooseUs />
-            <LatestNews />
             {/* <WhatOurCommunitySays /> */}
             {/* <NewsLetterSubscribe /> */}
             <Footer />

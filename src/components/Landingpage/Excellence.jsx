@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const Excellence = () => {
     return (
-        <section className="mt-[120px] px-6 md:px-12 lg:px-24 py-12 bg-gray-50">
+        <section className="mt-[120px] px-6 md:px-12 lg:px-24 py-12 bg-[#FAFAFA]">
             {/* Hero Section */}
             <div className="flex flex-col lg:flex-row items-center gap-8">
                 {/* Image Placeholder */}
@@ -17,7 +17,7 @@ const Excellence = () => {
                     <img
                         src="/excel.webp"
                         alt="MOLEK Schools Excellence"
-                        className="rounded-lg shadow-md w-full h-auto object-cover"
+                        className="rounded-2xl shadow-lg w-full h-auto object-cover"
                     />
                 </motion.div>
 
@@ -29,10 +29,10 @@ const Excellence = () => {
                     transition={{ duration: 0.6 }}
                     viewport={{ once: true }}
                 >
-                    <h2 className="text-3xl md:text-4xl font-bold text-blue-700 mb-4">
+                    <h2 className="text-3xl md:text-4xl font-bold  text-[#3B82F6] mb-4">
                         Excellence in Holistic Education
                     </h2>
-                    <p className="text-gray-700 mb-6">
+                    <p className="text-[#2D2D2D] mb-6">
                         Building GOD-FEARING future leaders through quality education that combines Islamic values 
                         with modern academic excellence. From Creche to Senior Secondary, we nurture the TOTAL CHILD 
                         with Montessori Method of Teaching.
@@ -41,7 +41,7 @@ const Excellence = () => {
                         <Link to="/admissions">
                             <motion.button
                                 whileHover={{ scale: 1.05 }}
-                                className="bg-blue-700 text-white px-6 py-2 rounded hover:bg-blue-500 transition"
+                                className="bg-[#3B82F6] text-white px-6 py-3 rounded-full hover:bg-[#2563EB] transition shadow-md font-medium"
                             >
                                 Apply for Admission
                             </motion.button>
@@ -49,7 +49,7 @@ const Excellence = () => {
                         <Link to="/about">
                             <motion.button
                                 whileHover={{ scale: 1.05 }}
-                                className="border border-blue-700 text-blue-700 px-6 py-2 rounded hover:bg-blue-100 transition"
+                                className="border-2 border-[#1F3B6B]  text-[#3B82F6] px-6 py-3 rounded-full hover:bg-[#F9D89C] hover:bg-opacity-20 transition font-medium"
                             >
                                 Learn More About Us
                             </motion.button>
@@ -67,17 +67,17 @@ const Excellence = () => {
                 viewport={{ once: true }}
             >
                 {[
-                    { value: "17+", label: "Years of Excellence" },
-                    { value: "900+", label: "Active Students" },
-                    { value: "95%", label: "WAEC/NECO Pass Rate" },
+                    { value: "17+", label: "Years of Excellence", color: "#1F3B6B" },
+                    { value: "900+", label: "Active Students", color: "#3B82F6" },
+                    { value: "95%", label: "WAEC/NECO Pass Rate", color: "#E85D5D" },
                 ].map((stat, index) => (
                     <motion.div
                         key={index}
                         whileHover={{ scale: 1.05 }}
-                        className="transition"
+                        className="transition bg-white rounded-2xl p-6 shadow-md hover:shadow-lg"
                     >
-                        <h3 className="text-3xl font-bold text-blue-700">{stat.value}</h3>
-                        <p className="text-gray-600">{stat.label}</p>
+                        <h3 className="text-3xl font-bold" style={{ color: stat.color }}>{stat.value}</h3>
+                        <p className="text-gray-600 mt-2">{stat.label}</p>
                     </motion.div>
                 ))}
             </motion.div>
@@ -101,40 +101,44 @@ const Excellence = () => {
                     {
                         title: "95% Exam Success",
                         desc: "Consistent 100% pass rate in WAEC, NECO, and BECE examinations since our first students in 2013-2016.",
+                        color: "#1F3B6B"
                     },
                     {
                         title: "Montessori-Inspired Learning",
                         desc: "We identify young talents, develop and modify them through active participation and discovery-based learning.",
+                        color: "#3B82F6"
                     },
                     {
                         title: "Holistic Islamic Education",
                         desc: "Complete curriculum including Arabic Studies, Islamic Studies, Tahafeez (Quran Memorization), and conventional subjects.",
+                        color: "#E85D5D"
                     },
                 ].map((card, index) => (
                     <motion.div
                         key={index}
-                        className="bg-white p-6 rounded-lg shadow hover:shadow-lg transition"
+                        className="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition"
                         variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0 } }}
+                        style={{ borderTop: `4px solid ${card.color}` }}
                     >
-                        <h4 className="text-xl font-semibold text-blue-700 mb-2">{card.title}</h4>
-                        <p className="text-gray-600">{card.desc}</p>
+                        <h4 className="text-xl font-semibold mb-2" style={{ color: card.color }}>{card.title}</h4>
+                        <p className="text-[#2D2D2D]">{card.desc}</p>
                     </motion.div>
                 ))}
             </motion.div>
 
             {/* Additional Recognition */}
             <motion.div
-                className="bg-green-50 border-l-4 border-green-500 p-6 rounded-r mt-12"
+                className="bg-[#F9D89C] bg-opacity-40 border-l-4 border-[#3B82F6] p-6 rounded-r-2xl mt-12"
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
                 viewport={{ once: true }}
             >
                 <div className="text-center">
-                    <h3 className="text-xl font-bold text-green-800 mb-2">
+                    <h3 className="text-xl font-bold  text-[#3B82F6] mb-2">
                         "Alhamdulillah - Glory be to Allah"
                     </h3>
-                    <p className="text-green-700">
+                    <p className="text-[#2D2D2D]">
                         From 19 pupils in 2007 to nearly 900 Students in 2025, recognized and approved 
                         by Osun State Government across all three sections: Nursery (2008), Primary (2012), 
                         and Secondary (2013).

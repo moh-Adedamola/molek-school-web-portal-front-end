@@ -10,121 +10,135 @@ const subjectData = [
         name: "Mathematics",
         level: "Both",
         type: "Core",
-    
         exam: "WAEC/NECO",
-        icon: <FaCalculator className="text-red-500 text-2xl" />,
+        icon: <FaCalculator className="text-2xl" />,
+        color: "#E85D5D"
     },
     {
         name: "English Language",
         level: "Both",
         type: "Core",
         exam: "WAEC/NECO",
-        icon: <FaPenFancy className="text-blue-500 text-2xl" />,
+        icon: <FaPenFancy className="text-2xl" />,
+        color: "#1F3B6B"
     },
     {
         name: "Basic Science",
         level: "JSS",
         type: "Core",
         exam: "BECE",
-        icon: <FaMicroscope className="text-green-500 text-2xl" />,
+        icon: <FaMicroscope className="text-2xl" />,
+        color: "#3B82F6"
     },
     {
         name: "Physics",
         level: "SSS",
         type: "Elective",
         exam: "WAEC/NECO",
-        icon: <FaMicroscope className="text-purple-500 text-2xl" />,
+        icon: <FaMicroscope className="text-2xl" />,
+        color: "#F9D89C"
     },
     {
         name: "Chemistry",
         level: "SSS",
         type: "Elective",
         exam: "WAEC/NECO",
-        icon: <FaFlask className="text-pink-500 text-2xl" />,
+        icon: <FaFlask className="text-2xl" />,
+        color: "#E85D5D"
     },
     {
         name: "Biology",
         level: "SSS",
         type: "Elective",
         exam: "WAEC/NECO",
-        icon: <FaGlobeAfrica className="text-teal-500 text-2xl" />,
+        icon: <FaGlobeAfrica className="text-2xl" />,
+        color: "#1F3B6B"
     },
     {
         name: "Literature in English",
         level: "SSS",
         type: "Elective",
-
         exam: "WAEC/NECO",
-        icon: <FaBook className="text-indigo-500 text-2xl" />,
+        icon: <FaBook className="text-2xl" />,
+        color: "#3B82F6"
     },
     {
         name: "Government",
         level: "SSS",
         type: "Elective",
         exam: "WAEC/NECO",
-        icon: <FaBalanceScale className="text-cyan-500 text-2xl" />,
+        icon: <FaBalanceScale className="text-2xl" />,
+        color: "#F9D89C"
     },
     {
         name: "History",
         level: "SSS",
         type: "Elective",
         exam: "WAEC/NECO",
-        icon: <FaHistory className="text-lime-500 text-2xl" />,
+        icon: <FaHistory className="text-2xl" />,
+        color: "#E85D5D"
     },
     {
         name: "Economics",
         level: "SSS",
         type: "Elective",
         exam: "WAEC/NECO",
-        icon: <FaMoneyBill className="text-amber-500 text-2xl" />,
+        icon: <FaMoneyBill className="text-2xl" />,
+        color: "#1F3B6B"
     },
     {
         name: "Accounting",
         level: "SSS",
         type: "Elective",
         exam: "WAEC/NECO",
-        icon: <FaFileAlt className="text-orange-500 text-2xl" />,
+        icon: <FaFileAlt className="text-2xl" />,
+        color: "#3B82F6"
     },
     {
         name: "Computer Studies",
         level: "Both",
         type: "Core",
         exam: "WAEC/NECO",
-        icon: <FaLaptop className="text-gray-600 text-2xl" />,
+        icon: <FaLaptop className="text-2xl" />,
+        color: "#F9D89C"
     },
     {
         name: "Creative Arts",
         level: "JSS",
         type: "Core",
         exam: "BECE",
-        icon: <FaPalette className="text-pink-600 text-2xl" />,
+        icon: <FaPalette className="text-2xl" />,
+        color: "#E85D5D"
     },
     {
         name: "Physical Education",
         level: "Both",
         type: "Core",
         exam: "WAEC/NECO",
-        icon: <FaRunning className="text-yellow-500 text-2xl" />,
+        icon: <FaRunning className="text-2xl" />,
+        color: "#1F3B6B"
     },
     {
         name: "Nigerian Languages",
         level: "JSS",
         type: "Core",
         exam: "BECE",
-        icon: <FaLanguage className="text-green-600 text-2xl" />,
+        icon: <FaLanguage className="text-2xl" />,
+        color: "#3B82F6"
     },
     {
         name: "Agricultural Science",
         level: "JSS",
         type: "Core",
         exam: "BECE",
-        icon: <FaSeedling className="text-green-700 text-2xl" />,
+        icon: <FaSeedling className="text-2xl" />,
+        color: "#F9D89C"
     },
 ];
 
 const SubjectsList = () => {
     return (
-        <section className="bg-blue-50 text-blue-900 px-6 md:px-12 lg:px-24 py-12">
+        <section className="bg-[#FAFAFA]  text-[#3B82F6] px-6 md:px-12 lg:px-24 py-12">
             <motion.h2
                 className="text-3xl font-bold mb-8 text-center"
                 initial={{ opacity: 0, y: -20 }}
@@ -145,23 +159,33 @@ const SubjectsList = () => {
                     visible: {
                         opacity: 1,
                         y: 0,
-                        transition: { staggerChildren: 0.2 },
+                        transition: { staggerChildren: 0.1 },
                     },
                 }}
             >
                 {subjectData.map((subject, index) => (
                     <motion.div
                         key={index}
-                        className="bg-white p-6 rounded shadow hover:shadow-lg transition"
+                        className="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition-all"
+                        style={{ borderTop: `4px solid ${subject.color}` }}
                         variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
+                        whileHover={{ y: -5 }}
                     >
                         <div className="flex items-center gap-3 mb-4">
-                            {subject.icon}
-                            <h3 className="text-xl font-semibold">{subject.name}</h3>
+                            <div 
+                                className="p-3 rounded-xl"
+                                style={{ 
+                                    backgroundColor: `${subject.color}20`,
+                                    color: subject.color
+                                }}
+                            >
+                                {subject.icon}
+                            </div>
+                            <h3 className="text-xl font-semibold  text-[#3B82F6]">{subject.name}</h3>
                         </div>
-                        <p className="text-sm"><strong>Level:</strong> {subject.level}</p>
-                        <p className="text-sm"><strong>Type:</strong> {subject.type} Subject</p>
-                        <p className="text-sm"><strong>Exam:</strong> {subject.exam}</p>
+                        <p className="text-sm text-[#2D2D2D]"><strong>Level:</strong> {subject.level}</p>
+                        <p className="text-sm text-[#2D2D2D]"><strong>Type:</strong> {subject.type} Subject</p>
+                        <p className="text-sm text-[#2D2D2D]"><strong>Exam:</strong> {subject.exam}</p>
                     </motion.div>
                 ))}
             </motion.div>

@@ -36,37 +36,40 @@ const NewsAndEvents = () => {
         setExpanded((prev) => ({ ...prev, [id]: !prev[id] }));
     };
 
+    // Rotating colors for cards
+    const cardColors = ['#1F3B6B', '#3B82F6', '#E85D5D', '#F9D89C'];
+
     return (
         <motion.section
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, ease: 'easeOut' }}
-            className="min-h-screen bg-gray-50 px-4 sm:px-6 lg:px-8 py-12"
+            className="min-h-screen bg-[#FAFAFA] px-4 sm:px-6 lg:px-8 py-12"
         >
             <div className="max-w-6xl mx-auto">
-                <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-8 text-center">
-                    News & Events
+                <h2 className="text-2xl md:text-3xl font-bold  text-[#3B82F6] mb-8 text-center">
+                    📰 News & Events
                 </h2>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {news.map((item) => (
+                    {news.map((item, idx) => (
                         <div
                             key={item.id}
-                            className="bg-white rounded-2xl shadow-lg border border-gray-100 p-5 flex flex-col"
+                            className="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-lg transition-all"
                         >
                             {/* Media */}
-                            <div className="mb-4">
+                            <div className="relative mb-4">
                                 {item.content_type === 'image' ? (
                                     <img
                                         src={item.media_url || '/excel.webp'}
                                         alt={item.title}
-                                        className="w-full h-48 object-cover rounded-md"
+                                        className="w-full h-48 object-cover"
                                         loading="lazy"
                                         onError={(e) => (e.target.src = '/excel.webp')}
                                     />
                                 ) : (
                                     <video
-                                        className="w-full h-48 object-cover rounded-md"
+                                        className="w-full h-48 object-cover"
                                         autoPlay
                                         muted
                                         loop
@@ -77,20 +80,25 @@ const NewsAndEvents = () => {
                                         Your browser does not support the video tag.
                                     </video>
                                 )}
+                                {/* Color accent bar */}
+                                <div 
+                                    className="absolute top-0 left-0 w-full h-1"
+                                    style={{ backgroundColor: cardColors[idx % cardColors.length] }}
+                                />
                             </div>
 
                             {/* Content */}
-                            <div className="flex-1">
-                                <h3 className="text-lg font-semibold text-blue-800 mb-2">
+                            <div className="px-6 pb-6">
+                                <h3 className="text-lg font-semibold  text-[#3B82F6] mb-2">
                                     {item.title}
                                 </h3>
-                                <p className="text-gray-600 text-sm">
+                                <p className="text-[#2D2D2D] text-sm">
                                     {expanded[item.id]
                                         ? item.description
                                         : `${item.description?.substring(0, 100)}...`}
                                 </p>
                                 <p className="text-xs text-gray-500 mt-2">
-                                    🕒{' '}
+                                    🕐{' '}
                                     {item.publish_date
                                         ? formatDate(item.publish_date)
                                         : item.timestamp || 'No date'}
@@ -98,15 +106,18 @@ const NewsAndEvents = () => {
                                 <p className="text-xs text-gray-500 mt-1">
                                     By: {item.created_by?.full_name || 'Admin'}
                                 </p>
-                            </div>
 
-                            {/* Read More Button */}
-                            <button
-                                onClick={() => toggleDescription(item.id)}
-                                className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-blue-600 transition-colors"
-                            >
-                                {expanded[item.id] ? 'Show Less' : 'Read More'}
-                            </button>
+                                {/* Read More Button */}
+                                <button
+                                    onClick={() => toggleDescription(item.id)}
+                                    className="mt-4 w-full text-white px-4 py-2 rounded-full text-sm font-medium transition-all shadow-md"
+                                    style={{ 
+                                        backgroundColor: cardColors[idx % cardColors.length],
+                                    }}
+                                >
+                                    {expanded[item.id] ? 'Show Less' : 'Read More'}
+                                </button>
+                            </div>
                         </div>
                     ))}
                 </div>
