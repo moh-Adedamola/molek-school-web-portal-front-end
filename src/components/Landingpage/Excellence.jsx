@@ -49,7 +49,7 @@ const Excellence = () => {
                         <Link to="/about">
                             <motion.button
                                 whileHover={{ scale: 1.05 }}
-                                className="border-2 border-[#1f4ea0]  text-[#3B82F6] px-6 py-3 rounded-full hover:bg-[#F9D89C] hover:bg-opacity-20 transition font-medium"
+                                className="border-2 border-[#1f4ea0]  text-[#3B82F6] px-6 py-3 rounded-full hover:bg-[#9cd4f9] hover:bg-opacity-20 transition font-medium"
                             >
                                 Learn More About Us
                             </motion.button>
