@@ -12,8 +12,7 @@ const ContactInfo = () => {
 
     const [errors, setErrors] = useState({});
 
-    // Primary WhatsApp number (you can change this to your preferred number)
-    const WHATSAPP_NUMBER = "2347066277945"; // Format: country code + number (no + or spaces)
+    const WHATSAPP_NUMBER = "+2347066277945"; 
 
     const handleChange = (e) => {
         const { name, value } = e.target;
