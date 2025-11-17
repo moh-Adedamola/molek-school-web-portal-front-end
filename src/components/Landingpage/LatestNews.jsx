@@ -1,19 +1,50 @@
 import { useEffect, useState } from 'react';
-import { fetchLatestNews } from '../../service/auth';
+import { fetchAllNews } from '../../service/auth';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const LatestNews = () => {
     const [newsList, setNewsList] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const loadNews = async () => {
             try {
-                const latestNews = await fetchLatestNews();
-                setNewsList(Array.isArray(latestNews) ? latestNews : [latestNews]);
+                // Try to load from cache first
+                const cachedNews = localStorage.getItem('latestNews');
+                const cachedTimestamp = localStorage.getItem('latestNewsTimestamp');
+                const cacheExpiry = 1000 * 60 * 60; // 1 hour cache
+
+                // Check if cache is valid
+                if (cachedNews && cachedTimestamp) {
+                    const age = Date.now() - parseInt(cachedTimestamp);
+                    if (age < cacheExpiry) {
+                        const parsedNews = JSON.parse(cachedNews);
+                        setNewsList(Array.isArray(parsedNews) ? parsedNews : [parsedNews]);
+                        setLoading(false);
+                        return; // Use cached data
+                    }
+                }
+
+                // Fetch fresh data
+                const latestNews = await fetchAllNews();
+                const newsArray = Array.isArray(latestNews) ? latestNews : [latestNews];
+                setNewsList(newsArray);
+
+                // Cache the data
+                localStorage.setItem('latestNews', JSON.stringify(newsArray));
+                localStorage.setItem('latestNewsTimestamp', Date.now().toString());
             } catch (error) {
                 console.error('Error fetching latest news:', error.message);
+
+                // Fallback to cached data even if expired
+                const cachedNews = localStorage.getItem('latestNews');
+                if (cachedNews) {
+                    const parsedNews = JSON.parse(cachedNews);
+                    setNewsList(Array.isArray(parsedNews) ? parsedNews : [parsedNews]);
+                }
             } finally {
                 setLoading(false);
             }
@@ -40,13 +71,20 @@ const LatestNews = () => {
         setCurrentIndex((prev) => (prev + 1) % newsList.length);
     };
 
+    // Navigate to news page when news title is clicked
+    const handleNewsClick = () => {
+        navigate('/news');
+    };
+
     if (loading) {
         return (
             <section className="w-full px-4 sm:px-6 lg:px-8 py-8 bg-[#FAFAFA]">
                 <div className="max-w-6xl mx-auto bg-white shadow-lg rounded-2xl p-6">
                     <div className="animate-pulse">
-                        <div className="h-8 bg-gray-200 rounded w-1/3 mb-4"></div>
-                        <div className="h-6 bg-gray-200 rounded w-2/3"></div>
+                        <h2 className="text-2xl font-bold text-[#3B82F6] mb-6 text-center">
+                            Latest News & Updates
+                        </h2>
+                        <div className="h-8 bg-gray-200 rounded w-2/3 mx-auto"></div>
                     </div>
                 </div>
             </section>
@@ -62,7 +100,10 @@ const LatestNews = () => {
     return (
         <section className="w-full px-4 sm:px-6 lg:px-8 py-8 bg-[#FAFAFA]">
             <div className="max-w-6xl mx-auto bg-white shadow-lg rounded-2xl p-6">
-                <h2 className="text-2xl font-bold text-[#3B82F6] mb-6">Latest News & Updates</h2>
+                {/* Section Header - Centered */}
+                <h2 className="text-2xl font-bold text-[#3B82F6] mb-6 text-center">
+                    Latest News & Updates
+                </h2>
 
                 <div className="relative flex items-center justify-center py-6">
                     {/* Previous Button */}
@@ -76,9 +117,21 @@ const LatestNews = () => {
                         </button>
                     )}
 
-                    {/* News Title - Centered */}
+                    {/* News Title - Centered and Clickable */}
                     <div className="flex-1 px-6 md:px-12">
-                        <h3 className="text-lg md:text-xl lg:text-2xl font-bold text-[#2D2D2D] text-center">
+                        <h3
+                            className="text-lg md:text-xl lg:text-2xl font-bold text-[#2D2D2D] text-center cursor-pointer hover:text-[#3B82F6] transition-colors select-none"
+                            onClick={handleNewsClick}
+                            role="button"
+                            tabIndex={0}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter' || e.key === ' ') {
+                                    e.preventDefault();
+                                    handleNewsClick();
+                                }
+                            }}
+                            aria-label={`Read more about: ${currentNews.title}`}
+                        >
                             {currentNews.title}
                         </h3>
                     </div>
