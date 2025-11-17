@@ -1,83 +1,117 @@
 import { useEffect, useState } from 'react';
 import { fetchLatestNews } from '../../service/auth';
-
-const formatDate = (isoString) => {
-    try {
-        const date = new Date(isoString);
-        if (isNaN(date.getTime())) return isoString;
-        return date.toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-        });
-    } catch (e) {
-        return isoString;
-    }
-};
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const LatestNews = () => {
-    const [news, setNews] = useState(null);
+    const [newsList, setNewsList] = useState([]);
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const loadNews = async () => {
             try {
                 const latestNews = await fetchLatestNews();
-                setNews(latestNews);
+                setNewsList(Array.isArray(latestNews) ? latestNews : [latestNews]);
             } catch (error) {
                 console.error('Error fetching latest news:', error.message);
+            } finally {
+                setLoading(false);
             }
         };
         loadNews();
     }, []);
 
-    if (!news) {
-        return <div>Loading...</div>;
-    }
+    // Auto-scroll every 5 seconds
+    useEffect(() => {
+        if (newsList.length > 1) {
+            const interval = setInterval(() => {
+                setCurrentIndex((prev) => (prev + 1) % newsList.length);
+            }, 5000);
 
-    return (
-        <section className="w-full px-4 sm:px-6 lg:px-8 py-12 bg-[#FAFAFA]">
-            <div className="max-w-6xl mx-auto bg-white shadow-lg rounded-2xl p-6">
-                <h2 className="text-2xl font-bold  text-[#3B82F6] mb-6">Latest News & Updates</h2>
+            return () => clearInterval(interval);
+        }
+    }, [newsList.length]);
 
-                <div className="flex flex-col md:flex-row gap-6">
-                    {/* Media */}
-                    <div className="w-full md:w-1/2">
-                        {news.content_type === 'image' ? (
-                            <img
-                                src={news.media_url || '/excel.webp'}
-                                alt={news.title}
-                                className="w-full h-64 object-cover rounded-2xl"
-                                loading="lazy"
-                                onError={(e) => {
-                                    e.target.src = '/excel.webp';
-                                }}
-                            />
-                        ) : (
-                            <video
-                                className="w-full h-64 object-cover rounded-2xl"
-                                autoPlay
-                                muted
-                                loop
-                                controls
-                                onError={(e) => {
-                                    e.target.src = '/fallback.webm';
-                                }}
-                            >
-                                <source src={news.media_url || '/fallback.webm'} />
-                                Your browser does not support the video tag.
-                            </video>
-                        )}
-                    </div>
+    const goToPrevious = () => {
+        setCurrentIndex((prev) => (prev - 1 + newsList.length) % newsList.length);
+    };
 
-                    {/* Content */}
-                    <div className="w-full md:w-1/2 flex flex-col justify-center">
-                        <h3 className="text-xl font-semibold text-[#3B82F6]">{news.title}</h3>
-                        <p className="text-[#2D2D2D] mt-2">{news.description}</p>
-                        <p className="text-sm text-gray-500 mt-4">
-                            🕐 {news.publish_date ? formatDate(news.publish_date) : news.timestamp}
-                        </p>
+    const goToNext = () => {
+        setCurrentIndex((prev) => (prev + 1) % newsList.length);
+    };
+
+    if (loading) {
+        return (
+            <section className="w-full px-4 sm:px-6 lg:px-8 py-8 bg-[#FAFAFA]">
+                <div className="max-w-6xl mx-auto bg-white shadow-lg rounded-2xl p-6">
+                    <div className="animate-pulse">
+                        <div className="h-8 bg-gray-200 rounded w-1/3 mb-4"></div>
+                        <div className="h-6 bg-gray-200 rounded w-2/3"></div>
                     </div>
                 </div>
+            </section>
+        );
+    }
+
+    if (!newsList || newsList.length === 0) {
+        return null;
+    }
+
+    const currentNews = newsList[currentIndex];
+
+    return (
+        <section className="w-full px-4 sm:px-6 lg:px-8 py-8 bg-[#FAFAFA]">
+            <div className="max-w-6xl mx-auto bg-white shadow-lg rounded-2xl p-6">
+                <h2 className="text-2xl font-bold text-[#3B82F6] mb-6">Latest News & Updates</h2>
+
+                <div className="relative flex items-center justify-center py-6">
+                    {/* Previous Button */}
+                    {newsList.length > 1 && (
+                        <button
+                            onClick={goToPrevious}
+                            className="flex-shrink-0 p-2 bg-white rounded-full shadow-lg hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-[#3B82F6]"
+                            aria-label="Previous news"
+                        >
+                            <ChevronLeft className="w-6 h-6 text-[#3B82F6]" />
+                        </button>
+                    )}
+
+                    {/* News Title - Centered */}
+                    <div className="flex-1 px-6 md:px-12">
+                        <h3 className="text-lg md:text-xl lg:text-2xl font-bold text-[#2D2D2D] text-center">
+                            {currentNews.title}
+                        </h3>
+                    </div>
+
+                    {/* Next Button */}
+                    {newsList.length > 1 && (
+                        <button
+                            onClick={goToNext}
+                            className="flex-shrink-0 p-2 bg-white rounded-full shadow-lg hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-[#3B82F6]"
+                            aria-label="Next news"
+                        >
+                            <ChevronRight className="w-6 h-6 text-[#3B82F6]" />
+                        </button>
+                    )}
+                </div>
+
+                {/* Dots Indicator */}
+                {newsList.length > 1 && (
+                    <div className="flex justify-center gap-2 mt-4">
+                        {newsList.map((_, index) => (
+                            <button
+                                key={index}
+                                onClick={() => setCurrentIndex(index)}
+                                className={`w-2 h-2 rounded-full transition-all ${
+                                    index === currentIndex
+                                        ? 'bg-[#3B82F6] w-8'
+                                        : 'bg-gray-300 hover:bg-gray-400'
+                                }`}
+                                aria-label={`Go to news ${index + 1}`}
+                            />
+                        ))}
+                    </div>
+                )}
             </div>
         </section>
     );
