@@ -3,7 +3,6 @@ import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import logo from '/logo.webp';
 import { useEffect, useState } from 'react';
-import { getUser } from '../../service/auth';
 
 const VITE_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -33,11 +32,6 @@ const Dashboard = () => {
         fetchEvents();
     }, []);
 
-    const user = getUser();
-    const fullName = user?.full_name || 'Student';
-    const admissionNumber = user?.admission_number || 'N/A';
-    const role = user?.role || 'Student';
-    const passportUrl = user?.passport_url || null;
 
     return (
         <motion.main

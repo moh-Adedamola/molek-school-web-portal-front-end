@@ -1,184 +1,160 @@
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 if (!API_BASE_URL) {
-    throw new Error('API_BASE_URL is not defined in .env');
+  throw new Error('API_BASE_URL is not defined in .env');
 }
 
-// Fallback news item for when API fetch fails
+// Fallback news item
 const fallbackNews = {
-    id: 1,
-    title: 'MOLEK Schools Resumes for 2025/2026 Academic Session',
-    description:
-        'Alhamdulillah! MOLEK Schools officially resumes for the new academic session on Monday, September 22, 2025. All students from Nursery to Senior Secondary are expected to report to the school on this day. We look forward to another year of academic excellence and character development.',
-    media_url: '/excel.webp',
-    content_type: 'image',
-    publish_date: '2025-09-15',
+  id: 1,
+  title: 'MOLEK Schools - Updates Coming Soon',
+  description: 'Stay tuned for the latest news and announcements from MOLEK Schools.',
+  media_url: '/excel.webp',
+  content_type: 'news',
+  publish_date: new Date().toISOString(),
 };
 
-
-export const fetchAllNews = async () => {
-    try {
-        const response = await fetch(`${API_BASE_URL}/molek/content/public/`);
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(`HTTP ${response.status}: ${errorData.detail || 'Unknown error'}`);
-        }
-        const data = await response.json();
-        return data.results;
-    } catch (error) {
-        console.error('Error fetching all news:', error.message);
-        throw error;
-    }
-};
-
-export const fetchLatestNews = async () => {
-    try {
-        const response = await fetch(`${API_BASE_URL}/molek/content/public/?limit=1`);
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(`HTTP ${response.status}: ${errorData.detail || 'Unknown error'}`);
-        }
-        const data = await response.json();
-        return data.results[0] || null;
-    } catch (error) {
-        console.error('Error fetching latest news:', error.message);
-        throw error;
-    }
-};
-
-export const fetchAllGalleries = async () => {
+// ============================================
+// 📰 FETCH ALL CONTENT (News, Images, Videos)
+// ============================================
+export const fetchAllContent = async () => {
   try {
-    const response = await fetch(`${API_BASE_URL}/molek/galleries/`); 
+    const response = await fetch(`${API_BASE_URL}/api/content/public/`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    
     if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(`HTTP ${response.status}: ${errorData.error || 'Unknown error'}`);
+      console.error(`HTTP ${response.status}: ${response.statusText}`);
+      throw new Error(`Failed to fetch content: ${response.status}`);
     }
+    
     const data = await response.json();
-    return data;  
+    
+    // Handle both paginated and non-paginated responses
+    if (data.results && Array.isArray(data.results)) {
+      return data.results;
+    }
+    
+    return Array.isArray(data) ? data : [];
   } catch (error) {
-    console.error('Error fetching galleries:', error.message);
-    return [];  
+    console.error('Error fetching all content:', error.message);
+    return [];
   }
 };
 
-export const loginByAdmission = async (admission_number, last_name) => {
-    try {
-        const response = await fetch(`${API_BASE_URL}/molek/users/login/student/`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ admission_number, last_name }),
-        });
-        const data = await response.json();
-        if (!response.ok) {
-            // Extract meaningful error
-            let errorMessage = 'Login failed';
-            if (data.detail) {
-                errorMessage = data.detail;
-            } else if (data.admission_number) {
-                errorMessage = Array.isArray(data.admission_number)
-                    ? data.admission_number[0]
-                    : data.admission_number;
-            } else if (data.last_name) {
-                errorMessage = Array.isArray(data.last_name)
-                    ? data.last_name[0]
-                    : data.last_name;
-            }
-
-            console.error('🔥 Backend validation error:', errorMessage);
-            throw new Error(errorMessage);
-        }
-
-        // Success
-        const accessToken = data.token?.access || data.access;
-        const refreshToken = data.token?.refresh || data.refresh;
-        const userData = data.user;
-
-        if (!accessToken || !userData) {
-            throw new Error('Invalid response structure from server');
-        }
-
-        return { ...data, access: accessToken, refresh: refreshToken };
-    } catch (error) {
-        console.error('💥 Final error thrown from loginByAdmission:', error);
-        throw error;
-    }
-};
-
-export const getUser = () => {
-    const userStr = localStorage.getItem('user');
-    return userStr ? JSON.parse(userStr) : null;
-};
-
-export const logout = () => {
-    localStorage.removeItem('user');
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('refresh_token');
-    window.location.href = '/';
-};
-
-export const getAccessToken = () => {
-    return localStorage.getItem('access_token');
-};
-
-export const updateProfile = async (formData) => {
-    const token = localStorage.getItem('access_token');
-    const response = await fetch(`${API_BASE_URL}/molek/users/profile/update/`, {
-        method: 'POST',
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-        body: formData,
+// ============================================
+// 📰 FETCH NEWS ONLY (for LatestNews component)
+// ============================================
+export const fetchAllNews = async () => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/content/public/?content_type=news`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
-
+    
     if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to update profile');
+      console.error(`HTTP ${response.status}: ${response.statusText}`);
+      throw new Error(`Failed to fetch news: ${response.status}`);
     }
-
-    return await response.json();
+    
+    const data = await response.json();
+    
+    // Handle both paginated and non-paginated responses
+    if (data.results && Array.isArray(data.results)) {
+      return data.results.length > 0 ? data.results : [fallbackNews];
+    }
+    
+    return Array.isArray(data) && data.length > 0 ? data : [fallbackNews];
+  } catch (error) {
+    console.error('Error fetching news:', error.message);
+    
+    // Return cached data if available
+    const cachedNews = localStorage.getItem('latestNews');
+    if (cachedNews) {
+      try {
+        const parsed = JSON.parse(cachedNews);
+        return Array.isArray(parsed) && parsed.length > 0 ? parsed : [fallbackNews];
+      } catch {
+        return [fallbackNews];
+      }
+    }
+    
+    return [fallbackNews];
+  }
 };
 
-export const exportStudentData = async () => {
-    const token = localStorage.getItem('access_token');
-    const response = await fetch(`${API_BASE_URL}/molek/users/profile/export/`, {
+// ============================================
+// 🖼️ FETCH GALLERIES (for Galleries component)
+// ============================================
+export const fetchAllGalleries = async () => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/galleries/`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    
+    if (!response.ok) {
+      console.error(`HTTP ${response.status}: ${response.statusText}`);
+      throw new Error(`Failed to fetch galleries: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    
+    // Handle both paginated and non-paginated responses
+    if (data.results && Array.isArray(data.results)) {
+      console.log('Galleries fetched:', data.results.length);
+      return data.results;
+    }
+    
+    if (Array.isArray(data)) {
+      console.log('Galleries fetched:', data.length);
+      return data;
+    }
+    
+    console.warn('Unexpected gallery response format:', data);
+    return [];
+  } catch (error) {
+    console.error('Error fetching galleries:', error.message);
+    return [];
+  }
+};
+
+// ============================================
+// 📚 FETCH SPECIFIC CONTENT TYPE
+// ============================================
+export const fetchContentByType = async (contentType) => {
+  try {
+    const response = await fetch(
+      `${API_BASE_URL}/api/content/public/?content_type=${contentType}`,
+      {
         method: 'GET',
         headers: {
-            Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
         },
-    });
-
-    if (!response.ok) throw new Error("Could not download data");
-
-    const blob = await response.blob();
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `student_${getUser()?.admission_number}_data.json`;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-};
-
-export const changePassword = async (oldPassword, newPassword) => {
-    const token = localStorage.getItem('access_token');
-    if (!token) throw new Error('Not authenticated');
-
-    const response = await fetch(`${API_BASE_URL}/molek/users/change-password/`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-            old_password: oldPassword,
-            new_password: newPassword,
-        }),
-    });
-
+      }
+    );
+    
     if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error || 'Failed to change password');
+      console.error(`HTTP ${response.status}: ${response.statusText}`);
+      throw new Error(`Failed to fetch ${contentType}: ${response.status}`);
     }
-
-    return await response.json();
+    
+    const data = await response.json();
+    
+    if (data.results && Array.isArray(data.results)) {
+      return data.results;
+    }
+    
+    return Array.isArray(data) ? data : [];
+  } catch (error) {
+    console.error(`Error fetching ${contentType}:`, error.message);
+    return [];
+  }
 };

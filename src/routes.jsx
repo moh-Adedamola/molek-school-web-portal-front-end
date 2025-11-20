@@ -3,11 +3,6 @@ import Homepage from "./pages/Homepage.jsx";
 import Academics from "./pages/Academics.jsx";
 import ContactUs from "./pages/ContactUs.jsx";
 import Admissions from './pages/Admissions.jsx';
-import Dashboard from "./components/Dashboard/Dashboard.jsx";
-import Payment from "./components/Dashboard/Payment.jsx";
-import Layout from "./components/Dashboard/Layout.jsx";
-import Grade from "./components/Dashboard/Grade.jsx";
-import Settings from "./components/Dashboard/Settings.jsx"
 import News from "./pages/News.jsx"
 import Gallery from "./pages/Gallery.jsx";
 // import ProtectedRoute from "./components/ProtectedRoute.jsx";
@@ -40,18 +35,7 @@ const routes = [
     {
         path: '/gallery',
         element: <Gallery />,
-    },
-    {
-        path: '/dashboard',
-        // element: <ProtectedRoute element={<Layout />} />,
-        element: <Layout />,
-        children: [
-            { index: true, element: <Dashboard /> },
-            { path: 'payment', element: <Payment /> },
-            { path: 'grades', element: <Grade />},
-            {path: 'settings', element: <Settings />}
-        ],
-    },
+    }
 
 ];
 

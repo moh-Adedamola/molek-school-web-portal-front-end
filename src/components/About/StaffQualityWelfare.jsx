@@ -209,7 +209,7 @@ const StaffQualityWelfare = () => {
                         {nonTeachingRoles.map((role, index) => (
                             <motion.div
                                 key={index}
-                                className="bg-white bg-opacity-20 backdrop-blur-sm p-3 rounded-xl text-center"
+                                className="bg-[#ff2626] text-white bg-opacity-20 backdrop-blur-sm p-3 rounded-xl text-center"
                                 initial={{ opacity: 0, y: 20 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.3, delay: index * 0.1 }}
@@ -246,14 +246,14 @@ const StaffQualityWelfare = () => {
                         {welfareIncentives.map((incentive, index) => (
                             <motion.div
                                 key={index}
-                                className="flex items-center gap-3 bg-[#E85D5D] bg-opacity-10 p-3 rounded-xl"
+                                className="flex items-center gap-3 bg-[#1c27a2] bg-opacity-10 p-3 rounded-xl"
                                 initial={{ opacity: 0, x: -20 }}
                                 whileInView={{ opacity: 1, x: 0 }}
                                 transition={{ duration: 0.3, delay: index * 0.1 }}
                                 viewport={{ once: true }}
                             >
-                                <CurrencyDollarIcon className="w-5 h-5 text-[#E85D5D]" />
-                                <span className="font-medium  text-[#3B82F6]">{incentive}</span>
+                                <CurrencyDollarIcon className="w-5 h-5 text-[#ff0000]" />
+                                <span className="font-medium  text-[#ffffff]">{incentive}</span>
                             </motion.div>
                         ))}
                     </div>

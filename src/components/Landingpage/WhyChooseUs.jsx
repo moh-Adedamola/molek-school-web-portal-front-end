@@ -62,7 +62,7 @@ const features = [
     },
     {
         title: "Small Class Advantage",
-        description: "Between 20 - 25 Students in our Secondary classes and under 20 Students in Nursery and Primary Sections, ensuring personalized attention and quality teacher-student interaction.",
+        description: "20-25 students in Secondary, under 20 in Nursery/Primary, ensuring personalized attention and quality interaction.",
         icon: UserGroupIcon,
         color: "#F9D89C"
     },
@@ -95,111 +95,66 @@ const features = [
 const successStories = [
     {
         icon: TrophyIcon,
-        title: "Outstanding Examination Results",
-        description: "Consistently recording excellent results with many distinction grades in Basic Education Certificate Examinations of Osun State and NECO, as well as WAEC and NECO Senior Secondary Certificate Examinations.",
+        title: "Outstanding Results",
+        description: "Consistently recording excellent results with many distinction grades in all certificate examinations.",
         color: "#3B82F6"
     },
     {
         icon: GlobeAltIcon,
-        title: "Tertiary Institution Success",
-        description: "Our students consistently gain admission to tertiary institutions of their choice within and outside Nigeria, with many securing scholarships based on their exceptional performance.",
+        title: "Tertiary Success",
+        description: "Students gaining admission to top institutions within and outside Nigeria, many with scholarships.",
         color: "#1F3B6B"
     },
     {
         icon: GraduationIcon,
         title: "Professional Excellence",
-        description: "Produced numerous university and polytechnic graduates excelling in Engineering, Medicine, Law, Accounting, Education, Nursing, and various other prestigious professions.",
+        description: "Graduates excelling in Engineering, Medicine, Law, Accounting, Education, Nursing, and more.",
         color: "#E85D5D"
     },
     {
         icon: StarIcon,
         title: "Competition Champions",
-        description: "Our students have won multiple medals and certificates in various inter-school competitions, demonstrating excellence beyond the classroom.",
+        description: "Multiple medals and certificates in various inter-school competitions, demonstrating total excellence.",
         color: "#F9D89C"
     }
 ];
 
 const WhyChooseUs = () => {
     return (
-        <section className="px-6 md:px-12 lg:px-24 py-16 bg-[#FAFAFA]">
-            <motion.div 
-                className="text-center mb-12"
-                initial={{ opacity: 0, y: -20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8 }}
-                viewport={{ once: true }}
-            >
-                <h2 className="text-3xl md:text-4xl font-bold  text-[#3B82F6] mb-4">
-                    Why Choose MOLEK Schools?
-                </h2>
-                <p className="text-[#2D2D2D] mt-4 max-w-3xl mx-auto text-lg">
-                    Experience comprehensive education from nursery to secondary level with Islamic values, 
-                    academic excellence, and practical skills development for the 21st century.
-                </p>
-            </motion.div>
+        <section className="relative px-4 sm:px-6 lg:px-8 py-16 lg:py-24 bg-gradient-to-b from-white via-[#FAFAFA] to-white overflow-hidden">
+            {/* Background Decorations */}
+            <div className="absolute top-20 left-0 w-96 h-96 bg-[#3B82F6]/5 rounded-full blur-3xl -z-10" />
+            <div className="absolute bottom-20 right-0 w-96 h-96 bg-[#E85D5D]/5 rounded-full blur-3xl -z-10" />
 
-            <motion.div 
-                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                variants={{
-                    hidden: { opacity: 0 },
-                    visible: {
-                        opacity: 1,
-                        transition: { staggerChildren: 0.1 }
-                    }
-                }}
-            >
-                {features.map(({ title, description, icon: Icon, color }, index) => (
-                    <motion.div
-                        key={index}
-                        className="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition-all duration-300"
-                        variants={{
-                            hidden: { opacity: 0, y: 30 },
-                            visible: { opacity: 1, y: 0 }
-                        }}
-                        whileHover={{ y: -5 }}
-                    >
-                        <div 
-                            className="mb-4 p-3 rounded-xl w-fit"
-                            style={{ backgroundColor: `${color}20` }}
-                        >
-                            <Icon className="w-8 h-8" style={{ color }} />
-                        </div>
-                        <h3 className="text-xl font-semibold  text-[#3B82F6] mb-3">{title}</h3>
-                        <p className="text-[#2D2D2D] leading-relaxed">{description}</p>
-                    </motion.div>
-                ))}
-            </motion.div>
+            <div className="max-w-7xl mx-auto">
+                {/* Section Header */}
+                <motion.div 
+                    className="text-center mb-16"
+                    initial={{ opacity: 0, y: -20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6 }}
+                    viewport={{ once: true }}
+                >
+                    <div className="inline-flex items-center gap-2 bg-[#3B82F6]/10 px-4 py-2 rounded-full mb-4">
+                        <StarIcon className="w-5 h-5 text-[#3B82F6]" />
+                        <span className="text-[#3B82F6] font-semibold text-sm uppercase tracking-wider">
+                            Our Advantages
+                        </span>
+                    </div>
+                    
+                    <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1F3B6B] mb-6">
+                        Why Choose <span className="text-[#3B82F6]">MOLEK Schools?</span>
+                    </h2>
+                    
+                    <p className="text-gray-700 text-lg max-w-3xl mx-auto leading-relaxed">
+                        Experience comprehensive education from nursery to secondary level with Islamic values, 
+                        academic excellence, and practical skills development for the 21st century.
+                    </p>
+                </motion.div>
 
-            {/* Success Story Section */}
-            <motion.div
-                className="mt-20"
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                transition={{ duration: 0.8 }}
-                viewport={{ once: true }}
-            >
-                <div className="text-center mb-12">
-                    <motion.div
-                        initial={{ scale: 0.8, opacity: 0 }}
-                        whileInView={{ scale: 1, opacity: 1 }}
-                        transition={{ duration: 0.6 }}
-                        viewport={{ once: true }}
-                    >
-                        <h2 className="text-3xl md:text-4xl font-bold  text-[#3B82F6] mb-4 flex items-center justify-center gap-3">
-                            <TrophyIcon className="w-10 h-10 text-[#3B82F6]" />
-                            Our Success Story
-                        </h2>
-                        <p className="text-[#2D2D2D] text-lg max-w-3xl mx-auto">
-                            Decades of proven excellence in nurturing future leaders and professionals
-                        </p>
-                    </motion.div>
-                </div>
-
-                <motion.div
-                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+                {/* Features Grid */}
+                <motion.div 
+                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-20"
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true }}
@@ -207,59 +162,146 @@ const WhyChooseUs = () => {
                         hidden: { opacity: 0 },
                         visible: {
                             opacity: 1,
-                            transition: { staggerChildren: 0.15 }
+                            transition: { staggerChildren: 0.08 }
                         }
                     }}
                 >
-                    {successStories.map((story, index) => (
+                    {features.map(({ title, description, icon: Icon, color }, index) => (
                         <motion.div
                             key={index}
-                            className="bg-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300"
+                            className="group bg-white rounded-2xl p-6 lg:p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100"
                             variants={{
-                                hidden: { opacity: 0, x: -30 },
-                                visible: { opacity: 1, x: 0 }
+                                hidden: { opacity: 0, y: 30 },
+                                visible: { opacity: 1, y: 0 }
                             }}
-                            whileHover={{ scale: 1.03, y: -5 }}
+                            whileHover={{ y: -8 }}
                         >
                             <div 
-                                className="p-4 rounded-full w-fit mb-4 shadow-md"
-                                style={{ backgroundColor: `${story.color}20` }}
+                                className="mb-5 p-4 rounded-xl w-fit group-hover:scale-110 transition-transform duration-300"
+                                style={{ backgroundColor: `${color}15` }}
                             >
-                                <story.icon className="w-8 h-8" style={{ color: story.color }} />
+                                <Icon className="w-8 h-8" style={{ color }} />
                             </div>
-                            <h3 className="text-xl font-bold  text-[#3B82F6] mb-3">
-                                {story.title}
+                            <h3 className="text-xl font-bold text-[#1F3B6B] mb-3 group-hover:text-[#3B82F6] transition-colors">
+                                {title}
                             </h3>
-                            <p className="text-[#2D2D2D] leading-relaxed">
-                                {story.description}
+                            <p className="text-gray-700 leading-relaxed">
+                                {description}
                             </p>
                         </motion.div>
                     ))}
                 </motion.div>
-            </motion.div>
 
-            {/* Call to Action */}
-            <motion.div 
-                className="text-center mt-16"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.3 }}
-                viewport={{ once: true }}
-            >
-                <div className="bg-[#1F3B6B] text-white p-8 rounded-2xl shadow-lg">
-                    <h3 className="text-2xl font-bold mb-4">Ready to Join the MOLEK Family?</h3>
-                    <p className=" text-blue-300 max-w-2xl mx-auto mb-6">
-                        Give your child the foundation they deserve with our proven educational excellence, 
-                        Islamic values, and comprehensive development programs.
-                    </p>
-                    <motion.button
-                        whileHover={{ scale: 1.05 }}
-                        className="bg-[#3B82F6] text-white px-8 py-3 rounded-full font-medium transition-all shadow-md hover:bg-[#2563EB]"
+                {/* Success Stories Section */}
+                <motion.div
+                    className="relative"
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    transition={{ duration: 0.6 }}
+                    viewport={{ once: true }}
+                >
+                    {/* Success Header */}
+                    <div className="text-center mb-12">
+                        <motion.div
+                            initial={{ scale: 0.8, opacity: 0 }}
+                            whileInView={{ scale: 1, opacity: 1 }}
+                            transition={{ duration: 0.5 }}
+                            viewport={{ once: true }}
+                        >
+                            <div className="inline-flex items-center gap-3 mb-6">
+                                <TrophyIcon className="w-10 h-10 text-[#3B82F6]" />
+                                <h2 className="text-3xl sm:text-4xl font-bold text-[#1F3B6B]">
+                                    Our <span className="text-[#3B82F6]">Success Story</span>
+                                </h2>
+                            </div>
+                            <p className="text-gray-700 text-lg max-w-3xl mx-auto">
+                                Decades of proven excellence in nurturing future leaders and professionals
+                            </p>
+                        </motion.div>
+                    </div>
+
+                    {/* Success Cards */}
+                    <motion.div
+                        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true }}
+                        variants={{
+                            hidden: { opacity: 0 },
+                            visible: {
+                                opacity: 1,
+                                transition: { staggerChildren: 0.12 }
+                            }
+                        }}
                     >
-                        Start Your Journey Today
-                    </motion.button>
-                </div>
-            </motion.div>
+                        {successStories.map((story, index) => (
+                            <motion.div
+                                key={index}
+                                className="relative bg-white rounded-2xl p-6 lg:p-8 shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden group"
+                                variants={{
+                                    hidden: { opacity: 0, scale: 0.9 },
+                                    visible: { opacity: 1, scale: 1 }
+                                }}
+                                whileHover={{ y: -10 }}
+                            >
+                                {/* Top Color Bar */}
+                                <div 
+                                    className="absolute top-0 left-0 right-0 h-1.5"
+                                    style={{ backgroundColor: story.color }}
+                                />
+                                
+                                <div 
+                                    className="p-4 rounded-full w-fit mb-5 shadow-md group-hover:scale-110 transition-transform duration-300"
+                                    style={{ backgroundColor: `${story.color}15` }}
+                                >
+                                    <story.icon className="w-8 h-8" style={{ color: story.color }} />
+                                </div>
+                                
+                                <h3 className="text-xl font-bold text-[#1F3B6B] mb-3 group-hover:text-[#3B82F6] transition-colors">
+                                    {story.title}
+                                </h3>
+                                
+                                <p className="text-gray-700 leading-relaxed">
+                                    {story.description}
+                                </p>
+                            </motion.div>
+                        ))}
+                    </motion.div>
+                </motion.div>
+
+                {/* CTA Section */}
+                <motion.div 
+                    className="text-center mt-20"
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6 }}
+                    viewport={{ once: true }}
+                >
+                    <div className="relative bg-gradient-to-r from-[#1F3B6B] via-[#3B82F6] to-[#1F3B6B] text-white rounded-3xl p-8 lg:p-12 shadow-2xl overflow-hidden">
+                        {/* Decorative Elements */}
+                        <div className="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full blur-3xl" />
+                        <div className="absolute bottom-0 left-0 w-40 h-40 bg-white/10 rounded-full blur-3xl" />
+                        
+                        <div className="relative">
+                            <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4">
+                                Ready to Join the MOLEK Family?
+                            </h3>
+                            <p className="text-blue-100 text-lg max-w-2xl mx-auto mb-8 leading-relaxed">
+                                Give your child the foundation they deserve with our proven educational excellence, 
+                                Islamic values, and comprehensive development programs.
+                            </p>
+                            <motion.button
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                className="inline-flex items-center gap-2 bg-white text-[#3B82F6] px-8 py-4 rounded-full font-bold text-lg shadow-xl hover:shadow-2xl transition-all"
+                            >
+                                <span>Start Your Journey Today</span>
+                                <GraduationIcon className="w-6 h-6" />
+                            </motion.button>
+                        </div>
+                    </div>
+                </motion.div>
+            </div>
         </section>
     );
 };

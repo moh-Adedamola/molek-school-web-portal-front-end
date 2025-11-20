@@ -1,10 +1,5 @@
 import { useState } from 'react';
-import {
-    updateProfile as apiUpdateProfile,
-    changePassword as apiChangePassword,
-    exportStudentData as apiExportStudentData,
-    getUser
-} from '../../service/auth';
+
 
 const Settings = () => {
     const [imageFile, setImageFile] = useState(null);

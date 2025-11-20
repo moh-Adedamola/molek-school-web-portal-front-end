@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   AcademicCapIcon,
   UserGroupIcon,
@@ -7,6 +8,7 @@ import {
   PhoneIcon,
   InformationCircleIcon,
   Bars3Icon,
+  XMarkIcon,
 } from '@heroicons/react/24/outline';
 
 const navLinks = [
@@ -20,6 +22,16 @@ const navLinks = [
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  // Handle scroll effect
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // Lock body scroll when mobile menu is open
   useEffect(() => {
@@ -45,94 +57,198 @@ const Header = () => {
   }, [onKeyDown]);
 
   return (
-    <header className="w-full fixed top-0 z-50 bg-white shadow-md">
-      {/* Marquee Banner with Coral Red */}
-      <div className="bg-[#E85D5D] text-white text-sm py-2 overflow-hidden">
-        <div className="animate-marquee whitespace-nowrap">
-          📍 10 Haliru Muhammed Street, Ofatedo, Osogbo, Osun State | 📅 Academic Year 2025/2026 | 📧 info@molekschool.com
-        </div>
-      </div>
-
-      {/* Main Navigation Bar - Left logo, Right nav, center spacer for balance on wide screens */}
-      <div className="flex items-center justify-between px-6 py-4">
-        {/* Left: Logo + Brand */}
-        <a href="/" className="flex items-center gap-2">
-          <div className="w-10 h-10 rounded-full overflow-hidden">
-            <img src="/logo.webp" alt="Molek Schools Logo" className="h-full w-full object-cover" />
+    <>
+      {/* Fixed Header */}
+      <header 
+        className={`w-full fixed top-0 z-50 bg-white transition-all duration-300 ${
+          isScrolled ? 'shadow-xl' : 'shadow-md'
+        }`}
+      >
+        {/* Marquee Banner */}
+        <div className="bg-gradient-to-r from-[#E85D5D] via-[#d44a4a] to-[#E85D5D] text-white text-xs sm:text-sm py-2.5 overflow-hidden">
+          <div className="animate-marquee whitespace-nowrap px-4">
+            <span className="inline-flex items-center gap-6">
+              <span className="flex items-center gap-2">
+                <span className="hidden sm:inline">📍</span>
+                <span>10 Haliru Muhammed Street, Ofatedo, Osun State</span>
+              </span>
+              <span className="text-white/60">•</span>
+              <span className="flex items-center gap-2">
+                <span className="hidden sm:inline">📅</span>
+                <span>Academic Year 2025/2026</span>
+              </span>
+              <span className="text-white/60">•</span>
+              <span className="flex items-center gap-2">
+                <span className="hidden sm:inline">📧</span>
+                <span>info@molekschool.com</span>
+              </span>
+            </span>
           </div>
-          <span className="text-xl font-bold text-[#1c73fe]">Molek Schools</span>
-        </a>
+        </div>
 
-        {/* Center spacer to create space in the middle on wide displays (optional visual balance) */}
-        <div className="flex-1" aria-hidden="true" />
-
-        {/* Desktop Navigation (right-aligned) */}
-        <nav className="hidden md:flex items-center space-x-6" aria-label="Main">
-          {navLinks.map(({ href, label, icon: Icon }) => (
-            <a
-              key={href}
-              href={href}
-              className="flex items-center gap-1 text-[#2269da] hover:text-[#2677f9] transition-colors duration-200 px-3 py-2 rounded-full hover:bg-blue-50"
+        {/* Main Navigation Bar */}
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16 lg:h-20">
+            {/* Logo + Brand */}
+            <motion.a 
+              href="/" 
+              className="flex items-center gap-2 sm:gap-3 group"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
             >
-              <Icon className="h-5 w-5" />
-              {label}
-            </a>
-          ))}
-        </nav>
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden ring-2 ring-[#3B82F6]/20 group-hover:ring-[#3B82F6] transition-all duration-300 shadow-md">
+                <img src="/logo.webp" alt="Molek Schools Logo" className="h-full w-full object-cover" />
+              </div>
+              <div className="flex flex-col">
+                <span className="text-lg sm:text-xl lg:text-2xl font-bold text-[#1F3B6B] group-hover:text-[#3B82F6] transition-colors">
+                  MOLEK Schools
+                </span>
+                <span className="text-[10px] sm:text-xs text-gray-500 font-medium hidden sm:block">
+                  Excellence in Islamic Education
+                </span>
+              </div>
+            </motion.a>
 
-        {/* Mobile Menu Button */}
-        <button
-          aria-label={menuOpen ? 'Close menu' : 'Open menu'}
-          className="md:hidden text-[#3B82F6] p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          onClick={() => setMenuOpen((s) => !s)}
-        >
-          <Bars3Icon className="h-6 w-6" />
-        </button>
-      </div>
-
-      {/* Mobile Drawer + Overlay */}
-      {menuOpen && (
-        <>
-          {/* Overlay */}
-          <div
-            className="fixed inset-0 bg-black/50 z-40"
-            aria-hidden="true"
-            onClick={() => setMenuOpen(false)}
-          ></div>
-
-          {/* Drawer Panel (slides in from left) */}
-          <aside
-            className="fixed top-0 left-0 w-72 max-w-full h-full bg-white shadow-xl z-50 transform transition-transform duration-300"
-            style={{ transform: menuOpen ? 'translateX(0)' : 'translateX(-100%)' }}
-            aria-label="Mobile navigation"
-          >
-            <div className="flex items-center justify-between px-4 py-4 border-b">
-              <span className="text-lg font-semibold">Menu</span>
-              <button
-                aria-label="Close menu"
-                onClick={() => setMenuOpen(false)}
-                className="p-2 rounded-md hover:bg-gray-100"
-              >
-                <Bars3Icon className="h-5 w-5 rotate-90" />
-              </button>
-            </div>
-            <nav className="flex flex-col px-4 py-2 space-y-2">
+            {/* Desktop Navigation */}
+            <nav className="hidden lg:flex items-center gap-1" aria-label="Main">
               {navLinks.map(({ href, label, icon: Icon }) => (
-                <a
+                <motion.a
                   key={href}
                   href={href}
-                  className="flex items-center gap-2 px-3 py-2 text-[#3B82F6] rounded-md hover:bg-blue-50 hover:text-[#1e40af] transition-colors"
-                  onClick={() => setMenuOpen(false)}
+                  className="flex items-center gap-2 text-[#1F3B6B] hover:text-[#3B82F6] transition-all duration-200 px-3 xl:px-4 py-2 rounded-full hover:bg-blue-50 font-medium text-sm xl:text-base group"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                 >
-                  <Icon className="h-5 w-5" />
+                  <Icon className="h-4 w-4 xl:h-5 xl:w-5 group-hover:scale-110 transition-transform" />
                   <span>{label}</span>
-                </a>
+                </motion.a>
               ))}
             </nav>
-          </aside>
-        </>
-      )}
-    </header>
+
+            {/* Mobile Menu Button */}
+            <motion.button
+              aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+              className="lg:hidden text-[#3B82F6] p-2 rounded-xl hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-[#3B82F6] transition-colors"
+              onClick={() => setMenuOpen((s) => !s)}
+              whileTap={{ scale: 0.9 }}
+            >
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={menuOpen ? 'close' : 'open'}
+                  initial={{ rotate: 0, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  exit={{ rotate: 90, opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  {menuOpen ? (
+                    <XMarkIcon className="h-6 w-6" />
+                  ) : (
+                    <Bars3Icon className="h-6 w-6" />
+                  )}
+                </motion.div>
+              </AnimatePresence>
+            </motion.button>
+          </div>
+        </div>
+      </header>
+
+      {/* Spacer - Adjusted for new header height */}
+      <div className="h-[88px] sm:h-[92px]" aria-hidden="true" />
+
+      {/* Mobile Menu Overlay + Drawer */}
+      <AnimatePresence>
+        {menuOpen && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
+              onClick={() => setMenuOpen(false)}
+            />
+
+            {/* Drawer */}
+            <motion.aside
+              initial={{ x: '-100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '-100%' }}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              className="fixed top-0 left-0 w-80 max-w-[85vw] h-full bg-white shadow-2xl z-50 flex flex-col"
+              aria-label="Mobile navigation"
+            >
+              {/* Drawer Header */}
+              <div className="flex items-center justify-between px-6 py-5 bg-gradient-to-r from-[#3B82F6] to-[#1F3B6B]">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full overflow-hidden ring-2 ring-white/30">
+                    <img src="/logo.webp" alt="Logo" className="h-full w-full object-cover" />
+                  </div>
+                  <span className="text-lg font-bold text-white">Menu</span>
+                </div>
+                <motion.button
+                  aria-label="Close menu"
+                  onClick={() => setMenuOpen(false)}
+                  className="p-2 rounded-lg hover:bg-white/20 text-white transition-colors"
+                  whileTap={{ scale: 0.9 }}
+                >
+                  <XMarkIcon className="h-6 w-6" />
+                </motion.button>
+              </div>
+
+              {/* Navigation Links */}
+              <nav className="flex-1 overflow-y-auto px-4 py-6">
+                <div className="space-y-2">
+                  {navLinks.map(({ href, label, icon: Icon }, index) => (
+                    <motion.a
+                      key={href}
+                      href={href}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.05 }}
+                      className="flex items-center gap-3 px-4 py-3 text-[#1F3B6B] rounded-xl hover:bg-blue-50 hover:text-[#3B82F6] transition-all duration-200 font-medium group"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      <div className="p-2 rounded-lg bg-blue-50 group-hover:bg-[#3B82F6] transition-colors">
+                        <Icon className="h-5 w-5 text-[#3B82F6] group-hover:text-white transition-colors" />
+                      </div>
+                      <span>{label}</span>
+                    </motion.a>
+                  ))}
+                </div>
+              </nav>
+
+              {/* Footer Info */}
+              <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
+                <p className="text-xs text-gray-600 text-center">
+                  © 2025 MOLEK Schools
+                </p>
+                <p className="text-xs text-gray-500 text-center mt-1">
+                  Excellence in Islamic Education
+                </p>
+              </div>
+            </motion.aside>
+          </>
+        )}
+      </AnimatePresence>
+
+      <style>{`
+        @keyframes marquee {
+          0% {
+            transform: translateX(0);
+          }
+          100% {
+            transform: translateX(-50%);
+          }
+        }
+        .animate-marquee {
+          display: inline-block;
+          animation: marquee 30s linear infinite;
+        }
+        .animate-marquee:hover {
+          animation-play-state: paused;
+        }
+      `}</style>
+    </>
   );
 };
 
