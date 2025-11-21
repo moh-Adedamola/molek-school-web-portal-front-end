@@ -1,22 +1,8 @@
-import { motion } from "framer-motion";
 import { 
-    FaSchool, 
-    FaUserGraduate, 
-    FaBookOpen, 
-    FaClock,
-    FaBaby,
-    FaChild,
-    FaGraduationCap,
-    FaTools,
-    FaUsers,
-    FaChartLine
+    FaSchool, FaUserGraduate, FaBookOpen, FaClock,
+    FaBaby, FaChild, FaGraduationCap, FaTools, FaUsers, FaChartLine
 } from "react-icons/fa";
-import { 
-    AcademicCapIcon,
-    SparklesIcon,
-    TrophyIcon,
-    BeakerIcon
-} from '@heroicons/react/24/outline';
+import { AcademicCapIcon, SparklesIcon, TrophyIcon, BeakerIcon } from '@heroicons/react/24/outline';
 
 const AcademicOverview = () => {
     const stats = [
@@ -98,272 +84,191 @@ const AcademicOverview = () => {
             color: "#E85D5D",
             description: "WAEC and NECO approved specialized program with three main streams.",
             streams: [
-                {
-                    name: "Science Stream",
-                    subjects: ["Physics", "Chemistry", "Biology", "Further Mathematics"],
-                    color: "#1F3B6B"
-                },
-                {
-                    name: "Arts/Humanity",
-                    subjects: ["Literature", "History", "Government", "Economics"],
-                    color: "#3B82F6"
-                },
-                {
-                    name: "Commercial",
-                    subjects: ["Accounting", "Economics", "Commerce", "Marketing"],
-                    color: "#E85D5D"
-                }
+                { name: "Science Stream", subjects: ["Physics", "Chemistry", "Biology", "Further Mathematics"], color: "#1F3B6B" },
+                { name: "Arts/Humanity", subjects: ["Literature", "History", "Government", "Economics"], color: "#3B82F6" },
+                { name: "Commercial", subjects: ["Accounting", "Commerce", "Economics", "Government"], color: "#F9D89C" }
             ],
-            additional: ["Islamic Studies", "Religious Studies", "Arabic Language", "French Language"]
-        },
-        {
-            id: "vocational",
-            icon: FaTools,
-            title: "Vocational/Skill Acquisition",
-            duration: "Ongoing Program",
-            color: "#F9D89C",
-            description: "Specialized training for young persons to become self-employed and employers of labour.",
+            additional: ["Arabic", "Islamic Studies", "Tahafeez", "French", "Civic Education"],
             programs: ["Catering", "Dress Making", "Hair Dressing", "Soap Making"],
             goals: [
-                "Enable students to become self-employed",
-                "Develop future employers of labour",
-                "Complement academic education with practical skills",
-                "Foster entrepreneurial mindset"
+                "Produce self-reliant graduates",
+                "Create future entrepreneurs",
+                "Develop practical vocational skills",
+                "Complement academic excellence with real-world abilities"
             ]
         }
     ];
 
     return (
-        <section className="relative bg-gradient-to-b from-white via-[#FAFAFA] to-white overflow-hidden">
-            {/* Background Decorations */}
-            <div className="absolute top-20 right-0 w-96 h-96 bg-[#3B82F6]/5 rounded-full blur-3xl -z-10" />
-            <div className="absolute bottom-20 left-0 w-96 h-96 bg-[#E85D5D]/5 rounded-full blur-3xl -z-10" />
+        <section className="relative bg-gradient-to-b from-white via-[#FAFAFA] to-white overflow-hidden py-16 lg:py-24">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
-                {/* Hero Section */}
-                <motion.div
-                    initial={{ opacity: 0, y: -20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6 }}
-                    className="text-center mb-12"
-                >
-                    <div className="inline-flex items-center gap-2 bg-[#3B82F6]/10 px-4 py-2 rounded-full mb-4">
+                <header className="text-center mb-16">
+                    <div className="inline-flex items-center gap-3 bg-[#3B82F6]/10 px-6 py-2 rounded-full mb-4">
                         <AcademicCapIcon className="w-5 h-5 text-[#3B82F6]" />
-                        <span className="text-[#3B82F6] font-semibold text-sm uppercase tracking-wider">
-                            Our Programs
-                        </span>
+                        <span className="text-[#3B82F6] font-semibold text-sm uppercase tracking-wider">Academic Excellence</span>
                     </div>
-                    
-                    <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1F3B6B] mb-4">
-                        Academic <span className="text-[#3B82F6]">Excellence</span>
+                    <h1 className="text-4xl md:text-5xl font-bold text-[#1F3B6B] mb-4">
+                        Academic Programs Overview
                     </h1>
-                    
-                    <p className="text-gray-700 text-lg max-w-3xl mx-auto leading-relaxed">
-                        Comprehensive education from Creche to Senior Secondary with proven track record of excellence
+                    <p className="text-gray-600 text-lg max-w-3xl mx-auto">
+                        From Crèche to Senior Secondary — a complete educational journey blending Islamic values with modern academic excellence.
                     </p>
-                </motion.div>
+                </header>
 
-                {/* Stats Grid - Reduced margin */}
-                <motion.div
-                    className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-12"
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true }}
-                    variants={{
-                        hidden: { opacity: 0 },
-                        visible: {
-                            opacity: 1,
-                            transition: { staggerChildren: 0.1 }
-                        }
-                    }}
-                >
-                    {stats.map((stat, index) => (
-                        <motion.div
-                            key={index}
-                            className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 text-center border border-gray-100"
-                            style={{ borderTop: `4px solid ${stat.color}` }}
-                            variants={{
-                                hidden: { opacity: 0, y: 20 },
-                                visible: { opacity: 1, y: 0 }
-                            }}
-                            whileHover={{ y: -5 }}
-                        >
-                            <div 
-                                className="inline-flex p-3 rounded-full mb-4"
-                                style={{ backgroundColor: `${stat.color}15` }}
-                            >
-                                <stat.icon className="text-3xl" style={{ color: stat.color }} />
-                            </div>
-                            <h3 className="text-3xl font-bold mb-2" style={{ color: stat.color }}>
-                                {stat.value}
-                            </h3>
-                            <p className="text-gray-600 font-medium text-sm">{stat.label}</p>
-                        </motion.div>
-                    ))}
-                </motion.div>
-
-                {/* Programs - Reduced spacing */}
-                <div className="space-y-8">
-                    {programs.map((program, index) => (
-                        <motion.div
-                            key={program.id}
-                            initial={{ opacity: 0, x: index % 2 === 0 ? -30 : 30 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 0.6 }}
-                            viewport={{ once: true }}
-                            className="bg-white rounded-3xl p-6 lg:p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100"
-                            style={{ borderTop: `4px solid ${program.color}` }}
-                        >
-                            {/* Program Header */}
-                            <div className="flex items-start gap-4 mb-6">
-                                <div 
-                                    className="p-4 rounded-xl flex-shrink-0"
-                                    style={{ backgroundColor: `${program.color}15` }}
-                                >
-                                    <program.icon className="text-3xl" style={{ color: program.color }} />
+                <section className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-20">
+                    {stats.map((stat, i) => {
+                        const Icon = stat.icon;
+                        return (
+                            <article key={i} className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all text-center border-t-4 hover:-translate-y-2"
+                                style={{ borderTopColor: stat.color }}>
+                                <div className="p-3 rounded-full w-fit mx-auto mb-3" style={{ backgroundColor: `${stat.color}15` }}>
+                                    <Icon className="w-8 h-8" style={{ color: stat.color }} />
                                 </div>
-                                <div className="flex-1">
-                                    <h3 className="text-2xl lg:text-3xl font-bold mb-2" style={{ color: program.color }}>
-                                        {program.title}
-                                    </h3>
-                                    <p className="text-sm font-semibold text-gray-600 mb-2">{program.duration}</p>
-                                    <p className="text-gray-700 leading-relaxed">{program.description}</p>
-                                </div>
-                            </div>
+                                <h3 className="text-3xl font-bold mb-1" style={{ color: stat.color }}>{stat.value}</h3>
+                                <p className="text-gray-600 font-medium">{stat.label}</p>
+                            </article>
+                        );
+                    })}
+                </section>
 
-                            {/* Program Content */}
-                            <div className="space-y-6">
-                                {/* Objectives */}
-                                {program.objectives && (
-                                    <div className="bg-gray-50 rounded-2xl p-6">
-                                        <h4 className="font-bold text-[#1F3B6B] mb-4 flex items-center gap-2">
-                                            <SparklesIcon className="w-5 h-5 text-[#3B82F6]" />
-                                            Programme Objectives
-                                        </h4>
-                                        <ul className="space-y-2">
-                                            {program.objectives.map((obj, i) => (
-                                                <li key={i} className="flex items-start gap-3 text-gray-700">
-                                                    <span className="text-[#3B82F6] mt-1">✓</span>
-                                                    <span>{obj}</span>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>
-                                )}
-
-                                {/* Features */}
-                                {program.features && (
-                                    <div className="bg-gray-50 rounded-2xl p-6">
-                                        <h4 className="font-bold text-[#1F3B6B] mb-4 flex items-center gap-2">
-                                            <TrophyIcon className="w-5 h-5 text-[#3B82F6]" />
-                                            Key Features
-                                        </h4>
-                                        <ul className="space-y-2">
-                                            {program.features.map((feature, i) => (
-                                                <li key={i} className="flex items-start gap-3 text-gray-700">
-                                                    <span className="text-[#3B82F6] mt-1">✓</span>
-                                                    <span>{feature}</span>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>
-                                )}
-
-                                {/* Subjects */}
-                                {program.subjects && (
-                                    <div className="bg-gray-50 rounded-2xl p-6">
-                                        <h4 className="font-bold text-[#1F3B6B] mb-4 flex items-center gap-2">
-                                            <BeakerIcon className="w-5 h-5 text-[#3B82F6]" />
-                                            Subjects Offered
-                                        </h4>
-                                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-                                            {program.subjects.map((subject, i) => (
-                                                <div key={i} className="flex items-center gap-2 text-gray-700">
-                                                    <span className="text-[#3B82F6]">•</span>
-                                                    <span className="text-sm">{subject}</span>
-                                                </div>
-                                            ))}
+                <section className="space-y-12">
+                    {programs.map((program) => {
+                        const Icon = program.icon;
+                        return (
+                            <article key={program.id} className="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100 hover:shadow-2xl transition-all">
+                                <header className="bg-gradient-to-r from-[#1F3B6B] to-[#3B82F6] text-white p-8">
+                                    <div className="flex items-center gap-4">
+                                        <div className="p-4 rounded-2xl bg-white/20">
+                                            <Icon className="w-10 h-10" />
+                                        </div>
+                                        <div>
+                                            <h2 className="text-2xl lg:text-3xl font-bold">{program.title}</h2>
+                                            <p className="text-blue-100">{program.duration}</p>
                                         </div>
                                     </div>
-                                )}
+                                </header>
 
-                                {/* Streams (for SSS) */}
-                                {program.streams && (
-                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                        {program.streams.map((stream, i) => (
-                                            <div 
-                                                key={i}
-                                                className="bg-white rounded-2xl p-6 border-2 hover:shadow-lg transition-all"
-                                                style={{ borderColor: stream.color }}
-                                            >
-                                                <h4 className="font-bold mb-4" style={{ color: stream.color }}>
-                                                    {stream.name}
+                                <div className="p-8 space-y-8">
+                                    <p className="text-gray-700 text-lg leading-relaxed">{program.description}</p>
+
+                                    {program.objectives && (
+                                        <div>
+                                            <h4 className="font-bold text-[#1F3B6B] mb-4 flex items-center gap-2">
+                                                <SparklesIcon className="w-6 h-6 text-[#3B82F6]" />
+                                                Key Objectives
+                                            </h4>
+                                            <ul className="space-y-3">
+                                                {program.objectives.map((obj, i) => (
+                                                    <li key={i} className="flex items-start gap-3 text-gray-700">
+                                                        <span className="text-[#3B82F6] mt-1">✓</span>
+                                                        <span>{obj}</span>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    )}
+
+                                    {program.features && (
+                                        <div className="bg-blue-50 rounded-2xl p-6 border-2 border-[#3B82F6]">
+                                            <h4 className="font-bold text-[#3B82F6] mb-4">Program Features</h4>
+                                            <ul className="space-y-2">
+                                                {program.features.map((feat, i) => (
+                                                    <li key={i} className="flex items-center gap-3 text-gray-700">
+                                                        <TrophyIcon className="w-5 h-5 text-[#3B82F6]" />
+                                                        <span>{feat}</span>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    )}
+
+                                    {program.subjects && (
+                                        <div>
+                                            <h4 className="font-bold text-[#1F3B6B] mb-4">Core Subjects</h4>
+                                            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                                                {program.subjects.map((subj, i) => (
+                                                    <div key={i} className="flex items-center gap-2 text-gray-700">
+                                                        <BeakerIcon className="w-5 h-5 text-[#3B82F6]" />
+                                                        <span>{subj}</span>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {program.streams && (
+                                        <div>
+                                            <h4 className="font-bold text-[#1F3B6B] mb-6">Specialized Streams (SSS)</h4>
+                                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                                {program.streams.map((stream, i) => (
+                                                    <div key={i} className="bg-gray-50 rounded-2xl p-6 border-t-4" style={{ borderTopColor: stream.color }}>
+                                                        <h5 className="font-bold text-lg mb-4" style={{ color: stream.color }}>{stream.name}</h5>
+                                                        <ul className="space-y-2">
+                                                            {stream.subjects.map((subj, j) => (
+                                                                <li key={j} className="flex items-center gap-2 text-gray-700 text-sm">
+                                                                    <span style={{ color: stream.color }}>•</span>
+                                                                    <span>{subj}</span>
+                                                                </li>
+                                                            ))}
+                                                        </ul>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {program.additional && (
+                                        <div className="bg-blue-50 rounded-2xl p-6 border-2 border-[#3B82F6]">
+                                            <h4 className="font-bold text-[#3B82F6] mb-4">Additional Studies</h4>
+                                            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                                                {program.additional.map((study, i) => (
+                                                    <div key={i} className="flex items-center gap-2 text-gray-700 text-sm">
+                                                        <span className="text-[#3B82F6]">•</span>
+                                                        <span>{study}</span>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {program.programs && program.goals && (
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                            <div className="bg-gray-50 rounded-2xl p-6">
+                                                <h4 className="font-bold text-[#1F3B6B] mb-4 flex items-center gap-2">
+                                                    <FaUsers className="text-[#3B82F6]" />
+                                                    Programme Goals
                                                 </h4>
                                                 <ul className="space-y-2">
-                                                    {stream.subjects.map((subj, j) => (
-                                                        <li key={j} className="flex items-center gap-2 text-gray-700 text-sm">
-                                                            <span style={{ color: stream.color }}>•</span>
-                                                            <span>{subj}</span>
+                                                    {program.goals.map((goal, i) => (
+                                                        <li key={i} className="flex items-start gap-3 text-gray-700 text-sm">
+                                                            <span className="text-[#3B82F6] mt-1">✓</span>
+                                                            <span>{goal}</span>
                                                         </li>
                                                     ))}
                                                 </ul>
                                             </div>
-                                        ))}
-                                    </div>
-                                )}
-
-                                {/* Additional Studies */}
-                                {program.additional && (
-                                    <div className="bg-blue-50 rounded-2xl p-6 border-2 border-[#3B82F6]">
-                                        <h4 className="font-bold text-[#3B82F6] mb-4">Additional Studies</h4>
-                                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                                            {program.additional.map((study, i) => (
-                                                <div key={i} className="flex items-center gap-2 text-gray-700 text-sm">
-                                                    <span className="text-[#3B82F6]">•</span>
-                                                    <span>{study}</span>
-                                                </div>
-                                            ))}
+                                            <div className="bg-gray-50 rounded-2xl p-6">
+                                                <h4 className="font-bold text-[#1F3B6B] mb-4 flex items-center gap-2">
+                                                    <FaChartLine className="text-[#3B82F6]" />
+                                                    Available Programs
+                                                </h4>
+                                                <ul className="space-y-2">
+                                                    {program.programs.map((prog, i) => (
+                                                        <li key={i} className="flex items-center gap-3 text-gray-700 text-sm">
+                                                            <span className="text-[#3B82F6]">•</span>
+                                                            <span>{prog}</span>
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            </div>
                                         </div>
-                                    </div>
-                                )}
-
-                                {/* Vocational Programs & Goals */}
-                                {program.programs && program.goals && (
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                        <div className="bg-gray-50 rounded-2xl p-6">
-                                            <h4 className="font-bold text-[#1F3B6B] mb-4 flex items-center gap-2">
-                                                <FaUsers className="text-[#3B82F6]" />
-                                                Programme Goals
-                                            </h4>
-                                            <ul className="space-y-2">
-                                                {program.goals.map((goal, i) => (
-                                                    <li key={i} className="flex items-start gap-3 text-gray-700 text-sm">
-                                                        <span className="text-[#3B82F6] mt-1">✓</span>
-                                                        <span>{goal}</span>
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        </div>
-                                        <div className="bg-gray-50 rounded-2xl p-6">
-                                            <h4 className="font-bold text-[#1F3B6B] mb-4 flex items-center gap-2">
-                                                <FaChartLine className="text-[#3B82F6]" />
-                                                Available Programs
-                                            </h4>
-                                            <ul className="space-y-2">
-                                                {program.programs.map((prog, i) => (
-                                                    <li key={i} className="flex items-center gap-3 text-gray-700 text-sm">
-                                                        <span className="text-[#3B82F6]">•</span>
-                                                        <span>{prog}</span>
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-                        </motion.div>
-                    ))}
-                </div>
+                                    )}
+                                </div>
+                            </article>
+                        );
+                    })}
+                </section>
             </div>
         </section>
     );
