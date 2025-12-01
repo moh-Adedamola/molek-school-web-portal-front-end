@@ -65,7 +65,7 @@ const ContactInfo = () => {
                     </div>
                     <h3 className="font-bold text-[#1F3B6B]">Address</h3>
                 </div>
-                <p className="text-gray-700">KM 2, Osogbo-Iwo Road, Opposite Sawmill, Osogbo, Osun State, Nigeria</p>
+                <p className="text-gray-700">10 Haliru Muhammed Street, Off Old Osogbo-Ede Road, Ofatedo, Osun State</p>
             </article>
 
             <article className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">

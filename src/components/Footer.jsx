@@ -179,7 +179,7 @@ const Footer = () => {
                   </div>
                   <div className="text-sm">
                     <p className="font-medium text-white mb-0.5">Phone</p>
-                    <p>+234 XXX XXX XXXX</p>
+                    <p>+234 706 627 7945</p>
                   </div>
                 </li>
               </ul>
