@@ -1,35 +1,48 @@
 import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { FaChartBar, FaBook, FaUserGraduate, FaCog, FaSignOutAlt } from 'react-icons/fa';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { FaChartBar, FaBook, FaUserGraduate, FaUser, FaCog, FaSignOutAlt } from 'react-icons/fa';
 import logo from '/logo.webp';
 import { motion } from 'framer-motion';
+import { useStudentAuth } from '../../context/StudentAuthContext';
 
 const DashboardHeader = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const location = useLocation();
+    const navigate = useNavigate();
+    const { student, logout } = useStudentAuth();
 
     const navItems = [
-        { name: 'Dashboard', icon: <FaChartBar />, path: '/dashboard' },
-        { name: 'Payment', icon: <FaBook />, path: '/dashboard/payment' },
-        { name: 'Grades', icon: <FaUserGraduate />, path: '/dashboard/grades' },
-        { name: 'Settings', icon: <FaCog />, path: '/dashboard/settings' },
+        { name: 'Dashboard', icon: <FaChartBar />, path: '/student/dashboard' },
+        { name: 'Profile', icon: <FaUser />, path: '/student/profile' },
+        { name: 'Grades', icon: <FaUserGraduate />, path: '/student/grades' },
+        { name: 'Payment', icon: <FaBook />, path: '/student/payment' },
+        { name: 'Settings', icon: <FaCog />, path: '/student/settings' },
     ];
 
     const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
+    const handleLogout = () => {
+        logout();
+        navigate('/student/login');
+    };
+
+    const fullName = student?.first_name && student?.last_name
+        ? `${student.first_name} ${student.last_name}`
+        : student?.full_name || 'Student';
+
     return (
         <>
             {/* ===== MOBILE HEADER (Top Bar) ===== */}
-            <header className="md:hidden fixed top-0 left-0 right-0 z-50 bg-blue-600 text-white shadow-lg">
+            <header className="md:hidden fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg">
                 <div className="container mx-auto px-4 py-3 flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                        <img src={logo} alt="Molek Schools" className="w-8 h-8 rounded-full object-cover" />
-                        <span className="text-xl font-bold tracking-wide">Molek</span>
+                        <img src={student?.passport_url || logo} alt="Profile" className="w-8 h-8 rounded-full object-cover ring-2 ring-white/30" onError={(e) => e.target.src = logo} />
+                        <span className="text-lg font-bold tracking-wide">{fullName}</span>
                     </div>
 
                     <button
                         onClick={toggleSidebar}
-                        className="p-2 rounded-lg bg-blue-700 hover:bg-blue-800 focus:outline-none"
+                        className="p-2 rounded-lg bg-blue-600 hover:bg-blue-700 focus:outline-none"
                         aria-label={isSidebarOpen ? "Close menu" : "Open menu"}
                     >
                         {isSidebarOpen ? (
@@ -61,10 +74,13 @@ const DashboardHeader = () => {
                     ></div>
 
                     {/* Sidebar */}
-                    <div className="w-72 bg-gradient-to-br from-blue-300 to-indigo-800 text-white p-6 flex flex-col">
+                    <div className="w-72 bg-gradient-to-br from-blue-500 to-indigo-800 text-white p-6 flex flex-col">
                         <div className="flex items-center gap-3 mb-8">
-                            <img src={logo} alt="Molek Schools" className="w-10 h-10 rounded-lg object-cover" />
-                            <span className="text-xl font-bold">Molek Schools</span>
+                            <img src={student?.passport_url || logo} alt="Profile" className="w-10 h-10 rounded-full object-cover ring-2 ring-white/30" onError={(e) => e.target.src = logo} />
+                            <div>
+                                <span className="text-lg font-bold block">{fullName}</span>
+                                <span className="text-xs text-blue-100">{student?.admission_number}</span>
+                            </div>
                         </div>
 
                         <nav className="space-y-2 flex-1">
@@ -87,14 +103,13 @@ const DashboardHeader = () => {
 
                         <hr className="border-white/20 my-4" />
 
-                        <Link
-                            to="/"
-                            className="flex items-center gap-3 px-4 py-3 text-red-100 hover:text-red-200 hover:bg-red-700 rounded-xl transition-colors"
-                            onClick={() => setIsSidebarOpen(false)}
+                        <button
+                            onClick={handleLogout}
+                            className="flex items-center gap-3 px-4 py-3 text-red-100 hover:text-red-200 hover:bg-red-600/30 rounded-xl transition-colors"
                         >
                             <FaSignOutAlt />
                             <span className="font-medium">Logout</span>
-                        </Link>
+                        </button>
                     </div>
                 </motion.div>
             )}
@@ -102,10 +117,24 @@ const DashboardHeader = () => {
             {/* ===== DESKTOP SIDEBAR (Fixed Left) ===== */}
             <aside className="hidden md:flex fixed left-0 top-0 h-screen w-60 lg:w-64 bg-gradient-to-b from-blue-500 to-indigo-800 text-white shadow-xl z-40">
                 <div className="flex flex-col w-full h-full p-6">
-                    {/* Logo & Title */}
-                    <div className="flex items-center gap-3 mb-8">
-                        <img src={logo} alt="Molek Schools" className="w-10 h-10 rounded-lg object-cover" />
-                        <span className="text-xl font-bold">Molek</span>
+                    {/* Logo & Student Info */}
+                    <div className="mb-8">
+                        <div className="flex items-center gap-3 mb-2">
+                            <img src={logo} alt="Molek Schools" className="w-10 h-10 rounded-lg object-cover" />
+                            <span className="text-xl font-bold">MOLEK</span>
+                        </div>
+                        <div className="flex items-center gap-3 mt-4 p-3 bg-white/10 rounded-xl">
+                            <img
+                                src={student?.passport_url || logo}
+                                alt="Profile"
+                                className="w-10 h-10 rounded-full object-cover ring-2 ring-white/30"
+                                onError={(e) => e.target.src = logo}
+                            />
+                            <div>
+                                <p className="font-semibold text-sm">{fullName}</p>
+                                <p className="text-xs text-blue-100">{student?.admission_number}</p>
+                            </div>
+                        </div>
                     </div>
 
                     {/* Nav Items */}
@@ -128,13 +157,13 @@ const DashboardHeader = () => {
 
                     {/* Logout */}
                     <div className="pt-4 border-t border-white/20 mt-auto">
-                        <Link
-                            to="/"
-                            className="flex items-center gap-3 px-4 py-3 text-red-100 hover:text-red-200 hover:bg-red-700 rounded-xl transition-colors"
+                        <button
+                            onClick={handleLogout}
+                            className="flex items-center gap-3 px-4 py-3 text-red-100 hover:text-red-200 hover:bg-red-600/30 rounded-xl transition-colors w-full"
                         >
                             <FaSignOutAlt />
                             <span className="font-medium">Logout</span>
-                        </Link>
+                        </button>
                     </div>
                 </div>
             </aside>
