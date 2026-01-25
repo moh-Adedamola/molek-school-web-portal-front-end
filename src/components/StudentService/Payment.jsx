@@ -84,7 +84,7 @@ For inquiries, contact: info@molekschool.com
             {/* Header */}
             <div className="flex items-center gap-4 mb-8">
                 <img
-                    src={student?.passport_url || logo}
+                    src={student?.passport || student?.passport_url || logo}
                     alt={fullName}
                     className="w-12 h-12 rounded-full object-cover border-2 border-blue-100"
                     onError={(e) => (e.target.src = logo)}

@@ -1,14 +1,40 @@
+/**
+ * Student Profile Component
+ * Displays complete student information in a clean, organized layout
+ */
+
 import { motion } from 'framer-motion';
+import { useMemo } from 'react';
 import { useStudentAuth } from '../../context/StudentAuthContext';
 import logo from '/logo.webp';
 
 const StudentProfile = () => {
     const { student } = useStudentAuth();
 
-    const fullName = student?.first_name && student?.last_name
-        ? `${student.first_name} ${student.middle_name || ''} ${student.last_name}`.trim()
-        : student?.full_name || 'Student';
+    // Memoized student info
+    const studentInfo = useMemo(() => ({
+        fullName: student?.first_name && student?.last_name
+            ? `${student.first_name} ${student.middle_name || ''} ${student.last_name}`.trim()
+            : student?.full_name || 'Student',
+        admissionNumber: student?.admission_number || 'N/A',
+        dateOfBirth: student?.date_of_birth,
+        gender: student?.gender,
+        email: student?.email,
+        phoneNumber: student?.phone_number,
+        address: student?.address,
+        stateOfOrigin: student?.state_of_origin,
+        localGovtArea: student?.local_govt_area,
+        className: student?.class_level_name || 'Not Assigned',
+        enrollmentSession: student?.enrollment_session_name || 'N/A',
+        isActive: student?.is_active,
+        parentName: student?.parent_name,
+        parentPhone: student?.parent_phone,
+        parentEmail: student?.parent_email,
+        // ✅ FIXED: Handle both passport (from ActiveStudentSerializer) and passport_url (from StudentProfileUpdateSerializer)
+        passport: student?.passport || student?.passport_url,
+    }), [student]);
 
+    // Format date helper
     const formatDate = (dateString) => {
         if (!dateString) return 'N/A';
         return new Date(dateString).toLocaleDateString('en-US', {
@@ -17,6 +43,22 @@ const StudentProfile = () => {
             day: 'numeric',
         });
     };
+
+    // Info card component
+    const InfoItem = ({ label, value, icon }) => (
+        <div>
+            <label className="block text-sm font-semibold text-gray-600 mb-1">{label}</label>
+            <p className="text-lg font-medium text-gray-800">{value || 'Not Provided'}</p>
+        </div>
+    );
+
+    // Section header component
+    const SectionHeader = ({ title, icon, colorClass }) => (
+        <h2 className={`text-xl font-bold text-gray-800 mb-6 pb-4 border-b-2 ${colorClass} flex items-center gap-2`}>
+            {icon}
+            {title}
+        </h2>
+    );
 
     return (
         <motion.main
@@ -28,10 +70,10 @@ const StudentProfile = () => {
             {/* Header */}
             <div className="flex items-center gap-4 mb-8">
                 <img
-                    src={student?.passport_url || logo}
-                    alt={fullName}
+                    src={studentInfo.passport || logo}
+                    alt={studentInfo.fullName}
                     className="w-16 h-16 rounded-full object-cover border-4 border-blue-100"
-                    onError={(e) => (e.target.src = logo)}
+                    onError={(e) => { e.target.src = logo; }}
                 />
                 <div>
                     <h1 className="text-3xl font-bold text-gray-800">My Profile</h1>
@@ -45,105 +87,80 @@ const StudentProfile = () => {
                 <div className="lg:col-span-2 space-y-6">
                     {/* Personal Information */}
                     <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
-                        <h2 className="text-xl font-bold text-gray-800 mb-6 pb-4 border-b-2 border-blue-500 flex items-center gap-2">
-                            <svg className="h-6 w-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                            </svg>
-                            Personal Information
-                        </h2>
+                        <SectionHeader
+                            title="Personal Information"
+                            colorClass="border-blue-500"
+                            icon={
+                                <svg className="h-6 w-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                </svg>
+                            }
+                        />
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label className="block text-sm font-semibold text-gray-600 mb-1">Full Name</label>
-                                <p className="text-lg font-medium text-gray-800">{fullName}</p>
-                            </div>
-
+                            <InfoItem label="Full Name" value={studentInfo.fullName} />
                             <div>
                                 <label className="block text-sm font-semibold text-gray-600 mb-1">Admission Number</label>
-                                <p className="text-lg font-medium text-blue-600">{student?.admission_number || 'N/A'}</p>
+                                <p className="text-lg font-medium text-blue-600">{studentInfo.admissionNumber}</p>
                             </div>
-
-                            <div>
-                                <label className="block text-sm font-semibold text-gray-600 mb-1">Date of Birth</label>
-                                <p className="text-lg font-medium text-gray-800">{formatDate(student?.date_of_birth)}</p>
-                            </div>
-
+                            <InfoItem label="Date of Birth" value={formatDate(studentInfo.dateOfBirth)} />
                             <div>
                                 <label className="block text-sm font-semibold text-gray-600 mb-1">Gender</label>
                                 <p className="text-lg font-medium text-gray-800">
-                                    {student?.gender === 'M' ? '👨 Male' : '👩 Female'}
+                                    {studentInfo.gender === 'M' ? '👨 Male' : studentInfo.gender === 'F' ? '👩 Female' : 'Not Specified'}
                                 </p>
                             </div>
-
-                            <div>
-                                <label className="block text-sm font-semibold text-gray-600 mb-1">Current Class</label>
-                                <p className="text-lg font-medium text-gray-800">{student?.current_class?.name || 'Not Assigned'}</p>
-                            </div>
-
+                            <InfoItem label="Current Class" value={studentInfo.className} />
                             <div>
                                 <label className="block text-sm font-semibold text-gray-600 mb-1">Status</label>
                                 <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold ${
-                                    student?.is_active
+                                    studentInfo.isActive
                                         ? 'bg-green-100 text-green-800'
                                         : 'bg-red-100 text-red-800'
                                 }`}>
-                  {student?.is_active ? '✓ Active' : '✗ Inactive'}
-                </span>
+                                    {studentInfo.isActive ? '✓ Active' : '✗ Inactive'}
+                                </span>
                             </div>
                         </div>
                     </div>
 
                     {/* Contact Information */}
                     <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
-                        <h2 className="text-xl font-bold text-gray-800 mb-6 pb-4 border-b-2 border-green-500 flex items-center gap-2">
-                            <svg className="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                            </svg>
-                            Contact Information
-                        </h2>
+                        <SectionHeader
+                            title="Contact Information"
+                            colorClass="border-green-500"
+                            icon={
+                                <svg className="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                </svg>
+                            }
+                        />
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label className="block text-sm font-semibold text-gray-600 mb-1">Address</label>
-                                <p className="text-base text-gray-800">{student?.address || 'Not Provided'}</p>
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-semibold text-gray-600 mb-1">State of Origin</label>
-                                <p className="text-base text-gray-800">{student?.state_of_origin || 'Not Provided'}</p>
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-semibold text-gray-600 mb-1">Local Government Area</label>
-                                <p className="text-base text-gray-800">{student?.lga || 'Not Provided'}</p>
-                            </div>
+                            <InfoItem label="Email" value={studentInfo.email} />
+                            <InfoItem label="Phone Number" value={studentInfo.phoneNumber} />
+                            <InfoItem label="Address" value={studentInfo.address} />
+                            <InfoItem label="State of Origin" value={studentInfo.stateOfOrigin} />
+                            <InfoItem label="Local Government Area" value={studentInfo.localGovtArea} />
                         </div>
                     </div>
 
                     {/* Parent/Guardian Information */}
                     <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
-                        <h2 className="text-xl font-bold text-gray-800 mb-6 pb-4 border-b-2 border-purple-500 flex items-center gap-2">
-                            <svg className="h-6 w-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                            </svg>
-                            Parent/Guardian Information
-                        </h2>
+                        <SectionHeader
+                            title="Parent/Guardian Information"
+                            colorClass="border-purple-500"
+                            icon={
+                                <svg className="h-6 w-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                </svg>
+                            }
+                        />
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label className="block text-sm font-semibold text-gray-600 mb-1">Name</label>
-                                <p className="text-base text-gray-800">{student?.parent_guardian_name || 'Not Provided'}</p>
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-semibold text-gray-600 mb-1">Phone Number</label>
-                                <p className="text-base text-gray-800">{student?.parent_guardian_phone || 'Not Provided'}</p>
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-semibold text-gray-600 mb-1">Email</label>
-                                <p className="text-base text-gray-800">{student?.parent_guardian_email || 'Not Provided'}</p>
-                            </div>
+                            <InfoItem label="Parent/Guardian Name" value={studentInfo.parentName} />
+                            <InfoItem label="Phone Number" value={studentInfo.parentPhone} />
+                            <InfoItem label="Email Address" value={studentInfo.parentEmail} />
                         </div>
                     </div>
                 </div>
@@ -153,14 +170,14 @@ const StudentProfile = () => {
                     {/* Profile Picture Card */}
                     <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 text-center">
                         <img
-                            src={student?.passport_url || logo}
-                            alt={fullName}
+                            src={studentInfo.passport || logo}
+                            alt={studentInfo.fullName}
                             className="w-40 h-40 mx-auto rounded-full object-cover border-4 border-blue-100 shadow-md mb-4"
-                            onError={(e) => (e.target.src = logo)}
+                            onError={(e) => { e.target.src = logo; }}
                         />
-                        <h3 className="text-xl font-bold text-gray-800 mb-1">{fullName}</h3>
-                        <p className="text-sm text-gray-600 mb-2">{student?.admission_number}</p>
-                        <p className="text-sm font-medium text-blue-600">{student?.current_class?.name || 'No Class'}</p>
+                        <h3 className="text-xl font-bold text-gray-800 mb-1">{studentInfo.fullName}</h3>
+                        <p className="text-sm text-gray-600 mb-2">{studentInfo.admissionNumber}</p>
+                        <p className="text-sm font-medium text-blue-600">{studentInfo.className}</p>
                     </div>
 
                     {/* Quick Stats */}
@@ -168,18 +185,18 @@ const StudentProfile = () => {
                         <h3 className="text-lg font-bold text-gray-800 mb-4">Quick Stats</h3>
                         <div className="space-y-3">
                             <div className="flex items-center justify-between p-3 bg-white rounded-lg">
-                                <span className="text-sm text-gray-600">Academic Level</span>
-                                <span className="text-lg font-bold text-blue-600">{student?.current_class?.level || 'N/A'}</span>
+                                <span className="text-sm text-gray-600">Current Class</span>
+                                <span className="text-lg font-bold text-blue-600">{studentInfo.className}</span>
                             </div>
                             <div className="flex items-center justify-between p-3 bg-white rounded-lg">
                                 <span className="text-sm text-gray-600">Enrollment Status</span>
-                                <span className={`text-sm font-semibold ${student?.is_active ? 'text-green-600' : 'text-red-600'}`}>
-                  {student?.is_active ? 'Active' : 'Inactive'}
-                </span>
+                                <span className={`text-sm font-semibold ${studentInfo.isActive ? 'text-green-600' : 'text-red-600'}`}>
+                                    {studentInfo.isActive ? 'Active' : 'Inactive'}
+                                </span>
                             </div>
                             <div className="flex items-center justify-between p-3 bg-white rounded-lg">
-                                <span className="text-sm text-gray-600">Academic Year</span>
-                                <span className="text-sm font-medium text-gray-800">2024/2025</span>
+                                <span className="text-sm text-gray-600">Enrollment Session</span>
+                                <span className="text-sm font-medium text-gray-800">{studentInfo.enrollmentSession}</span>
                             </div>
                         </div>
                     </div>

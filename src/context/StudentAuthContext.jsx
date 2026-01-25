@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { studentLogin as apiStudentLogin, getStudentProfile } from '../service/studentApi';
 
 const StudentAuthContext = createContext(null);
@@ -23,7 +23,7 @@ export const StudentAuthProvider = ({ children }) => {
 
                     // Optionally refresh profile from server
                     try {
-                        const { student: freshStudent } = await getStudentProfile();
+                        const freshStudent = await getStudentProfile();
                         setStudent(freshStudent);
                         localStorage.setItem('studentData', JSON.stringify(freshStudent));
                     } catch (err) {
@@ -79,6 +79,26 @@ export const StudentAuthProvider = ({ children }) => {
         });
     };
 
+    // ✅ NEW: Refresh student data from server (used after profile updates)
+    const refreshStudent = useCallback(async () => {
+        const admissionNumber = localStorage.getItem('studentAdmissionNumber');
+
+        if (!admissionNumber) {
+            console.warn('No admission number found, cannot refresh');
+            return null;
+        }
+
+        try {
+            const freshStudent = await getStudentProfile();
+            setStudent(freshStudent);
+            localStorage.setItem('studentData', JSON.stringify(freshStudent));
+            return freshStudent;
+        } catch (err) {
+            console.error('Failed to refresh student data:', err);
+            throw err;
+        }
+    }, []);
+
     const value = {
         student,
         loading,
@@ -86,6 +106,7 @@ export const StudentAuthProvider = ({ children }) => {
         login,
         logout,
         updateStudent,
+        refreshStudent, // ✅ NEW: Added to context value
     };
 
     return (
