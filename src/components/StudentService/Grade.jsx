@@ -114,38 +114,50 @@ const Grade = () => {
     }, [terms]);
 
     // Calculate overall average
-    const calculateAverage = useCallback((gradesArray) => {
-        if (!gradesArray || gradesArray.length === 0) return 0;
-        const sum = gradesArray.reduce((acc, g) => acc + (g.total_score || 0), 0);
-        return Math.round(sum / gradesArray.length);
-    }, []);
+// Calculate overall average - FIXED to handle string/decimal values
+const calculateAverage = useCallback((gradesArray) => {
+    if (!gradesArray || gradesArray.length === 0) return 0;
+    
+    const validGrades = gradesArray.filter(g => {
+        const score = parseFloat(g.total_score);
+        return !isNaN(score);
+    });
+    
+    if (validGrades.length === 0) return 0;
+    
+    const sum = validGrades.reduce((acc, g) => acc + parseFloat(g.total_score), 0);
+    return Math.round(sum / validGrades.length);
+}, []);
 
-    // Get grade color
-    const getGradeColor = (score) => {
-        if (score >= 70) return 'bg-green-500';
-        if (score >= 60) return 'bg-blue-500';
-        if (score >= 50) return 'bg-yellow-500';
-        if (score >= 40) return 'bg-orange-500';
-        return 'bg-red-500';
-    };
+// Get grade color - FIXED to parse score
+const getGradeColor = (score) => {
+    const numScore = parseFloat(score) || 0;
+    if (numScore >= 70) return 'bg-green-500';
+    if (numScore >= 60) return 'bg-blue-500';
+    if (numScore >= 50) return 'bg-yellow-500';
+    if (numScore >= 40) return 'bg-orange-500';
+    return 'bg-red-500';
+};
 
-    // Get grade badge color
-    const getGradeBadgeClass = (score) => {
-        if (score >= 70) return 'bg-green-100 text-green-800';
-        if (score >= 60) return 'bg-blue-100 text-blue-800';
-        if (score >= 50) return 'bg-yellow-100 text-yellow-800';
-        if (score >= 40) return 'bg-orange-100 text-orange-800';
-        return 'bg-red-100 text-red-800';
-    };
+// Get grade badge color - FIXED to parse score
+const getGradeBadgeClass = (score) => {
+    const numScore = parseFloat(score) || 0;
+    if (numScore >= 70) return 'bg-green-100 text-green-800';
+    if (numScore >= 60) return 'bg-blue-100 text-blue-800';
+    if (numScore >= 50) return 'bg-yellow-100 text-yellow-800';
+    if (numScore >= 40) return 'bg-orange-100 text-orange-800';
+    return 'bg-red-100 text-red-800';
+};
 
-    // Get grade letter
-    const getGradeLetter = (score) => {
-        if (score >= 70) return 'A';
-        if (score >= 60) return 'B';
-        if (score >= 50) return 'C';
-        if (score >= 40) return 'D';
-        return 'F';
-    };
+// Get grade letter - FIXED to parse score
+const getGradeLetter = (score) => {
+    const numScore = parseFloat(score) || 0;
+    if (numScore >= 70) return 'A';
+    if (numScore >= 60) return 'B';
+    if (numScore >= 50) return 'C';
+    if (numScore >= 40) return 'D';
+    return 'F';
+};
 
     // Student passport URL - using correct field name
     const passportUrl = student?.passport || student?.passport_url || null;

@@ -409,3 +409,19 @@ export const exportAcademicReport = async () => {
 
 export const getPaymentHistory = async () => [];
 export const getPayableItems = async () => [];
+
+// Get student report card
+export const getStudentReportCard = async (params = {}) => {
+    const admissionNumber = getAdmissionNumber();
+    
+    const queryParams = new URLSearchParams({
+        admission_number: admissionNumber,
+        ...params
+    });
+    
+    const response = await fetch(`${API_BASE_URL}/api/users/student-portal/report-card/?${queryParams}`, {
+        headers: { 'Content-Type': 'application/json' },
+    });
+    
+    return handleResponse(response);
+};
