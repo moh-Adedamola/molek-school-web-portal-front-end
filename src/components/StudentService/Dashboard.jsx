@@ -1,6 +1,7 @@
 /**
  * Student Dashboard Component
  * Displays welcome message, profile info, events, calendar, and academic stats
+ * Updated for Nigerian School Grading System
  */
 
 import { motion } from 'framer-motion';
@@ -29,22 +30,19 @@ const Dashboard = () => {
         });
     }, []);
 
-    // Student display info - memoized
+    // Student display info
     const studentInfo = useMemo(() => ({
         fullName: student?.first_name && student?.last_name
             ? `${student.first_name} ${student.middle_name || ''} ${student.last_name}`.trim()
             : student?.full_name || 'Student',
         admissionNumber: student?.admission_number || 'N/A',
-        // ✅ FIXED: Use correct field names from backend serializer
         currentClass: student?.class_level_name || student?.class_level?.name || 'Not Assigned',
-        // ✅ FIXED: Handle both passport (from ActiveStudentSerializer) and passport_url (from StudentProfileUpdateSerializer)
         passportUrl: student?.passport || student?.passport_url || null,
         gender: student?.gender,
         isActive: student?.is_active,
         enrollmentSession: student?.enrollment_session_name || 'N/A'
     }), [student]);
 
-    // Fetch events on mount
     useEffect(() => {
         const fetchEvents = async () => {
             try {
@@ -60,7 +58,6 @@ const Dashboard = () => {
         fetchEvents();
     }, []);
 
-    // Fetch academic stats on mount
     useEffect(() => {
         const fetchStats = async () => {
             try {
@@ -76,13 +73,22 @@ const Dashboard = () => {
         fetchStats();
     }, []);
 
-    // Get grade color based on average
+    /**
+     * Nigerian Secondary School Grading Scale
+     * A: 75-100 (Excellent)
+     * B: 70-74 (Very Good)
+     * C: 60-69 (Good)
+     * D: 50-59 (Pass)
+     * E: 45-49 (Fair)
+     * F: 0-44 (Fail)
+     */
     const getGradeInfo = (average) => {
-        if (average >= 70) return { grade: 'A', color: 'text-green-600', bg: 'bg-green-100' };
-        if (average >= 60) return { grade: 'B', color: 'text-blue-600', bg: 'bg-blue-100' };
-        if (average >= 50) return { grade: 'C', color: 'text-yellow-600', bg: 'bg-yellow-100' };
-        if (average >= 40) return { grade: 'D', color: 'text-orange-600', bg: 'bg-orange-100' };
-        return { grade: 'F', color: 'text-red-600', bg: 'bg-red-100' };
+        if (average >= 75) return { grade: 'A', color: 'text-green-600', bg: 'bg-green-100', remark: 'Excellent' };
+        if (average >= 70) return { grade: 'B', color: 'text-blue-600', bg: 'bg-blue-100', remark: 'Very Good' };
+        if (average >= 60) return { grade: 'C', color: 'text-cyan-600', bg: 'bg-cyan-100', remark: 'Good' };
+        if (average >= 50) return { grade: 'D', color: 'text-yellow-600', bg: 'bg-yellow-100', remark: 'Pass' };
+        if (average >= 45) return { grade: 'E', color: 'text-orange-600', bg: 'bg-orange-100', remark: 'Fair' };
+        return { grade: 'F', color: 'text-red-600', bg: 'bg-red-100', remark: 'Fail' };
     };
 
     return (
@@ -127,10 +133,8 @@ const Dashboard = () => {
                         )}
                     </div>
 
-                    {/* Student Info */}
                     <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-4">{studentInfo.fullName}</h2>
 
-                    {/* Admission Number */}
                     <div className="flex items-center justify-center gap-3 mb-4 w-full">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 md:h-7 md:w-7 text-blue-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -140,12 +144,11 @@ const Dashboard = () => {
                         </span>
                     </div>
 
-                    {/* Current Class */}
                     <div className="flex items-center justify-center gap-3 w-full">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 md:h-7 md:w-7 text-green-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 md:h-7 md:w-7 text-indigo-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                         </svg>
-                        <span className="text-sm md:text-base font-medium text-green-700 bg-green-50 px-4 py-2 rounded-full shadow-sm">
+                        <span className="text-sm md:text-base font-medium text-indigo-700 bg-indigo-50 px-4 py-2 rounded-full shadow-sm">
                             {studentInfo.currentClass}
                         </span>
                     </div>
@@ -153,39 +156,32 @@ const Dashboard = () => {
 
                 {/* Upcoming Events */}
                 <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-5 md:p-6">
-                    <h2 className="text-xl font-bold text-gray-800 mb-5 text-center">Upcoming Events</h2>
+                    <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                        <span>📅</span> Upcoming Events
+                    </h2>
                     {loading ? (
                         <div className="flex items-center justify-center py-8">
                             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
                         </div>
                     ) : (
-                        <ul className="space-y-3 max-h-[300px] overflow-y-auto pr-2">
+                        <ul className="divide-y divide-gray-100 max-h-60 overflow-y-auto">
                             {events.length > 0 ? (
-                                events
-                                    .filter(event => event.published !== false)
-                                    .slice(0, 5)
-                                    .map(event => (
-                                        <li
-                                            key={event.id}
-                                            className="flex items-start gap-4 p-3 rounded-xl bg-blue-50 hover:bg-blue-100 transition-colors shadow-sm"
-                                        >
-                                            <div className="text-xs md:text-sm text-gray-600 whitespace-nowrap flex-shrink-0 pt-1">
-                                                <div>{new Date(event.publish_date || event.created_at).toLocaleDateString()}</div>
-                                            </div>
-                                            <div className="flex-1 min-w-0">
-                                                <h4 className="font-bold text-gray-800 text-sm md:text-base">{event.title}</h4>
-                                                <p className="text-xs md:text-sm text-gray-600 mt-1 line-clamp-2">{event.description}</p>
-                                            </div>
-                                            {event.media_url && (
-                                                <img
-                                                    src={event.media_url}
-                                                    alt={event.title}
-                                                    className="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover border border-gray-200"
-                                                    onError={(e) => { e.target.src = logo; }}
-                                                />
-                                            )}
-                                        </li>
-                                    ))
+                                events.slice(0, 5).map((event, idx) => (
+                                    <li key={idx} className="py-3 flex items-center gap-4">
+                                        <div className="flex-1 min-w-0">
+                                            <p className="font-medium text-gray-800 truncate">{event.title}</p>
+                                            <p className="text-sm text-gray-500">{event.content_type || 'Event'}</p>
+                                        </div>
+                                        {event.media_url && (
+                                            <img
+                                                src={event.media_url}
+                                                alt={event.title}
+                                                className="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover border border-gray-200"
+                                                onError={(e) => { e.target.src = logo; }}
+                                            />
+                                        )}
+                                    </li>
+                                ))
                             ) : (
                                 <li className="py-8 text-center text-gray-500">
                                     <svg className="mx-auto h-12 w-12 text-gray-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -218,7 +214,7 @@ const Dashboard = () => {
                     />
                 </div>
 
-                {/* Quick Stats - Now with real backend data */}
+                {/* Quick Stats */}
                 <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-5 md:p-6">
                     <h2 className="text-xl font-bold text-gray-800 mb-5 text-center">Quick Overview</h2>
 
@@ -238,7 +234,7 @@ const Dashboard = () => {
 
                             {/* Average Score */}
                             <div className="bg-gradient-to-br from-green-50 to-green-100 p-4 rounded-xl text-center">
-                                <div className={`text-2xl font-bold ${stats?.averageScore >= 50 ? 'text-green-600' : 'text-orange-600'}`}>
+                                <div className={`text-2xl font-bold ${stats?.averageScore >= 45 ? 'text-green-600' : 'text-red-600'}`}>
                                     {stats?.averageScore || 0}%
                                 </div>
                                 <p className="text-sm text-gray-600 mt-1">Average Score</p>
@@ -274,7 +270,7 @@ const Dashboard = () => {
                 </div>
             </div>
 
-            {/* Recent Performance - New Section */}
+            {/* Recent Performance */}
             {!statsLoading && stats?.grades?.length > 0 && (
                 <div className="mt-6 bg-white rounded-2xl shadow-lg border border-gray-100 p-5 md:p-6">
                     <h2 className="text-xl font-bold text-gray-800 mb-5">Recent Results</h2>
@@ -293,9 +289,10 @@ const Dashboard = () => {
                                             {grade.grade || gradeInfo.grade}
                                         </span>
                                     </div>
+                                    <p className="text-xs text-gray-500 mt-1">{gradeInfo.remark}</p>
                                     <div className="mt-2 h-2 bg-gray-200 rounded-full overflow-hidden">
                                         <div
-                                            className={`h-full ${grade.total_score >= 50 ? 'bg-green-500' : 'bg-orange-500'}`}
+                                            className={`h-full ${grade.total_score >= 45 ? 'bg-green-500' : 'bg-red-500'}`}
                                             style={{ width: `${Math.min(grade.total_score || 0, 100)}%` }}
                                         ></div>
                                     </div>

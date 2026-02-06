@@ -1,6 +1,21 @@
 /**
  * Student Grades Component
- * Displays academic grades with current term view and all-round history
+ * Displays academic grades with Nigerian School Grading Format
+ * 
+ * Score Structure:
+ * - CA1: 15 marks
+ * - CA2: 15 marks
+ * - OBJ/CBT: 30 marks
+ * - Theory: 40 marks
+ * - Total: 100 marks
+ * 
+ * Grading Scale:
+ * - A: 75-100 (Excellent)
+ * - B: 70-74 (Very Good)
+ * - C: 60-69 (Good)
+ * - D: 50-59 (Pass)
+ * - E: 45-49 (Fair)
+ * - F: 0-44 (Fail)
  */
 
 import { motion } from 'framer-motion';
@@ -13,13 +28,12 @@ const Grade = () => {
     const { student } = useStudentAuth();
     const [activeTab, setActiveTab] = useState('current');
     const [loading, setLoading] = useState(true);
-    const [allGrades, setAllGrades] = useState([]); // Store ALL grades
+    const [allGrades, setAllGrades] = useState([]);
     const [sessions, setSessions] = useState([]);
     const [terms, setTerms] = useState([]);
     const [selectedSession, setSelectedSession] = useState(null);
     const [selectedTerm, setSelectedTerm] = useState(null);
 
-    // Fetch initial data on mount
     useEffect(() => {
         fetchInitialData();
     }, []);
@@ -33,7 +47,6 @@ const Grade = () => {
                 getStudentGrades(),
             ]);
 
-            // Extract arrays from response objects
             const sessionsArray = sessionsData.sessions || sessionsData.results || [];
             const termsArray = termsData.terms || termsData.results || [];
             const gradesArray = gradesData.grades || gradesData.results || [];
@@ -42,7 +55,6 @@ const Grade = () => {
             setTerms(termsArray);
             setAllGrades(gradesArray);
 
-            // Auto-select current session and term
             const activeSession = sessionsArray.find(s => s.is_current) || sessionsArray[0];
             const activeTerm = termsArray.find(t => t.is_current) || termsArray[0];
 
@@ -81,7 +93,6 @@ const Grade = () => {
             grouped[key].grades.push(grade);
         });
 
-        // Sort by session and term
         return Object.values(grouped).sort((a, b) => {
             if (a.sessionName !== b.sessionName) {
                 return b.sessionName.localeCompare(a.sessionName);
@@ -97,69 +108,61 @@ const Grade = () => {
         return terms.filter(t => t.session === selectedSession.id);
     }, [terms, selectedSession]);
 
-    // Handle session change
     const handleSessionChange = useCallback((sessionId) => {
         const session = sessions.find(s => s.id === parseInt(sessionId));
         setSelectedSession(session);
-
-        // Auto-select first term of this session
         const sessionTerms = terms.filter(t => t.session === session?.id);
         setSelectedTerm(sessionTerms[0] || null);
     }, [sessions, terms]);
 
-    // Handle term change
     const handleTermChange = useCallback((termId) => {
         const term = terms.find(t => t.id === parseInt(termId));
         setSelectedTerm(term);
     }, [terms]);
 
     // Calculate overall average
-// Calculate overall average - FIXED to handle string/decimal values
-const calculateAverage = useCallback((gradesArray) => {
-    if (!gradesArray || gradesArray.length === 0) return 0;
-    
-    const validGrades = gradesArray.filter(g => {
-        const score = parseFloat(g.total_score);
-        return !isNaN(score);
-    });
-    
-    if (validGrades.length === 0) return 0;
-    
-    const sum = validGrades.reduce((acc, g) => acc + parseFloat(g.total_score), 0);
-    return Math.round(sum / validGrades.length);
-}, []);
+    const calculateAverage = useCallback((gradesArray) => {
+        if (!gradesArray || gradesArray.length === 0) return 0;
+        const validGrades = gradesArray.filter(g => {
+            const score = parseFloat(g.total_score);
+            return !isNaN(score);
+        });
+        if (validGrades.length === 0) return 0;
+        const sum = validGrades.reduce((acc, g) => acc + parseFloat(g.total_score), 0);
+        return Math.round(sum / validGrades.length);
+    }, []);
 
-// Get grade color - FIXED to parse score
-const getGradeColor = (score) => {
-    const numScore = parseFloat(score) || 0;
-    if (numScore >= 70) return 'bg-green-500';
-    if (numScore >= 60) return 'bg-blue-500';
-    if (numScore >= 50) return 'bg-yellow-500';
-    if (numScore >= 40) return 'bg-orange-500';
-    return 'bg-red-500';
-};
+    // Nigerian grading scale colors
+    const getGradeColor = (score) => {
+        const numScore = parseFloat(score) || 0;
+        if (numScore >= 75) return 'bg-green-500';
+        if (numScore >= 70) return 'bg-blue-500';
+        if (numScore >= 60) return 'bg-cyan-500';
+        if (numScore >= 50) return 'bg-yellow-500';
+        if (numScore >= 45) return 'bg-orange-500';
+        return 'bg-red-500';
+    };
 
-// Get grade badge color - FIXED to parse score
-const getGradeBadgeClass = (score) => {
-    const numScore = parseFloat(score) || 0;
-    if (numScore >= 70) return 'bg-green-100 text-green-800';
-    if (numScore >= 60) return 'bg-blue-100 text-blue-800';
-    if (numScore >= 50) return 'bg-yellow-100 text-yellow-800';
-    if (numScore >= 40) return 'bg-orange-100 text-orange-800';
-    return 'bg-red-100 text-red-800';
-};
+    const getGradeBadgeClass = (score) => {
+        const numScore = parseFloat(score) || 0;
+        if (numScore >= 75) return 'bg-green-100 text-green-800';
+        if (numScore >= 70) return 'bg-blue-100 text-blue-800';
+        if (numScore >= 60) return 'bg-cyan-100 text-cyan-800';
+        if (numScore >= 50) return 'bg-yellow-100 text-yellow-800';
+        if (numScore >= 45) return 'bg-orange-100 text-orange-800';
+        return 'bg-red-100 text-red-800';
+    };
 
-// Get grade letter - FIXED to parse score
-const getGradeLetter = (score) => {
-    const numScore = parseFloat(score) || 0;
-    if (numScore >= 70) return 'A';
-    if (numScore >= 60) return 'B';
-    if (numScore >= 50) return 'C';
-    if (numScore >= 40) return 'D';
-    return 'F';
-};
+    const getGradeLetter = (score) => {
+        const numScore = parseFloat(score) || 0;
+        if (numScore >= 75) return 'A';
+        if (numScore >= 70) return 'B';
+        if (numScore >= 60) return 'C';
+        if (numScore >= 50) return 'D';
+        if (numScore >= 45) return 'E';
+        return 'F';
+    };
 
-    // Student passport URL - using correct field name
     const passportUrl = student?.passport || student?.passport_url || null;
 
     return (
@@ -179,8 +182,30 @@ const getGradeLetter = (score) => {
                 />
                 <div>
                     <h1 className="text-2xl font-bold text-gray-800">Academic Grades</h1>
-                    <p className="text-sm text-gray-600">View your academic performance</p>
+                    <p className="text-sm text-gray-600">View your academic performance (Nigerian Grading System)</p>
                 </div>
+            </div>
+
+            {/* Grading Scale Info */}
+            <div className="bg-blue-50 rounded-xl p-4 mb-6 border border-blue-200">
+                <h3 className="font-semibold text-blue-900 mb-2">📊 Nigerian School Grading</h3>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs">
+                    <div className="bg-white/50 p-2 rounded text-center">
+                        <span className="font-bold">CA1</span>: 15 marks
+                    </div>
+                    <div className="bg-white/50 p-2 rounded text-center">
+                        <span className="font-bold">CA2</span>: 15 marks
+                    </div>
+                    <div className="bg-white/50 p-2 rounded text-center">
+                        <span className="font-bold">OBJ</span>: 30 marks
+                    </div>
+                    <div className="bg-white/50 p-2 rounded text-center">
+                        <span className="font-bold">Theory</span>: 40 marks
+                    </div>
+                </div>
+                <p className="text-xs text-blue-600 mt-2 text-center">
+                    A(75+) • B(70-74) • C(60-69) • D(50-59) • E(45-49) • F(&lt;45)
+                </p>
             </div>
 
             {/* Tabs */}
@@ -223,9 +248,7 @@ const getGradeLetter = (score) => {
                             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                                            Academic Session
-                                        </label>
+                                        <label className="block text-sm font-medium text-gray-700 mb-2">Academic Session</label>
                                         <select
                                             value={selectedSession?.id || ''}
                                             onChange={(e) => handleSessionChange(e.target.value)}
@@ -239,9 +262,7 @@ const getGradeLetter = (score) => {
                                         </select>
                                     </div>
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                                            Term
-                                        </label>
+                                        <label className="block text-sm font-medium text-gray-700 mb-2">Term</label>
                                         <select
                                             value={selectedTerm?.id || ''}
                                             onChange={(e) => handleTermChange(e.target.value)}
@@ -288,22 +309,35 @@ const getGradeLetter = (score) => {
                                                     </span>
                                                 </div>
 
-                                                <div className="space-y-2 mb-4">
-                                                    <div className="flex justify-between text-sm">
-                                                        <span className="text-gray-600">CA Score:</span>
-                                                        <span className="font-medium">{result.ca_score || 0}/30</span>
+                                                {/* Nigerian Score Breakdown */}
+                                                <div className="space-y-2 mb-4 text-sm">
+                                                    <div className="grid grid-cols-2 gap-2">
+                                                        <div className="flex justify-between">
+                                                            <span className="text-gray-600">CA1:</span>
+                                                            <span className="font-medium">{result.ca1_score || 0}/15</span>
+                                                        </div>
+                                                        <div className="flex justify-between">
+                                                            <span className="text-gray-600">CA2:</span>
+                                                            <span className="font-medium">{result.ca2_score || 0}/15</span>
+                                                        </div>
                                                     </div>
-                                                    <div className="flex justify-between text-sm">
-                                                        <span className="text-gray-600">Exam Score:</span>
-                                                        <span className="font-medium">{result.exam_score || 0}/70</span>
+                                                    <div className="grid grid-cols-2 gap-2">
+                                                        <div className="flex justify-between">
+                                                            <span className="text-gray-600">OBJ:</span>
+                                                            <span className="font-medium">{result.obj_score || 0}/30</span>
+                                                        </div>
+                                                        <div className="flex justify-between">
+                                                            <span className="text-gray-600">Theory:</span>
+                                                            <span className="font-medium">{result.theory_score || 0}/40</span>
+                                                        </div>
                                                     </div>
-                                                    <div className="flex justify-between text-sm font-semibold border-t pt-2">
+                                                    <div className="flex justify-between font-semibold border-t pt-2">
                                                         <span className="text-gray-800">Total:</span>
                                                         <span className="text-blue-600">{result.total_score}/100</span>
                                                     </div>
                                                 </div>
 
-                                                {/* Additional stats if available */}
+                                                {/* Additional stats */}
                                                 {result.position && (
                                                     <div className="text-xs text-gray-500 border-t pt-2 mt-2">
                                                         Position: {result.position}/{result.total_students} • Class Avg: {result.class_average}
@@ -341,7 +375,7 @@ const getGradeLetter = (score) => {
                                                 </div>
                                                 <div className="flex justify-between text-xs text-gray-500 mt-2">
                                                     <span>{currentTermGrades.length} subjects</span>
-                                                    <span>{currentTermGrades.filter(g => g.total_score >= 40).length} passed</span>
+                                                    <span>{currentTermGrades.filter(g => parseFloat(g.total_score) >= 45).length} passed</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -386,36 +420,40 @@ const getGradeLetter = (score) => {
                                                 </div>
                                             </div>
 
-                                            {/* Results Table */}
+                                            {/* Results Table - Nigerian Format */}
                                             <div className="overflow-x-auto">
                                                 <table className="w-full">
                                                     <thead>
-                                                    <tr className="border-b border-gray-200 bg-gray-50">
-                                                        <th className="text-left py-3 px-4 font-semibold text-gray-700">Subject</th>
-                                                        <th className="text-center py-3 px-4 font-semibold text-gray-700">CA</th>
-                                                        <th className="text-center py-3 px-4 font-semibold text-gray-700">Exam</th>
-                                                        <th className="text-center py-3 px-4 font-semibold text-gray-700">Total</th>
-                                                        <th className="text-center py-3 px-4 font-semibold text-gray-700">Grade</th>
-                                                        <th className="text-center py-3 px-4 font-semibold text-gray-700 hidden md:table-cell">Position</th>
-                                                    </tr>
+                                                        <tr className="border-b border-gray-200 bg-gray-50">
+                                                            <th className="text-left py-3 px-4 font-semibold text-gray-700">Subject</th>
+                                                            <th className="text-center py-3 px-2 font-semibold text-gray-700 text-sm">CA1<br/><span className="text-xs font-normal">(15)</span></th>
+                                                            <th className="text-center py-3 px-2 font-semibold text-gray-700 text-sm">CA2<br/><span className="text-xs font-normal">(15)</span></th>
+                                                            <th className="text-center py-3 px-2 font-semibold text-gray-700 text-sm">OBJ<br/><span className="text-xs font-normal">(30)</span></th>
+                                                            <th className="text-center py-3 px-2 font-semibold text-gray-700 text-sm">Theory<br/><span className="text-xs font-normal">(40)</span></th>
+                                                            <th className="text-center py-3 px-2 font-semibold text-gray-700 text-sm">Total<br/><span className="text-xs font-normal">(100)</span></th>
+                                                            <th className="text-center py-3 px-4 font-semibold text-gray-700">Grade</th>
+                                                            <th className="text-center py-3 px-4 font-semibold text-gray-700 hidden md:table-cell">Position</th>
+                                                        </tr>
                                                     </thead>
                                                     <tbody>
-                                                    {group.grades.map((grade, idx) => (
-                                                        <tr key={grade.id || idx} className="border-b border-gray-100 hover:bg-gray-50">
-                                                            <td className="py-3 px-4 font-medium text-gray-800">{grade.subject_name}</td>
-                                                            <td className="py-3 px-4 text-center">{grade.ca_score || 0}</td>
-                                                            <td className="py-3 px-4 text-center">{grade.exam_score || 0}</td>
-                                                            <td className="py-3 px-4 text-center font-semibold text-blue-600">{grade.total_score}</td>
-                                                            <td className="py-3 px-4 text-center">
+                                                        {group.grades.map((grade, idx) => (
+                                                            <tr key={grade.id || idx} className="border-b border-gray-100 hover:bg-gray-50">
+                                                                <td className="py-3 px-4 font-medium text-gray-800">{grade.subject_name}</td>
+                                                                <td className="py-3 px-2 text-center">{grade.ca1_score || 0}</td>
+                                                                <td className="py-3 px-2 text-center">{grade.ca2_score || 0}</td>
+                                                                <td className="py-3 px-2 text-center">{grade.obj_score || 0}</td>
+                                                                <td className="py-3 px-2 text-center">{grade.theory_score || 0}</td>
+                                                                <td className="py-3 px-2 text-center font-semibold text-blue-600">{grade.total_score}</td>
+                                                                <td className="py-3 px-4 text-center">
                                                                     <span className={`${getGradeBadgeClass(grade.total_score)} px-3 py-1 rounded-full text-sm font-medium`}>
                                                                         {grade.grade}
                                                                     </span>
-                                                            </td>
-                                                            <td className="py-3 px-4 text-center text-gray-600 hidden md:table-cell">
-                                                                {grade.position ? `${grade.position}/${grade.total_students}` : '-'}
-                                                            </td>
-                                                        </tr>
-                                                    ))}
+                                                                </td>
+                                                                <td className="py-3 px-4 text-center text-gray-600 hidden md:table-cell">
+                                                                    {grade.position ? `${grade.position}/${grade.total_students}` : '-'}
+                                                                </td>
+                                                            </tr>
+                                                        ))}
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -438,7 +476,7 @@ const getGradeLetter = (score) => {
                                             </div>
                                             <div className="bg-white rounded-xl p-4 text-center">
                                                 <div className="text-2xl font-bold text-purple-600">
-                                                    {allGrades.filter(g => g.total_score >= 40).length}
+                                                    {allGrades.filter(g => parseFloat(g.total_score) >= 45).length}
                                                 </div>
                                                 <p className="text-sm text-gray-600">Subjects Passed</p>
                                             </div>
