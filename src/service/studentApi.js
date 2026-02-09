@@ -115,14 +115,13 @@ export const getStudentProfile = async () => {
 export const updateStudentProfile = async (formData) => {
     const admissionNumber = getAdmissionNumber();
 
-    // Add admission number to request body
-    if (formData instanceof FormData) {
-        formData.append('admission_number', admissionNumber);
-    } else {
-        formData = { ...formData, admission_number: admissionNumber };
-    }
+    // FIX: Send admission_number in URL query params, NOT in body
+    // Django endpoint reads from request.query_params, not request.data
+    const url = buildUrl('/api/users/student-portal/profile/', { 
+        admission_number: admissionNumber 
+    });
 
-    const response = await fetch(`${API_BASE_URL}/api/users/student-portal/profile/`, {
+    const response = await fetch(url, {
         method: 'PUT',
         // Don't set Content-Type for FormData - browser sets it with boundary
         headers: formData instanceof FormData ? {} : { 'Content-Type': 'application/json' },
