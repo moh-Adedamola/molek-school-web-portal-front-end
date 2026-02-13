@@ -209,7 +209,7 @@ const Settings = () => {
     // Generate MOLEK-style HTML Report
     const generateMolekReport = (data, type) => {
         const studentData = data.student || {};
-        const subjects = data.subjects || [];
+        const rawSubjects = data.subjects || [];
         const summary = data.summary || data.cumulative || {};
         const sessionInfo = data.session || {};
         const termInfo = data.term || {};
@@ -223,6 +223,54 @@ const Settings = () => {
         };
 
         const isCumulative = type === 'session';
+
+        // =============================================================
+        // BUG 6 FIX: Normalize API field names → HTML template fields
+        // Term API returns: ca1Score, ca2Score, objScore, theoryScore, totalScore
+        // Session API returns: termScores: {"First Term": {total: X}, ...}
+        // Template uses: s.ca1, s.ca2, s.exam, s.total, s.firstTerm, etc.
+        // =============================================================
+        let subjects;
+        if (isCumulative) {
+            subjects = rawSubjects.map(s => {
+                const ts = s.termScores || {};
+                const ft = ts['First Term'];
+                const st = ts['Second Term'];
+                const tt = ts['Third Term'];
+                const firstTerm = ft ? ft.total : null;
+                const secondTerm = st ? st.total : null;
+                const thirdTerm = tt ? tt.total : null;
+                const validTerms = [firstTerm, secondTerm, thirdTerm].filter(t => t !== null && t !== undefined);
+                const cumulativeTotal = validTerms.reduce((sum, t) => sum + t, 0);
+                const cumulativePercent = validTerms.length > 0 ? (cumulativeTotal / validTerms.length).toFixed(1) : 0;
+                return {
+                    subjectName: s.subjectName,
+                    firstTerm: firstTerm !== null ? Math.round(firstTerm) : '-',
+                    secondTerm: secondTerm !== null ? Math.round(secondTerm) : '-',
+                    thirdTerm: thirdTerm !== null ? Math.round(thirdTerm) : '-',
+                    cumulativeTotal: Math.round(cumulativeTotal),
+                    cumulativePercent,
+                    grade: s.cumulativeGrade || '-',
+                    remark: s.cumulativeRemark || '-',
+                    position: s.position || '-',
+                    totalStudents: s.totalStudents || '',
+                    classAverage: s.classAverage || '-',
+                };
+            });
+        } else {
+            subjects = rawSubjects.map(s => ({
+                subjectName: s.subjectName,
+                ca1: s.ca1Score != null ? s.ca1Score : 0,
+                ca2: s.ca2Score != null ? s.ca2Score : 0,
+                exam: ((s.objScore || 0) + (s.theoryScore || 0)),
+                total: s.totalScore || 0,
+                grade: s.grade || '-',
+                remark: s.remark || '-',
+                position: s.position || '-',
+                totalStudents: s.totalStudents || '',
+                classAverage: s.classAverage || '-',
+            }));
+        }
 
         return `<!DOCTYPE html>
 <html lang="en">
