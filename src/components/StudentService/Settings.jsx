@@ -206,7 +206,7 @@ const Settings = () => {
         }
     };
 
-    // Generate MOLEK-style HTML Report
+    // Generate MOLEK-style HTML Report matching Recording Sheet format
     const generateMolekReport = (data, type) => {
         const studentData = data.student || {};
         const rawSubjects = data.subjects || [];
@@ -217,19 +217,14 @@ const Settings = () => {
         const getGradeColor = (grade) => {
             const colors = {
                 'A': '#22c55e', 'B': '#3b82f6', 'C': '#eab308',
-                'D': '#f97316', 'F': '#ef4444'
+                'D': '#f97316', 'E': '#f97316', 'F': '#ef4444'
             };
             return colors[grade] || '#6b7280';
         };
 
         const isCumulative = type === 'session';
 
-        // =============================================================
-        // BUG 6 FIX: Normalize API field names → HTML template fields
-        // Term API returns: ca1Score, ca2Score, objScore, theoryScore, totalScore
-        // Session API returns: termScores: {"First Term": {total: X}, ...}
-        // Template uses: s.ca1, s.ca2, s.exam, s.total, s.firstTerm, etc.
-        // =============================================================
+        // Normalize API fields to template fields
         let subjects;
         if (isCumulative) {
             subjects = rawSubjects.map(s => {
@@ -242,19 +237,22 @@ const Settings = () => {
                 const thirdTerm = tt ? tt.total : null;
                 const validTerms = [firstTerm, secondTerm, thirdTerm].filter(t => t !== null && t !== undefined);
                 const cumulativeTotal = validTerms.reduce((sum, t) => sum + t, 0);
-                const cumulativePercent = validTerms.length > 0 ? (cumulativeTotal / validTerms.length).toFixed(1) : 0;
+                const numTerms = validTerms.length;
+                const cumulativeAvg = numTerms > 0 ? cumulativeTotal / numTerms : 0;
                 return {
                     subjectName: s.subjectName,
                     firstTerm: firstTerm !== null ? Math.round(firstTerm) : '-',
                     secondTerm: secondTerm !== null ? Math.round(secondTerm) : '-',
                     thirdTerm: thirdTerm !== null ? Math.round(thirdTerm) : '-',
                     cumulativeTotal: Math.round(cumulativeTotal),
-                    cumulativePercent,
-                    grade: s.cumulativeGrade || '-',
-                    remark: s.cumulativeRemark || '-',
+                    cumulativeMark: Math.round(cumulativeTotal),
+                    cumulativePercent: numTerms > 0 ? cumulativeAvg.toFixed(1) : '0',
+                    avgStudent: numTerms > 0 ? cumulativeAvg.toFixed(1) : '0',
+                    classAverage: s.classAverage != null ? Math.round(s.classAverage) : '-',
                     position: s.position || '-',
                     totalStudents: s.totalStudents || '',
-                    classAverage: s.classAverage || '-',
+                    grade: s.cumulativeGrade || '-',
+                    remark: s.cumulativeRemark || '-',
                 };
             });
         } else {
@@ -272,6 +270,9 @@ const Settings = () => {
             }));
         }
 
+        // Convert logo to embeddable format for print
+        const logoUrl = window.location.origin + '/logo.webp';
+
         return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -283,263 +284,335 @@ const Settings = () => {
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: #f3f4f6;
-            padding: 20px;
+            padding: 15px;
             color: #1f2937;
         }
         .container {
-            max-width: 900px;
+            max-width: 960px;
             margin: 0 auto;
             background: white;
-            border: 2px solid #1e3a5f;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border: 2px solid #000;
         }
+
+        /* ===== HEADER WITH LOGO ===== */
         .header {
-            background: linear-gradient(135deg, #1e3a5f 0%, #2d5a87 100%);
-            color: white;
-            padding: 25px;
             text-align: center;
-            border-bottom: 4px solid #fbbf24;
+            padding: 15px 20px 10px;
+            border-bottom: 2px solid #000;
+        }
+        .header-logo {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            object-fit: contain;
+            margin-bottom: 5px;
         }
         .header h1 {
-            font-size: 28px;
-            font-weight: bold;
-            letter-spacing: 2px;
-            margin-bottom: 5px;
+            font-size: 24px;
+            font-weight: 900;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin: 0;
         }
         .header h2 {
-            font-size: 16px;
-            font-weight: normal;
-            opacity: 0.9;
-        }
-        .student-info {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-            padding: 20px;
-            background: #f8fafc;
-            border-bottom: 2px solid #e2e8f0;
-        }
-        .info-box {
-            text-align: center;
-            padding: 10px;
-            background: white;
-            border-radius: 8px;
-            border: 1px solid #e2e8f0;
-        }
-        .info-box label {
-            display: block;
-            font-size: 11px;
-            color: #64748b;
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 2px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 5px;
-        }
-        .info-box span {
-            font-size: 14px;
-            font-weight: 600;
-            color: #1e3a5f;
-        }
-        .section-title {
-            background: #1e3a5f;
-            color: white;
-            padding: 10px 20px;
-            font-size: 14px;
-            font-weight: 600;
             letter-spacing: 1px;
         }
+
+        /* ===== STUDENT INFO BAR ===== */
+        .info-bar {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 15px;
+            border-bottom: 1px solid #000;
+            font-size: 12px;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+        .info-bar .field {
+            display: flex;
+            gap: 4px;
+        }
+        .info-bar .field label {
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 11px;
+        }
+        .info-bar .field span {
+            border-bottom: 1px solid #000;
+            min-width: 80px;
+            display: inline-block;
+            padding: 0 4px;
+            font-weight: 500;
+        }
+
+        /* ===== TABLE - RECORDING SHEET STYLE ===== */
         table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 12px;
+            font-size: 11px;
         }
         th, td {
-            border: 1px solid #d1d5db;
-            padding: 8px 6px;
+            border: 1px solid #000;
+            padding: 4px 3px;
             text-align: center;
+            vertical-align: middle;
         }
         th {
-            background: #f1f5f9;
-            font-weight: 600;
-            color: #374151;
-            font-size: 11px;
+            background: #f5f5f5;
+            font-weight: 700;
+            font-size: 10px;
             text-transform: uppercase;
         }
         .subject-name {
             text-align: left !important;
+            padding-left: 6px !important;
             font-weight: 500;
+            font-size: 11px;
+            white-space: nowrap;
         }
-        .grade-cell {
-            font-weight: bold;
-            padding: 4px 8px;
-            border-radius: 4px;
+        .group-header {
+            background: #e8e8e8;
+            font-weight: 800;
+            font-size: 11px;
+            letter-spacing: 0.5px;
         }
+        .sub-max {
+            font-size: 9px;
+            color: #555;
+            font-weight: 600;
+        }
+        td.bold-val {
+            font-weight: 700;
+        }
+
+        /* ===== SUMMARY SECTION ===== */
         .summary-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-            padding: 20px;
-            background: #fef3c7;
+            gap: 10px;
+            padding: 12px 15px;
+            border-top: 2px solid #000;
         }
         .summary-box {
             text-align: center;
-            padding: 15px;
-            background: white;
-            border-radius: 8px;
-            border: 2px solid #f59e0b;
+            padding: 10px;
+            border: 1px solid #999;
         }
         .summary-box .value {
-            font-size: 24px;
+            font-size: 20px;
             font-weight: bold;
-            color: #1e3a5f;
         }
         .summary-box .label {
-            font-size: 11px;
-            color: #64748b;
-            margin-top: 5px;
+            font-size: 10px;
+            color: #555;
+            margin-top: 3px;
+            text-transform: uppercase;
         }
+
+        /* ===== FOOTER ===== */
         .footer {
-            padding: 20px;
-            background: #f8fafc;
-            border-top: 2px solid #e2e8f0;
+            padding: 15px;
+            border-top: 1px solid #000;
+        }
+        .comment-box {
+            margin-bottom: 12px;
+        }
+        .comment-box strong {
+            font-size: 12px;
+        }
+        .comment-box p {
+            margin-top: 4px;
+            padding: 8px;
+            border: 1px dashed #999;
+            min-height: 35px;
+            font-size: 12px;
         }
         .signatures {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
-            margin-top: 30px;
+            gap: 25px;
+            margin-top: 25px;
         }
         .signature-line {
             text-align: center;
         }
         .signature-line .line {
-            border-top: 1px solid #374151;
-            margin-bottom: 5px;
-            margin-top: 40px;
+            border-top: 1px solid #000;
+            margin-bottom: 4px;
+            margin-top: 35px;
         }
         .signature-line span {
-            font-size: 12px;
-            color: #64748b;
+            font-size: 11px;
+            color: #555;
         }
-        .remark-excellent { color: #22c55e; }
-        .remark-good { color: #3b82f6; }
-        .remark-fair { color: #f59e0b; }
-        .remark-poor { color: #ef4444; }
+
+        /* ===== GRADE KEY ===== */
+        .grade-key {
+            display: flex;
+            gap: 12px;
+            padding: 6px 15px;
+            border-top: 1px solid #000;
+            font-size: 10px;
+            flex-wrap: wrap;
+        }
+        .grade-key span { font-weight: 600; }
+
         @media print {
             body { padding: 0; background: white; }
-            .container { border: none; box-shadow: none; }
+            .container { border: 2px solid #000; box-shadow: none; }
+            .no-print { display: none !important; }
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- HEADER WITH LOGO -->
         <div class="header">
-            <h1>🎓 MOLEK SECONDARY SCHOOLS</h1>
-            <h2>${isCumulative ? 'CUMULATIVE ASSESSMENT REPORT' : 'TERMINAL REPORT CARD'}</h2>
+            <img src="${logoUrl}" alt="MOLEK Logo" class="header-logo" onerror="this.style.display='none'" />
+            <h1>MOLEK SECONDARY SCHOOLS</h1>
+            <h2>${isCumulative ? 'Recording Sheet / Cumulative Assessment' : 'Terminal Report Card'}</h2>
         </div>
-        
-        <div class="student-info">
-            <div class="info-box">
-                <label>Student Name</label>
-                <span>${studentData.full_name || `${studentData.first_name || ''} ${studentData.last_name || ''}`}</span>
-            </div>
-            <div class="info-box">
-                <label>Admission No.</label>
-                <span>${studentData.admission_number || 'N/A'}</span>
-            </div>
-            <div class="info-box">
-                <label>Class</label>
-                <span>${studentData.class_level_name || 'N/A'}</span>
-            </div>
-            <div class="info-box">
-                <label>Session</label>
-                <span>${sessionInfo.name || 'N/A'}</span>
-            </div>
+
+        <!-- STUDENT INFO BAR -->
+        <div class="info-bar">
             ${!isCumulative ? `
-            <div class="info-box">
-                <label>Term</label>
-                <span>${termInfo.name || 'N/A'}</span>
-            </div>
+            <div class="field"><label>Subject:</label> <span>All Subjects</span></div>
             ` : ''}
-            <div class="info-box">
-                <label>Gender</label>
-                <span>${studentData.gender === 'M' ? 'Male' : studentData.gender === 'F' ? 'Female' : 'N/A'}</span>
-            </div>
-            <div class="info-box">
-                <label>Date Generated</label>
-                <span>${new Date().toLocaleDateString()}</span>
-            </div>
+            <div class="field"><label>Name:</label> <span>${studentData.full_name || (studentData.first_name || '') + ' ' + (studentData.last_name || '')}</span></div>
+            <div class="field"><label>Class:</label> <span>${studentData.class_level_name || 'N/A'}</span></div>
+            <div class="field"><label>Term:</label> <span>${isCumulative ? 'Cumulative' : (termInfo.name || 'N/A')}</span></div>
+            <div class="field"><label>Session:</label> <span>${sessionInfo.name || 'N/A'}</span></div>
+            <div class="field"><label>Adm No:</label> <span>${studentData.admission_number || 'N/A'}</span></div>
         </div>
 
-        <div class="section-title">
-            ${isCumulative ? '📊 CUMULATIVE ASSESSMENT' : '📊 CURRENT TERM RESULTS'}
-        </div>
-
+        ${isCumulative ? `
+        <!-- ===== CUMULATIVE TABLE (Recording Sheet Format) ===== -->
         <table>
             <thead>
                 <tr>
-                    <th rowspan="2" style="width: 25%">SUBJECTS</th>
-                    ${isCumulative ? `
-                    <th colspan="3">TERM SCORES (B/F)</th>
-                    <th rowspan="2">TOTAL<br>(300)</th>
-                    <th rowspan="2">%</th>
-                    ` : `
-                    <th colspan="2">CA (30)</th>
-                    <th rowspan="2">EXAM<br>(70)</th>
-                    <th rowspan="2">TOTAL<br>(100)</th>
-                    `}
+                    <th rowspan="3" style="width:18%; min-width:100px;">SUBJECTS</th>
+                    <th colspan="6" class="group-header">CURRENT TERM</th>
+                    <th colspan="11" class="group-header">CUMULATIVE ASSESSMENT</th>
+                </tr>
+                <tr>
+                    <th rowspan="2">CA 1<br><span class="sub-max">15</span></th>
+                    <th rowspan="2">CA 2<br><span class="sub-max">15</span></th>
+                    <th rowspan="2">EXAM<br><span class="sub-max">70</span></th>
+                    <th rowspan="2">TOTAL<br><span class="sub-max">100</span></th>
+                    <th rowspan="2">POS.</th>
                     <th rowspan="2">GRADE</th>
-                    <th rowspan="2">POSITION</th>
-                    ${isCumulative ? `<th rowspan="2">CLASS<br>AVG</th>` : ''}
+                    <th rowspan="2">1ST TERM<br>B/F<br><span class="sub-max">100</span></th>
+                    <th rowspan="2">2ND TERM<br>B/F<br><span class="sub-max">100</span></th>
+                    <th rowspan="2">3RD TERM<br>B/F<br><span class="sub-max">100</span></th>
+                    <th rowspan="2">TOTAL</th>
+                    <th colspan="2">CUMULATIVE</th>
+                    <th colspan="2">AVERAGE SCORE</th>
+                    <th rowspan="2">POS.</th>
+                    <th rowspan="2">GRADE</th>
                     <th rowspan="2">REMARKS</th>
                 </tr>
                 <tr>
-                    ${isCumulative ? `
-                    <th>1ST</th>
-                    <th>2ND</th>
-                    <th>3RD</th>
-                    ` : `
-                    <th>CA1</th>
-                    <th>CA2</th>
-                    `}
+                    <th>MARK<br><span class="sub-max">100</span></th>
+                    <th>%<br><span class="sub-max">100</span></th>
+                    <th>STUDENT<br><span class="sub-max">100</span></th>
+                    <th>CLASS<br><span class="sub-max">100</span></th>
+                </tr>
+            </thead>
+            <tbody>
+                ${subjects.length > 0 ? subjects.map((s, idx) => {
+                    // Get latest term's CA/exam data for "Current Term" columns
+                    const raw = rawSubjects[idx];
+                    const ts = raw?.termScores || {};
+                    // Find the latest available term
+                    const latestTerm = ts['Third Term'] || ts['Second Term'] || ts['First Term'];
+                    const ca1 = latestTerm ? latestTerm.ca1 : '-';
+                    const ca2 = latestTerm ? latestTerm.ca2 : '-';
+                    const exam = latestTerm ? Math.round((latestTerm.obj || 0) + (latestTerm.theory || 0)) : '-';
+                    const termTotal = latestTerm ? Math.round(latestTerm.total) : '-';
+                    const termGrade = latestTerm ? (latestTerm.grade || '-') : '-';
+                    return `
+                <tr>
+                    <td class="subject-name">${idx + 1}. ${s.subjectName}</td>
+                    <td>${ca1}</td>
+                    <td>${ca2}</td>
+                    <td>${exam}</td>
+                    <td class="bold-val">${termTotal}</td>
+                    <td>${s.position || '-'}</td>
+                    <td>${termGrade}</td>
+                    <td>${s.firstTerm}</td>
+                    <td>${s.secondTerm}</td>
+                    <td>${s.thirdTerm}</td>
+                    <td class="bold-val">${s.cumulativeTotal}</td>
+                    <td>${s.cumulativeMark}</td>
+                    <td>${s.cumulativePercent}%</td>
+                    <td>${s.avgStudent}</td>
+                    <td>${s.classAverage}</td>
+                    <td>${s.position || '-'}${s.totalStudents ? '/' + s.totalStudents : ''}</td>
+                    <td><strong>${s.grade}</strong></td>
+                    <td style="font-size:9px;">${s.remark}</td>
+                </tr>`;
+                }).join('') : `
+                <tr>
+                    <td colspan="18" style="padding: 25px; color: #888;">No results available for this session</td>
+                </tr>`}
+            </tbody>
+        </table>
+        ` : `
+        <!-- ===== TERM REPORT TABLE ===== -->
+        <table>
+            <thead>
+                <tr>
+                    <th rowspan="2" style="width:22%">SUBJECTS</th>
+                    <th colspan="2">CA (30)</th>
+                    <th rowspan="2">EXAM<br><span class="sub-max">70</span></th>
+                    <th rowspan="2">TOTAL<br><span class="sub-max">100</span></th>
+                    <th rowspan="2">GRADE</th>
+                    <th rowspan="2">POSITION</th>
+                    <th rowspan="2">CLASS<br>AVG</th>
+                    <th rowspan="2">REMARKS</th>
+                </tr>
+                <tr>
+                    <th>CA1<br><span class="sub-max">15</span></th>
+                    <th>CA2<br><span class="sub-max">15</span></th>
                 </tr>
             </thead>
             <tbody>
                 ${subjects.length > 0 ? subjects.map((s, idx) => `
                 <tr>
                     <td class="subject-name">${idx + 1}. ${s.subjectName}</td>
-                    ${isCumulative ? `
-                    <td>${s.firstTerm || '-'}</td>
-                    <td>${s.secondTerm || '-'}</td>
-                    <td>${s.thirdTerm || '-'}</td>
-                    <td><strong>${s.cumulativeTotal || 0}</strong></td>
-                    <td>${s.cumulativePercent || 0}%</td>
-                    ` : `
-                    <td>${s.ca1 || 0}</td>
-                    <td>${s.ca2 || 0}</td>
-                    <td>${s.exam || 0}</td>
-                    <td><strong>${s.total || 0}</strong></td>
-                    `}
-                    <td>
-                        <span class="grade-cell" style="background: ${getGradeColor(s.grade)}20; color: ${getGradeColor(s.grade)}">
-                            ${s.grade || '-'}
-                        </span>
-                    </td>
-                    <td>${s.position || '-'}${s.totalStudents ? `/${s.totalStudents}` : ''}</td>
-                    ${isCumulative ? `<td>${s.classAverage || '-'}</td>` : ''}
-                    <td class="${s.remark === 'Excellent' ? 'remark-excellent' : s.remark === 'Very Good' || s.remark === 'Good' ? 'remark-good' : s.remark === 'Fair' ? 'remark-fair' : 'remark-poor'}">
-                        ${s.remark || '-'}
-                    </td>
+                    <td>${s.ca1}</td>
+                    <td>${s.ca2}</td>
+                    <td>${s.exam}</td>
+                    <td class="bold-val">${s.total}</td>
+                    <td><strong>${s.grade}</strong></td>
+                    <td>${s.position}${s.totalStudents ? '/' + s.totalStudents : ''}</td>
+                    <td>${s.classAverage}</td>
+                    <td style="font-size:10px;">${s.remark}</td>
                 </tr>
                 `).join('') : `
                 <tr>
-                    <td colspan="${isCumulative ? 10 : 8}" style="padding: 30px; color: #64748b;">
-                        No results available for this ${isCumulative ? 'session' : 'term'}
-                    </td>
+                    <td colspan="9" style="padding: 25px; color: #888;">No results available for this term</td>
                 </tr>
                 `}
             </tbody>
         </table>
+        `}
 
+        <!-- GRADE KEY -->
+        <div class="grade-key">
+            <span>A = 75-100 (Excellent)</span>
+            <span>B = 70-74 (Very Good)</span>
+            <span>C = 60-69 (Good)</span>
+            <span>D = 50-59 (Pass)</span>
+            <span>E = 45-49 (Fair)</span>
+            <span>F = 0-44 (Fail)</span>
+        </div>
+
+        <!-- SUMMARY -->
         <div class="summary-grid">
             <div class="summary-box">
                 <div class="value">${summary.totalSubjects || 0}</div>
@@ -559,30 +632,29 @@ const Settings = () => {
             </div>
         </div>
 
+        <!-- FOOTER -->
         <div class="footer">
-            <div style="margin-bottom: 15px;">
+            <div class="comment-box">
                 <strong>Class Teacher's Comment:</strong>
-                <p style="margin-top: 5px; padding: 10px; background: #f9fafb; border-radius: 4px; min-height: 40px; border: 1px dashed #d1d5db;">
-                    ${parseFloat(summary.averageScore) >= 70 ? 'Excellent performance! Keep it up.' :
+                <p>${parseFloat(summary.averageScore) >= 70 ? 'Excellent performance! Keep it up.' :
                       parseFloat(summary.averageScore) >= 60 ? 'Very good performance. Continue to work hard.' :
                       parseFloat(summary.averageScore) >= 50 ? 'Good performance. There is room for improvement.' :
                       parseFloat(summary.averageScore) >= 40 ? 'Fair performance. More effort is needed.' :
-                      'Below average. Needs to put in much more effort.'}
-                </p>
+                      'Below average. Needs to put in much more effort.'}</p>
             </div>
-            
+
             <div class="signatures">
                 <div class="signature-line">
                     <div class="line"></div>
-                    <span>Class Teacher</span>
+                    <span>Date Submitted</span>
                 </div>
                 <div class="signature-line">
                     <div class="line"></div>
-                    <span>Principal</span>
+                    <span>Signature</span>
                 </div>
                 <div class="signature-line">
                     <div class="line"></div>
-                    <span>Date</span>
+                    <span>Head Teacher</span>
                 </div>
             </div>
         </div>
