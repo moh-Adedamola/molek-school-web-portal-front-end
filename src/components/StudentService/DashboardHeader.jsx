@@ -15,7 +15,7 @@ const DashboardHeader = () => {
         { name: 'Dashboard', icon: <FaChartBar />, path: '/student/dashboard' },
         { name: 'Profile', icon: <FaUser />, path: '/student/profile' },
         { name: 'Grades', icon: <FaUserGraduate />, path: '/student/grades' },
-        { name: 'Payment', icon: <FaBook />, path: '/student/payment' },
+        // { name: 'Payment', icon: <FaBook />, path: '/student/payment' },
         { name: 'Settings', icon: <FaCog />, path: '/student/settings' },
     ];
 
