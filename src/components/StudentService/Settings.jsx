@@ -919,14 +919,14 @@ const Settings = () => {
                                         Generating...
                                     </>
                                 ) : (
-                                    <>📥 Download Report</>
+                                    <> Download Report</>
                                 )}
                             </button>
                         </div>
                     </div>
 
                     <p className="text-sm text-gray-600 text-center">
-                        ✨ MOLEK Official Format • 🖨️ Print-Ready • 📊 {reportType === 'session' ? 'Cumulative Assessment' : 'Term Results'}
+                        MOLEK Official Format • Print-Ready • {reportType === 'session' ? 'Cumulative Assessment' : 'Term Results'}
                     </p>
                 </div>
 
@@ -951,7 +951,7 @@ const Settings = () => {
                         <div className="bg-white p-4 rounded-lg">
                             <p className="text-gray-600">Status</p>
                             <p className={`font-semibold ${student?.is_active ? 'text-green-600' : 'text-red-600'}`}>
-                                {student?.is_active ? '✓ Active' : '✗ Inactive'}
+                                {student?.is_active ? 'Active' : 'Inactive'}
                             </p>
                         </div>
                     </div>

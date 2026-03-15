@@ -139,7 +139,7 @@ const StudentProfile = () => {
                             <div className="min-w-0">
                                 <label className="block text-xs sm:text-sm font-semibold text-gray-500 mb-0.5 sm:mb-1">Gender</label>
                                 <p className="text-sm sm:text-base font-medium text-gray-800">
-                                    {studentInfo.gender === 'M' ? '👨 Male' : studentInfo.gender === 'F' ? '👩 Female' : 'Not Specified'}
+                                    {studentInfo.gender === 'M' ? 'Male' : studentInfo.gender === 'F' ? 'Female' : 'Not Specified'}
                                 </p>
                             </div>
                             <InfoItem label="Current Class" value={studentInfo.className} />
@@ -150,7 +150,7 @@ const StudentProfile = () => {
                                         ? 'bg-green-100 text-green-800'
                                         : 'bg-red-100 text-red-800'
                                 }`}>
-                                    {studentInfo.isActive ? '✓ Active' : '✗ Inactive'}
+                                    {studentInfo.isActive ? 'Active' : 'Inactive'}
                                 </span>
                             </div>
                         </div>
@@ -275,7 +275,7 @@ const StudentProfile = () => {
                             <div className="flex items-center justify-between p-2.5 sm:p-3 bg-white rounded-lg">
                                 <span className="text-xs sm:text-sm text-gray-600">Status</span>
                                 <span className={`text-xs sm:text-sm font-semibold ${studentInfo.isActive ? 'text-green-600' : 'text-red-600'}`}>
-                                    {studentInfo.isActive ? '✓ Active' : '✗ Inactive'}
+                                    {studentInfo.isActive ? 'Active' : 'Inactive'}
                                 </span>
                             </div>
                             <div className="flex items-center justify-between p-2.5 sm:p-3 bg-white rounded-lg">
@@ -299,19 +299,19 @@ const StudentProfile = () => {
                                 href="/student/settings"
                                 className="block w-full text-center bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white py-2.5 sm:py-3 px-4 rounded-lg font-semibold text-sm transition-all shadow-md hover:shadow-lg"
                             >
-                                ✏️ Edit Profile
+                                 Edit Profile
                             </a>
                             <a
                                 href="/student/grades"
                                 className="block w-full text-center bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white py-2.5 sm:py-3 px-4 rounded-lg font-semibold text-sm transition-all shadow-md hover:shadow-lg"
                             >
-                                📊 View All Grades
+                                 View All Grades
                             </a>
                             <a
                                 href="/student/payments"
                                 className="block w-full text-center bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white py-2.5 sm:py-3 px-4 rounded-lg font-semibold text-sm transition-all shadow-md hover:shadow-lg"
                             >
-                                💳 Payment History
+                                 Payment History
                             </a>
                         </div>
                     </div>

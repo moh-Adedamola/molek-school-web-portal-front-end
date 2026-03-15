@@ -157,7 +157,7 @@ const Dashboard = () => {
                 {/* Upcoming Events */}
                 <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-5 md:p-6">
                     <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-                        <span>📅</span> Upcoming Events
+                        <span></span> Upcoming Events
                     </h2>
                     {loading ? (
                         <div className="flex items-center justify-center py-8">
@@ -259,10 +259,10 @@ const Dashboard = () => {
                             {/* Enrollment Status */}
                             <div className="bg-gradient-to-br from-indigo-50 to-indigo-100 p-4 rounded-xl text-center col-span-2">
                                 <div className={`text-lg font-bold ${studentInfo.isActive ? 'text-green-600' : 'text-red-600'}`}>
-                                    {studentInfo.isActive ? '✓ Active Student' : '✗ Inactive'}
+                                    {studentInfo.isActive ? 'Active Student' : 'Inactive'}
                                 </div>
                                 <p className="text-sm text-gray-600 mt-1">
-                                    {studentInfo.gender === 'M' ? '👨 Male' : '👩 Female'} • Enrolled: {studentInfo.enrollmentSession}
+                                    {studentInfo.gender === 'M' ? 'Male' : 'Female'} • Enrolled: {studentInfo.enrollmentSession}
                                 </p>
                             </div>
                         </div>

@@ -194,7 +194,7 @@ const Grade = () => {
 
             {/* Grading Scale Info - Mobile Optimized */}
             <div className="bg-blue-50 rounded-xl p-3 sm:p-4 mb-4 sm:mb-6 border border-blue-200">
-                <h3 className="font-semibold text-blue-900 mb-2 text-sm sm:text-base">📊 Score Structure</h3>
+                <h3 className="font-semibold text-blue-900 mb-2 text-sm sm:text-base"> Score Structure</h3>
                 <div className="grid grid-cols-4 gap-1 sm:gap-2 text-xs">
                     <div className="bg-white/50 p-1.5 sm:p-2 rounded text-center">
                         <span className="font-bold block">CA1</span>
@@ -248,7 +248,7 @@ const Grade = () => {
                             : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
                     }`}
                 >
-                    📄 Report Card
+                     Report Card
                 </button>
             </div>
 
