@@ -198,19 +198,19 @@ const Grade = () => {
                 <div className="grid grid-cols-4 gap-1 sm:gap-2 text-xs">
                     <div className="bg-white/50 p-1.5 sm:p-2 rounded text-center">
                         <span className="font-bold block">CA1</span>
-                        <span className="text-gray-600">15</span>
+                        {/* <span className="text-gray-600">15</span>*/}
                     </div>
                     <div className="bg-white/50 p-1.5 sm:p-2 rounded text-center">
                         <span className="font-bold block">CA2</span>
-                        <span className="text-gray-600">15</span>
+                        {/* <span className="text-gray-600">15</span>*/}
                     </div>
                     <div className="bg-white/50 p-1.5 sm:p-2 rounded text-center">
                         <span className="font-bold block">OBJ</span>
-                        <span className="text-gray-600">30</span>
+                        {/* <span className="text-gray-600">30</span>*/}
                     </div>
                     <div className="bg-white/50 p-1.5 sm:p-2 rounded text-center">
                         <span className="font-bold block">Theory</span>
-                        <span className="text-gray-600">40</span>
+                        {/* <span className="text-gray-600">40</span>*/}
                     </div>
                 </div>
                 <p className="text-xs text-blue-600 mt-2 text-center">
