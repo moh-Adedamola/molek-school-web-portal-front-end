@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /student/dashboard
+Disallow: /student/grades
+Disallow: /student/settings
+Disallow: /student/profile
+Disallow: /student/payment
+
+Sitemap: https://molekschool.com/sitemap.xml
