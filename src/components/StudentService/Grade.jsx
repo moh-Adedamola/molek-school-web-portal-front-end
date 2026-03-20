@@ -194,23 +194,23 @@ const Grade = () => {
 
             {/* Grading Scale Info - Mobile Optimized */}
             <div className="bg-blue-50 rounded-xl p-3 sm:p-4 mb-4 sm:mb-6 border border-blue-200">
-                <h3 className="font-semibold text-blue-900 mb-2 text-sm sm:text-base"> Score Structure</h3>
+                <h3 className="font-semibold text-blue-900 mb-2 text-sm sm:text-base">📊 Score Structure</h3>
                 <div className="grid grid-cols-4 gap-1 sm:gap-2 text-xs">
                     <div className="bg-white/50 p-1.5 sm:p-2 rounded text-center">
                         <span className="font-bold block">CA1</span>
-                        {/* <span className="text-gray-600">15</span>*/}
+                        <span className="text-gray-600">15</span>
                     </div>
                     <div className="bg-white/50 p-1.5 sm:p-2 rounded text-center">
                         <span className="font-bold block">CA2</span>
-                        {/* <span className="text-gray-600">15</span>*/}
+                        <span className="text-gray-600">15</span>
                     </div>
                     <div className="bg-white/50 p-1.5 sm:p-2 rounded text-center">
                         <span className="font-bold block">OBJ</span>
-                        {/* <span className="text-gray-600">30</span>*/}
+                        <span className="text-gray-600">30</span>
                     </div>
                     <div className="bg-white/50 p-1.5 sm:p-2 rounded text-center">
                         <span className="font-bold block">Theory</span>
-                        {/* <span className="text-gray-600">40</span>*/}
+                        <span className="text-gray-600">40</span>
                     </div>
                 </div>
                 <p className="text-xs text-blue-600 mt-2 text-center">
@@ -248,7 +248,7 @@ const Grade = () => {
                             : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
                     }`}
                 >
-                     Report Card
+                    📄 Report Card
                 </button>
             </div>
 
@@ -329,29 +329,32 @@ const Grade = () => {
                                                     </span>
                                                 </div>
 
-                                                {/* Score Breakdown - Compact */}
-                                                <div className="space-y-1.5 mb-3 text-xs sm:text-sm">
-                                                    <div className="grid grid-cols-2 gap-2">
-                                                        <div className="flex justify-between bg-gray-50 rounded px-2 py-1">
-                                                            <span className="text-gray-600">CA1:</span>
-                                                            <span className="font-medium">{result.ca1_score || 0}</span>
-                                                        </div>
-                                                        <div className="flex justify-between bg-gray-50 rounded px-2 py-1">
-                                                            <span className="text-gray-600">CA2:</span>
-                                                            <span className="font-medium">{result.ca2_score || 0}</span>
-                                                        </div>
+                                                {/* Score Breakdown - Vertical Bar Chart */}
+                                                <div className="mb-3">
+                                                    <div className="flex items-end justify-center gap-1.5 h-28 px-1">
+                                                        {[
+                                                            { label: 'CA1', value: result.ca1_score || 0, color: 'bg-blue-500' },
+                                                            { label: 'CA2', value: result.ca2_score || 0, color: 'bg-gray-400' },
+                                                            { label: 'OBJ', value: result.obj_score || 0, color: 'bg-indigo-500' },
+                                                            { label: 'Theory', value: result.theory_score || 0, color: 'bg-red-400' },
+                                                        ].map((item) => {
+                                                            const maxScore = Math.max(result.ca1_score || 0, result.ca2_score || 0, result.obj_score || 0, result.theory_score || 0, 1);
+                                                            const heightPercent = (item.value / maxScore) * 100;
+                                                            return (
+                                                                <div key={item.label} className="flex flex-col items-center flex-1 gap-1">
+                                                                    <span className="text-[10px] font-bold text-gray-700">{item.value}</span>
+                                                                    <div className="w-full flex items-end" style={{ height: '80px' }}>
+                                                                        <div
+                                                                            className={`w-full ${item.color} rounded-t-sm transition-all duration-700 ease-out`}
+                                                                            style={{ height: `${Math.max(heightPercent, 4)}%` }}
+                                                                        ></div>
+                                                                    </div>
+                                                                    <span className="text-[9px] text-gray-500 font-medium">{item.label}</span>
+                                                                </div>
+                                                            );
+                                                        })}
                                                     </div>
-                                                    <div className="grid grid-cols-2 gap-2">
-                                                        <div className="flex justify-between bg-gray-50 rounded px-2 py-1">
-                                                            <span className="text-gray-600">OBJ:</span>
-                                                            <span className="font-medium">{result.obj_score || 0}</span>
-                                                        </div>
-                                                        <div className="flex justify-between bg-gray-50 rounded px-2 py-1">
-                                                            <span className="text-gray-600">Theory:</span>
-                                                            <span className="font-medium">{result.theory_score || 0}</span>
-                                                        </div>
-                                                    </div>
-                                                    <div className="flex justify-between font-semibold border-t pt-2 mt-2">
+                                                    <div className="flex justify-between font-semibold border-t pt-2 mt-2 text-xs sm:text-sm">
                                                         <span className="text-gray-800">Total:</span>
                                                         <span className="text-blue-600">{result.total_score}</span>
                                                     </div>
