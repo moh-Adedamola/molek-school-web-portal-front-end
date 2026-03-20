@@ -318,13 +318,13 @@ const Grade = () => {
                                                     return (
                                                         <div key={result.id || idx} className="flex flex-col items-center flex-1" style={{ minWidth: '70px' }}>
                                                             {/* Bars group */}
-                                                            <div className="flex items-end gap-0.5 w-full justify-center" style={{ height: '160px' }}>
+                                                            <div className="flex items-end gap-0.5 w-full justify-center" style={{ height: '220px' }}>
                                                                 {scores.map(s => {
                                                                     const pct = (s.value / maxVal) * 100;
                                                                     return (
                                                                         <div key={s.key} className="flex flex-col items-center" style={{ width: '16px' }}>
                                                                             <span className="text-[8px] sm:text-[9px] font-bold text-gray-600 mb-0.5">{s.value > 0 ? s.value : ''}</span>
-                                                                            <div className="w-full flex items-end" style={{ height: '140px' }}>
+                                                                            <div className="w-full flex items-end" style={{ height: '190px' }}>
                                                                                 <div
                                                                                     className={`w-full ${s.color} rounded-t-sm transition-all duration-700 ease-out`}
                                                                                     style={{ height: `${Math.max(pct, 2)}%` }}
