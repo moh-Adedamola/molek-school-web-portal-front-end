@@ -192,31 +192,6 @@ const Grade = () => {
                 </div>
             </div>
 
-            {/* Grading Scale Info - Mobile Optimized */}
-            <div className="bg-blue-50 rounded-xl p-3 sm:p-4 mb-4 sm:mb-6 border border-blue-200">
-                <h3 className="font-semibold text-blue-900 mb-2 text-sm sm:text-base">📊 Score Structure</h3>
-                <div className="grid grid-cols-4 gap-1 sm:gap-2 text-xs">
-                    <div className="bg-white/50 p-1.5 sm:p-2 rounded text-center">
-                        <span className="font-bold block">CA1</span>
-                        <span className="text-gray-600">15</span>
-                    </div>
-                    <div className="bg-white/50 p-1.5 sm:p-2 rounded text-center">
-                        <span className="font-bold block">CA2</span>
-                        <span className="text-gray-600">15</span>
-                    </div>
-                    <div className="bg-white/50 p-1.5 sm:p-2 rounded text-center">
-                        <span className="font-bold block">OBJ</span>
-                        <span className="text-gray-600">30</span>
-                    </div>
-                    <div className="bg-white/50 p-1.5 sm:p-2 rounded text-center">
-                        <span className="font-bold block">Theory</span>
-                        <span className="text-gray-600">40</span>
-                    </div>
-                </div>
-                <p className="text-xs text-blue-600 mt-2 text-center">
-                    A(75+) • B(70-74) • C(60-69) • D(50-59) • E(45-49) • F(&lt;45)
-                </p>
-            </div>
 
             {/* Tabs - Mobile Optimized */}
             <div className="flex flex-wrap gap-2 mb-4 sm:mb-6">
@@ -312,72 +287,96 @@ const Grade = () => {
                                 </div>
                             ) : (
                                 <>
-                                    {/* Grade Cards - Mobile Optimized */}
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
-                                        {currentTermGrades.map((result, idx) => (
-                                            <motion.div
-                                                key={result.id || idx}
-                                                initial={{ opacity: 0, y: 10 }}
-                                                animate={{ opacity: 1, y: 0 }}
-                                                transition={{ delay: idx * 0.05 }}
-                                                className="bg-white rounded-xl sm:rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-5 hover:shadow-md transition-shadow"
-                                            >
-                                                <div className="flex items-start justify-between mb-3">
-                                                    <h3 className="font-medium text-gray-800 text-sm sm:text-base truncate pr-2">{result.subject_name}</h3>
-                                                    <span className={`${getGradeBadgeClass(result.total_score)} text-xs px-2 py-1 rounded-full font-medium flex-shrink-0`}>
-                                                        {result.grade}
-                                                    </span>
+                                    {/* Score Overview - One Big Grouped Bar Chart */}
+                                    <div className="bg-white rounded-xl sm:rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6">
+                                        {/* Legend */}
+                                        <div className="flex flex-wrap items-center gap-4 mb-6 text-xs sm:text-sm">
+                                            {[
+                                                { label: 'CA1', color: 'bg-blue-500' },
+                                                { label: 'CA2', color: 'bg-gray-400' },
+                                                { label: 'OBJ', color: 'bg-indigo-500' },
+                                                { label: 'Theory', color: 'bg-red-400' },
+                                            ].map(item => (
+                                                <div key={item.label} className="flex items-center gap-1.5">
+                                                    <div className={`w-3 h-3 rounded-sm ${item.color}`}></div>
+                                                    <span className="text-gray-600">{item.label}</span>
                                                 </div>
+                                            ))}
+                                        </div>
 
-                                                {/* Score Breakdown - Vertical Bar Chart */}
-                                                <div className="mb-3">
-                                                    <div className="flex items-end justify-center gap-1.5 h-28 px-1">
-                                                        {[
-                                                            { label: 'CA1', value: result.ca1_score || 0, color: 'bg-blue-500' },
-                                                            { label: 'CA2', value: result.ca2_score || 0, color: 'bg-gray-400' },
-                                                            { label: 'OBJ', value: result.obj_score || 0, color: 'bg-indigo-500' },
-                                                            { label: 'Theory', value: result.theory_score || 0, color: 'bg-red-400' },
-                                                        ].map((item) => {
-                                                            const maxScore = Math.max(result.ca1_score || 0, result.ca2_score || 0, result.obj_score || 0, result.theory_score || 0, 1);
-                                                            const heightPercent = (item.value / maxScore) * 100;
-                                                            return (
-                                                                <div key={item.label} className="flex flex-col items-center flex-1 gap-1">
-                                                                    <span className="text-[10px] font-bold text-gray-700">{item.value}</span>
-                                                                    <div className="w-full flex items-end" style={{ height: '80px' }}>
-                                                                        <div
-                                                                            className={`w-full ${item.color} rounded-t-sm transition-all duration-700 ease-out`}
-                                                                            style={{ height: `${Math.max(heightPercent, 4)}%` }}
-                                                                        ></div>
-                                                                    </div>
-                                                                    <span className="text-[9px] text-gray-500 font-medium">{item.label}</span>
-                                                                </div>
-                                                            );
-                                                        })}
-                                                    </div>
-                                                    <div className="flex justify-between font-semibold border-t pt-2 mt-2 text-xs sm:text-sm">
-                                                        <span className="text-gray-800">Total:</span>
-                                                        <span className="text-blue-600">{result.total_score}</span>
-                                                    </div>
+                                        {/* Chart Area */}
+                                        <div className="overflow-x-auto">
+                                            <div className="flex items-end gap-3 sm:gap-5 pb-2" style={{ minWidth: `${currentTermGrades.length * 90}px` }}>
+                                                {currentTermGrades.map((result, idx) => {
+                                                    const scores = [
+                                                        { key: 'CA1', value: result.ca1_score || 0, color: 'bg-blue-500' },
+                                                        { key: 'CA2', value: result.ca2_score || 0, color: 'bg-gray-400' },
+                                                        { key: 'OBJ', value: result.obj_score || 0, color: 'bg-indigo-500' },
+                                                        { key: 'Theory', value: result.theory_score || 0, color: 'bg-red-400' },
+                                                    ];
+                                                    const maxVal = Math.max(...currentTermGrades.flatMap(g => [g.ca1_score || 0, g.ca2_score || 0, g.obj_score || 0, g.theory_score || 0]), 1);
+                                                    return (
+                                                        <div key={result.id || idx} className="flex flex-col items-center flex-1" style={{ minWidth: '70px' }}>
+                                                            {/* Bars group */}
+                                                            <div className="flex items-end gap-0.5 w-full justify-center" style={{ height: '160px' }}>
+                                                                {scores.map(s => {
+                                                                    const pct = (s.value / maxVal) * 100;
+                                                                    return (
+                                                                        <div key={s.key} className="flex flex-col items-center" style={{ width: '16px' }}>
+                                                                            <span className="text-[8px] sm:text-[9px] font-bold text-gray-600 mb-0.5">{s.value > 0 ? s.value : ''}</span>
+                                                                            <div className="w-full flex items-end" style={{ height: '140px' }}>
+                                                                                <div
+                                                                                    className={`w-full ${s.color} rounded-t-sm transition-all duration-700 ease-out`}
+                                                                                    style={{ height: `${Math.max(pct, 2)}%` }}
+                                                                                ></div>
+                                                                            </div>
+                                                                        </div>
+                                                                    );
+                                                                })}
+                                                            </div>
+                                                            {/* Total badge */}
+                                                            <div className={`mt-2 text-[10px] sm:text-xs font-bold px-1.5 py-0.5 rounded ${
+                                                                result.total_score >= 75 ? 'bg-green-100 text-green-700' :
+                                                                result.total_score >= 60 ? 'bg-blue-100 text-blue-700' :
+                                                                result.total_score >= 45 ? 'bg-yellow-100 text-yellow-700' :
+                                                                'bg-red-100 text-red-700'
+                                                            }`}>
+                                                                {result.total_score}
+                                                            </div>
+                                                            {/* Subject name */}
+                                                            <span className="text-[9px] sm:text-[10px] text-gray-500 font-medium mt-1 text-center leading-tight max-w-[70px] truncate">
+                                                                {result.subject_name}
+                                                            </span>
+                                                            {/* Grade */}
+                                                            <span className={`text-[9px] font-bold mt-0.5 ${
+                                                                result.total_score >= 75 ? 'text-green-600' :
+                                                                result.total_score >= 60 ? 'text-blue-600' :
+                                                                result.total_score >= 45 ? 'text-yellow-600' :
+                                                                'text-red-600'
+                                                            }`}>
+                                                                {result.grade}
+                                                            </span>
+                                                        </div>
+                                                    );
+                                                })}
+                                            </div>
+                                        </div>
+
+                                        {/* Position Table below chart */}
+                                        {currentTermGrades.some(g => g.position) && (
+                                            <div className="mt-4 pt-4 border-t border-gray-100">
+                                                <div className="flex flex-wrap gap-2">
+                                                    {currentTermGrades.filter(g => g.position).map((g, i) => (
+                                                        <span key={i} className="text-[10px] sm:text-xs text-gray-500 bg-gray-50 px-2 py-1 rounded">
+                                                            {g.subject_name}: {g.position}/{g.total_students}
+                                                        </span>
+                                                    ))}
                                                 </div>
-
-                                                {/* Position */}
-                                                {result.position && (
-                                                    <div className="text-xs text-gray-500 border-t pt-2">
-                                                        Position: {result.position}/{result.total_students}
-                                                    </div>
-                                                )}
-
-                                                <div className="h-1.5 sm:h-2 bg-gray-200 rounded-full overflow-hidden mt-2">
-                                                    <div
-                                                        className={`h-full ${getGradeColor(result.total_score)} transition-all duration-700 ease-out`}
-                                                        style={{ width: `${Math.min(result.total_score, 100)}%` }}
-                                                    ></div>
-                                                </div>
-                                            </motion.div>
-                                        ))}
+                                            </div>
+                                        )}
                                     </div>
 
-                                    {/* Term Summary - Mobile Optimized */}
+                                    {/* Term Summary */}
                                     <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-blue-100">
                                         <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-3">Term Summary</h3>
                                         <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
