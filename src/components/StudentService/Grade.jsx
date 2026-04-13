@@ -379,27 +379,37 @@ const Grade = () => {
                                     {/* Term Summary */}
                                     <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-blue-100">
                                         <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-3">Term Summary</h3>
-                                        <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
-                                            <div className="text-center sm:text-left">
-                                                <div className="text-3xl sm:text-4xl font-bold text-blue-600">
+                                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-4">
+                                            <div className="text-center">
+                                                <div className="text-2xl sm:text-3xl font-bold text-blue-600">
                                                     {calculateAverage(currentTermGrades)}%
                                                 </div>
-                                                <p className="text-xs sm:text-sm text-gray-600 mt-1">
-                                                    Average • Grade: {getGradeLetter(calculateAverage(currentTermGrades))}
-                                                </p>
+                                                <p className="text-xs text-gray-500 mt-1">Average Score</p>
                                             </div>
-                                            <div className="flex-1 w-full">
-                                                <div className="h-2 sm:h-3 bg-blue-100 rounded-full overflow-hidden">
-                                                    <div
-                                                        className="h-full bg-blue-500 transition-all duration-700 ease-out"
-                                                        style={{ width: `${calculateAverage(currentTermGrades)}%` }}
-                                                    ></div>
+                                            <div className="text-center">
+                                                <div className="text-2xl sm:text-3xl font-bold text-indigo-600">
+                                                    {getGradeLetter(calculateAverage(currentTermGrades))}
                                                 </div>
-                                                <div className="flex justify-between text-xs text-gray-500 mt-2">
-                                                    <span>{currentTermGrades.length} subjects</span>
-                                                    <span>{currentTermGrades.filter(g => parseFloat(g.total_score) >= 45).length} passed</span>
-                                                </div>
+                                                <p className="text-xs text-gray-500 mt-1">Overall Grade</p>
                                             </div>
+                                            <div className="text-center">
+                                                <div className="text-2xl sm:text-3xl font-bold text-purple-600">
+                                                    {currentTermGrades[0]?.overall_position || '-'}{currentTermGrades[0]?.overall_total_students ? `/${currentTermGrades[0].overall_total_students}` : ''}
+                                                </div>
+                                                <p className="text-xs text-gray-500 mt-1">Overall Position</p>
+                                            </div>
+                                            <div className="text-center">
+                                                <div className="text-2xl sm:text-3xl font-bold text-green-600">
+                                                    {currentTermGrades.filter(g => parseFloat(g.total_score) >= 45).length}/{currentTermGrades.length}
+                                                </div>
+                                                <p className="text-xs text-gray-500 mt-1">Subjects Passed</p>
+                                            </div>
+                                        </div>
+                                        <div className="h-2 sm:h-3 bg-blue-100 rounded-full overflow-hidden">
+                                            <div
+                                                className="h-full bg-blue-500 transition-all duration-700 ease-out"
+                                                style={{ width: `${calculateAverage(currentTermGrades)}%` }}
+                                            ></div>
                                         </div>
                                     </div>
                                 </>

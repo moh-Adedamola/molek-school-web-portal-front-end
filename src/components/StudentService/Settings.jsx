@@ -211,6 +211,14 @@ const Settings = () => {
         const studentData = data.student || {};
         const rawSubjects = data.subjects || [];
         const summary = data.summary || data.cumulative || {};
+        
+        // Add overall position from the first grade result (all results for same student have same overall position)
+        if (!summary.overallPosition && rawSubjects.length > 0) {
+            const firstSubject = rawSubjects[0];
+            summary.overallPosition = firstSubject.overallPosition || firstSubject.overall_position || null;
+            summary.overallTotalStudents = firstSubject.overallTotalStudents || firstSubject.overall_total_students || null;
+            summary.overallAverage = firstSubject.overallAverage || firstSubject.overall_average || null;
+        }
         const sessionInfo = data.session || {};
         const termInfo = data.term || {};
 
@@ -623,12 +631,16 @@ const Settings = () => {
                 <div class="label">Average Score</div>
             </div>
             <div class="summary-box">
-                <div class="value" style="color: #22c55e">${summary.passedSubjects || 0}</div>
+                <div class="value" style="color: #22c55e">${summary.passedSubjects || 0}/${summary.totalSubjects || 0}</div>
                 <div class="label">Subjects Passed</div>
             </div>
             <div class="summary-box">
                 <div class="value" style="color: ${getGradeColor(summary.grade)}">${summary.grade || '-'}</div>
                 <div class="label">Overall Grade</div>
+            </div>
+            <div class="summary-box">
+                <div class="value" style="color: #7c3aed">${summary.overallPosition || '-'}${summary.overallTotalStudents ? '/' + summary.overallTotalStudents : ''}</div>
+                <div class="label">Overall Position</div>
             </div>
         </div>
 
