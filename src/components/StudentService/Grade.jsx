@@ -22,7 +22,7 @@ import { motion } from 'framer-motion';
 import logo from '/logo.webp';
 import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { useStudentAuth } from '../../context/StudentAuthContext';
-import { getStudentGrades, getAcademicSessions, getTerms } from '../../service/studentApi';
+import { getStudentGrades, getAcademicSessions, getTerms, getReportCard } from '../../service/studentApi';
 
 const Grade = () => {
     const { student } = useStudentAuth();
@@ -33,11 +33,24 @@ const Grade = () => {
     const [terms, setTerms] = useState([]);
     const [selectedSession, setSelectedSession] = useState(null);
     const [selectedTerm, setSelectedTerm] = useState(null);
+    const [reportData, setReportData] = useState(null);
+    const [loadingReport, setLoadingReport] = useState(false);
     const printRef = useRef();
 
     useEffect(() => {
         fetchInitialData();
     }, []);
+
+    // Fetch report card data (with behavioral + principal remark) when Report tab opens
+    useEffect(() => {
+        if (activeTab === 'report' && selectedSession?.id && selectedTerm?.id) {
+            setLoadingReport(true);
+            getReportCard(selectedSession.id, selectedTerm.id)
+                .then(data => setReportData(data))
+                .catch(() => setReportData(null))
+                .finally(() => setLoadingReport(false));
+        }
+    }, [activeTab, selectedSession?.id, selectedTerm?.id]);
 
     const fetchInitialData = async () => {
         try {
@@ -677,6 +690,83 @@ const Grade = () => {
                                             <div className="mt-4 sm:mt-6 p-3 bg-gray-50 rounded-lg text-xs">
                                                 <p className="font-semibold mb-1">Grading Key:</p>
                                                 <p>A (75-100) Excellent • B (70-74) Very Good • C (60-69) Good • D (50-59) Pass • E (45-49) Fair • F (0-44) Fail</p>
+                                            </div>
+
+                                            {/* Behavioral Assessment Grid */}
+                                            {reportData?.behavioral && (
+                                                <div className="mt-6 border-2 border-gray-300 rounded-lg overflow-hidden">
+                                                    <h3 className="bg-blue-700 text-white px-3 py-2 text-sm font-bold uppercase tracking-wide">Behavioral Assessment</h3>
+                                                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-0">
+                                                        <div className="sm:col-span-2 overflow-x-auto">
+                                                            <table className="w-full text-xs">
+                                                                <thead className="bg-gray-100">
+                                                                    <tr>
+                                                                        <th className="border border-gray-300 px-2 py-1.5 text-left">(Affective) General Behaviour</th>
+                                                                        {[1, 2, 3, 4, 5].map(n => (
+                                                                            <th key={n} className="border border-gray-300 px-2 py-1.5 text-center w-10">{n}</th>
+                                                                        ))}
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    {[
+                                                                        ['Punctuality', 'punctuality'],
+                                                                        ['Attendance', 'attendance'],
+                                                                        ['Carrying Out Assignment', 'carrying_out_assignment'],
+                                                                        ['Neatness', 'neatness'],
+                                                                        ['Politeness', 'politeness'],
+                                                                        ['Honesty', 'honesty'],
+                                                                        ['Self-control', 'self_control'],
+                                                                        ['Relationship With Others', 'relationship_others'],
+                                                                        ['Sense Of Responsibility', 'sense_responsibility'],
+                                                                        ['Obedience', 'obedience'],
+                                                                        ['Organizational Ability', 'organizational_ability'],
+                                                                    ].map(([label, key]) => {
+                                                                        const val = reportData.behavioral[key];
+                                                                        return (
+                                                                            <tr key={key}>
+                                                                                <td className="border border-gray-300 px-2 py-1.5 text-left">{label}</td>
+                                                                                {[1, 2, 3, 4, 5].map(n => (
+                                                                                    <td key={n} className="border border-gray-300 px-2 py-1.5 text-center">
+                                                                                        <span className={`inline-block w-3 h-3 rounded-full border ${val === n ? 'bg-blue-700 border-blue-700' : 'bg-white border-gray-400'}`}></span>
+                                                                                    </td>
+                                                                                ))}
+                                                                            </tr>
+                                                                        );
+                                                                    })}
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                        <div className="bg-gray-50 p-3 text-xs">
+                                                            <p className="font-bold mb-2">Key to Ratings:</p>
+                                                            <p>5 — Excellent</p>
+                                                            <p>4 — Very Good</p>
+                                                            <p>3 — Good</p>
+                                                            <p>2 — Fair</p>
+                                                            <p>1 — Weak</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            )}
+
+                                            {/* Class Teacher's & Principal's Comments */}
+                                            <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                                <div className="border border-gray-300 rounded-lg p-3 bg-blue-50">
+                                                    <p className="text-xs font-bold text-blue-900 uppercase mb-1">Class Teacher's Comment</p>
+                                                    <p className="text-sm text-gray-700">
+                                                        {reportData?.behavioral?.class_teacher_comment ||
+                                                            (calculateAverage(currentTermGrades) >= 70 ? 'Excellent performance! Keep it up.' :
+                                                             calculateAverage(currentTermGrades) >= 60 ? 'Very good performance. Continue to work hard.' :
+                                                             calculateAverage(currentTermGrades) >= 50 ? 'Good performance. There is room for improvement.' :
+                                                             calculateAverage(currentTermGrades) >= 40 ? 'Fair performance. More effort is needed.' :
+                                                             'Below average. Needs to put in much more effort.')}
+                                                    </p>
+                                                </div>
+                                                <div className="border border-gray-300 rounded-lg p-3 bg-purple-50">
+                                                    <p className="text-xs font-bold text-purple-900 uppercase mb-1">Principal's Comment</p>
+                                                    <p className="text-sm text-gray-700">
+                                                        {reportData?.principal_remark || 'Comment will appear once results are finalized.'}
+                                                    </p>
+                                                </div>
                                             </div>
                                         </>
                                     )}

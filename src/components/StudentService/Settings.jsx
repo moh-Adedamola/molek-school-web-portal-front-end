@@ -458,6 +458,65 @@ const Settings = () => {
             color: #555;
         }
 
+        /* ===== BEHAVIORAL ASSESSMENT GRID ===== */
+        .behavioral-section {
+            margin-top: 20px;
+            border: 1.5px solid #000;
+            padding: 0;
+        }
+        .section-title {
+            background: #1e40af;
+            color: white;
+            padding: 6px 12px;
+            margin: 0;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .behavioral-grid-wrapper {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 0;
+        }
+        .behavioral-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 10px;
+            margin: 0;
+        }
+        .behavioral-table th, .behavioral-table td {
+            border: 1px solid #888;
+            padding: 4px 6px;
+            text-align: center;
+        }
+        .behavioral-table thead th {
+            background: #f3f4f6;
+            font-weight: 700;
+        }
+        .behavioral-table tbody td {
+            height: 20px;
+        }
+        .rating-circle {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border: 1.5px solid #555;
+            border-radius: 50%;
+            background: white;
+        }
+        .rating-circle.filled {
+            background: #1e40af;
+            border-color: #1e40af;
+        }
+        .rating-key {
+            padding: 10px 15px;
+            font-size: 10px;
+            line-height: 1.6;
+            background: #fafafa;
+            border-left: 1px solid #000;
+        }
+
         /* ===== GRADE KEY ===== */
         .grade-key {
             display: flex;
@@ -504,7 +563,7 @@ const Settings = () => {
                 <tr>
                     <th rowspan="3" style="width:18%; min-width:100px;">SUBJECTS</th>
                     <th colspan="6" class="group-header">CURRENT TERM</th>
-                    <th colspan="11" class="group-header">CUMULATIVE ASSESSMENT</th>
+                    <th colspan="10" class="group-header">CUMULATIVE ASSESSMENT</th>
                 </tr>
                 <tr>
                     <th rowspan="2">CA 1<br><span class="sub-max">15</span></th>
@@ -517,15 +576,13 @@ const Settings = () => {
                     <th rowspan="2">2ND TERM<br>B/F<br><span class="sub-max">100</span></th>
                     <th rowspan="2">3RD TERM<br>B/F<br><span class="sub-max">100</span></th>
                     <th rowspan="2">TOTAL</th>
-                    <th colspan="2">CUMULATIVE</th>
+                    <th rowspan="2">CUMULATIVE %</th>
                     <th colspan="2">AVERAGE SCORE</th>
                     <th rowspan="2">POS.</th>
                     <th rowspan="2">GRADE</th>
                     <th rowspan="2">REMARKS</th>
                 </tr>
                 <tr>
-                    <th>MARK<br><span class="sub-max">100</span></th>
-                    <th>%<br><span class="sub-max">100</span></th>
                     <th>STUDENT<br><span class="sub-max">100</span></th>
                     <th>CLASS<br><span class="sub-max">100</span></th>
                 </tr>
@@ -555,7 +612,6 @@ const Settings = () => {
                     <td>${s.secondTerm}</td>
                     <td>${s.thirdTerm}</td>
                     <td class="bold-val">${s.cumulativeTotal}</td>
-                    <td>${s.cumulativeMark}</td>
                     <td>${s.cumulativePercent}%</td>
                     <td>${s.avgStudent}</td>
                     <td>${s.classAverage}</td>
@@ -565,7 +621,7 @@ const Settings = () => {
                 </tr>`;
                 }).join('') : `
                 <tr>
-                    <td colspan="18" style="padding: 25px; color: #888;">No results available for this session</td>
+                    <td colspan="17" style="padding: 25px; color: #888;">No results available for this session</td>
                 </tr>`}
             </tbody>
         </table>
@@ -644,15 +700,74 @@ const Settings = () => {
             </div>
         </div>
 
+        <!-- BEHAVIORAL ASSESSMENT GRID (only for term reports, not session) -->
+        ${!isCumulative && data.behavioral ? `
+        <div class="behavioral-section">
+            <h3 class="section-title">BEHAVIORAL ASSESSMENT</h3>
+            <div class="behavioral-grid-wrapper">
+                <table class="behavioral-table">
+                    <thead>
+                        <tr>
+                            <th style="text-align:left; width:50%;">(Affective) General Behaviour</th>
+                            <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${[
+                            ['Punctuality', data.behavioral.punctuality],
+                            ['Attendance', data.behavioral.attendance],
+                            ['Carrying Out Assignment', data.behavioral.carrying_out_assignment],
+                            ['Neatness', data.behavioral.neatness],
+                            ['Politeness', data.behavioral.politeness],
+                            ['Honesty', data.behavioral.honesty],
+                            ['Self-control', data.behavioral.self_control],
+                            ['Relationship With Others', data.behavioral.relationship_others],
+                            ['Sense Of Responsibility', data.behavioral.sense_responsibility],
+                            ['Obedience', data.behavioral.obedience],
+                            ['Organizational Ability', data.behavioral.organizational_ability],
+                        ].map(([label, val]) => `
+                            <tr>
+                                <td style="text-align:left;">${label}</td>
+                                ${[1, 2, 3, 4, 5].map(n => `
+                                    <td>
+                                        <span class="rating-circle ${val === n ? 'filled' : ''}"></span>
+                                    </td>
+                                `).join('')}
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+                <div class="rating-key">
+                    <strong>Key to Ratings:</strong><br>
+                    5 — Excellent<br>
+                    4 — Very Good<br>
+                    3 — Good<br>
+                    2 — Fair<br>
+                    1 — Weak
+                </div>
+            </div>
+        </div>
+        ` : ''}
+
         <!-- FOOTER -->
         <div class="footer">
             <div class="comment-box">
                 <strong>Class Teacher's Comment:</strong>
-                <p>${parseFloat(summary.averageScore) >= 70 ? 'Excellent performance! Keep it up.' :
-                      parseFloat(summary.averageScore) >= 60 ? 'Very good performance. Continue to work hard.' :
-                      parseFloat(summary.averageScore) >= 50 ? 'Good performance. There is room for improvement.' :
-                      parseFloat(summary.averageScore) >= 40 ? 'Fair performance. More effort is needed.' :
-                      'Below average. Needs to put in much more effort.'}</p>
+                <p>${(data.behavioral && data.behavioral.class_teacher_comment) ? data.behavioral.class_teacher_comment :
+                    (parseFloat(summary.averageScore) >= 70 ? 'Excellent performance! Keep it up.' :
+                     parseFloat(summary.averageScore) >= 60 ? 'Very good performance. Continue to work hard.' :
+                     parseFloat(summary.averageScore) >= 50 ? 'Good performance. There is room for improvement.' :
+                     parseFloat(summary.averageScore) >= 40 ? 'Fair performance. More effort is needed.' :
+                     'Below average. Needs to put in much more effort.')}</p>
+            </div>
+
+            <div class="comment-box">
+                <strong>Principal's Comment:</strong>
+                <p>${data.principal_remark ||
+                    (parseFloat(summary.averageScore) >= 75 ? 'Outstanding performance. Keep up the excellent work.' :
+                     parseFloat(summary.averageScore) >= 60 ? 'Very good performance. We are proud of you.' :
+                     parseFloat(summary.averageScore) >= 45 ? 'Acceptable performance. There is room for improvement.' :
+                     'Performance needs urgent improvement. Please consult your teachers.')}</p>
             </div>
 
             <div class="signatures">
