@@ -625,6 +625,46 @@ const Grade = () => {
                                             <p className="font-semibold">{selectedSession?.name} - {selectedTerm?.name}</p>
                                         </div>
                                     </div>
+
+                                    {/* Attendance & School Resumption */}
+                                    {(reportData?.behavioral?.times_school_opened != null ||
+                                      reportData?.behavioral?.times_present != null ||
+                                      reportData?.behavioral?.public_holidays != null ||
+                                      reportData?.term?.school_resumes) && (
+                                        <div className="mt-3 pt-3 border-t border-gray-200 grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 text-sm">
+                                            {reportData?.behavioral?.times_school_opened != null && (
+                                                <div>
+                                                    <span className="text-gray-500 text-xs">Times School Opened:</span>
+                                                    <p className="font-semibold">{reportData.behavioral.times_school_opened}</p>
+                                                </div>
+                                            )}
+                                            {reportData?.behavioral?.times_present != null && (
+                                                <div>
+                                                    <span className="text-gray-500 text-xs">Times Present:</span>
+                                                    <p className="font-semibold">{reportData.behavioral.times_present}</p>
+                                                </div>
+                                            )}
+                                            {reportData?.behavioral?.public_holidays != null && (
+                                                <div>
+                                                    <span className="text-gray-500 text-xs">Public Holidays:</span>
+                                                    <p className="font-semibold">{reportData.behavioral.public_holidays}</p>
+                                                </div>
+                                            )}
+                                            {reportData?.term?.school_resumes && (
+                                                <div>
+                                                    <span className="text-gray-500 text-xs">School Resumes:</span>
+                                                    <p className="font-semibold">
+                                                        {new Date(reportData.term.school_resumes).toLocaleDateString('en-NG', {
+                                                            weekday: 'short',
+                                                            year: 'numeric',
+                                                            month: 'short',
+                                                            day: 'numeric',
+                                                        })}
+                                                    </p>
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
                                 </div>
 
                                 {/* Results Table */}
