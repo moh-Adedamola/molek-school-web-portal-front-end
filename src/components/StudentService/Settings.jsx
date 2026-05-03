@@ -556,6 +556,19 @@ const Settings = () => {
             <div class="field"><label>Adm No:</label> <span>${studentData.admission_number || 'N/A'}</span></div>
         </div>
 
+        ${!isCumulative && data.behavioral && (data.behavioral.times_school_opened || data.behavioral.times_present || data.behavioral.public_holidays) ? `
+        <div class="info-bar attendance-bar">
+            <div class="field"><label>Times School Opened:</label> <span>${data.behavioral.times_school_opened ?? '—'}</span></div>
+            <div class="field"><label>Times Present:</label> <span>${data.behavioral.times_present ?? '—'}</span></div>
+            <div class="field"><label>Public Holidays:</label> <span>${data.behavioral.public_holidays ?? '—'}</span></div>
+            ${termInfo.school_resumes ? `<div class="field"><label>School Resumes:</label> <span>${new Date(termInfo.school_resumes).toLocaleDateString('en-NG', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' })}</span></div>` : ''}
+        </div>
+        ` : (termInfo.school_resumes && !isCumulative ? `
+        <div class="info-bar attendance-bar">
+            <div class="field"><label>School Resumes:</label> <span>${new Date(termInfo.school_resumes).toLocaleDateString('en-NG', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' })}</span></div>
+        </div>
+        ` : '')}
+
         ${isCumulative ? `
         <!-- ===== CUMULATIVE TABLE (Recording Sheet Format) ===== -->
         <table>

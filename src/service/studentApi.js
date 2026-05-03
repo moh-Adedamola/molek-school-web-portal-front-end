@@ -424,3 +424,20 @@ export const getStudentReportCard = async (params = {}) => {
     
     return handleResponse(response);
 };
+// ============================================
+// 📅 EVENTS (public — no auth needed)
+// ============================================
+
+/**
+ * Get upcoming school events (public endpoint - no auth required).
+ * Returns events where event_date >= now, published, ordered by date.
+ */
+export const getUpcomingEvents = async () => {
+    const response = await fetch(`${API_BASE_URL}/api/events/upcoming/`, {
+        headers: { 'Content-Type': 'application/json' },
+    });
+    if (!response.ok) {
+        return { results: [], count: 0 };
+    }
+    return response.json();
+};

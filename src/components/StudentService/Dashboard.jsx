@@ -10,7 +10,7 @@ import 'react-calendar/dist/Calendar.css';
 import logo from '/logo.webp';
 import { useEffect, useState, useMemo } from 'react';
 import { useStudentAuth } from '../../context/StudentAuthContext';
-import { getSchoolEvents, getDashboardStats } from '../../service/studentApi';
+import { getSchoolEvents, getDashboardStats, getUpcomingEvents } from '../../service/studentApi';
 
 const Dashboard = () => {
     const { student } = useStudentAuth();
@@ -46,8 +46,8 @@ const Dashboard = () => {
     useEffect(() => {
         const fetchEvents = async () => {
             try {
-                const data = await getSchoolEvents();
-                setEvents(Array.isArray(data) ? data : data.results || []);
+                const data = await getUpcomingEvents();
+                setEvents(data.results || []);
             } catch (err) {
                 console.error('Failed to load events:', err);
                 setEvents([]);
@@ -166,22 +166,37 @@ const Dashboard = () => {
                     ) : (
                         <ul className="divide-y divide-gray-100 max-h-60 overflow-y-auto">
                             {events.length > 0 ? (
-                                events.slice(0, 5).map((event, idx) => (
-                                    <li key={idx} className="py-3 flex items-center gap-4">
-                                        <div className="flex-1 min-w-0">
-                                            <p className="font-medium text-gray-800 truncate">{event.title}</p>
-                                            <p className="text-sm text-gray-500">{event.content_type || 'Event'}</p>
-                                        </div>
-                                        {event.media_url && (
-                                            <img
-                                                src={event.media_url}
-                                                alt={event.title}
-                                                className="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover border border-gray-200"
-                                                onError={(e) => { e.target.src = logo; }}
-                                            />
-                                        )}
-                                    </li>
-                                ))
+                                events.slice(0, 5).map((event, idx) => {
+                                    const dt = event.event_date ? new Date(event.event_date) : null;
+                                    return (
+                                        <li key={event.id || idx} className="py-3 flex items-center gap-4">
+                                            {dt && (
+                                                <div className="flex-shrink-0 w-12 text-center">
+                                                    <div className="text-[10px] text-purple-600 font-semibold uppercase">
+                                                        {dt.toLocaleString('en-NG', { month: 'short' })}
+                                                    </div>
+                                                    <div className="text-xl font-bold text-gray-800">
+                                                        {dt.getDate()}
+                                                    </div>
+                                                </div>
+                                            )}
+                                            <div className="flex-1 min-w-0">
+                                                <p className="font-medium text-gray-800 truncate">{event.title}</p>
+                                                <p className="text-sm text-gray-500 truncate">
+                                                    {event.location || (dt ? dt.toLocaleString('en-NG', { weekday: 'short', hour: '2-digit', minute: '2-digit' }) : 'Event')}
+                                                </p>
+                                            </div>
+                                            {event.image_url && (
+                                                <img
+                                                    src={event.image_url}
+                                                    alt={event.title}
+                                                    className="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover border border-gray-200"
+                                                    onError={(e) => { e.target.src = logo; }}
+                                                />
+                                            )}
+                                        </li>
+                                    );
+                                })
                             ) : (
                                 <li className="py-8 text-center text-gray-500">
                                     <svg className="mx-auto h-12 w-12 text-gray-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">

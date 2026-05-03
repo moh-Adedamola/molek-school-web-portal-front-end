@@ -1,17 +1,27 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { Eye, EyeOff, Calendar, MapPin } from 'lucide-react';
 import { useStudentAuth } from '../context/StudentAuthContext';
+import { getUpcomingEvents } from '../service/studentApi';
 
 const StudentLogin = () => {
     const navigate = useNavigate();
     const { login } = useStudentAuth();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
+    const [events, setEvents] = useState([]);
     const [formData, setFormData] = useState({
         admission_number: '',
         password: '',
     });
+
+    useEffect(() => {
+        getUpcomingEvents()
+            .then((data) => setEvents(data.results || []))
+            .catch(() => setEvents([]));
+    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -42,7 +52,8 @@ const StudentLogin = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-blue-100 to-indigo-200 flex items-center justify-center p-4">
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-blue-100 to-indigo-200 flex flex-col items-center justify-center p-4 py-8">
+            <div className="w-full max-w-md flex flex-col items-center gap-6">
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -96,14 +107,24 @@ const StudentLogin = () => {
                             <label className="block text-sm font-semibold text-gray-700 mb-2">
                                 Password
                             </label>
-                            <input
-                                type="password"
-                                value={formData.password}
-                                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                                placeholder="Enter your password"
-                                className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-blue-500 focus:outline-none transition-colors text-gray-800 placeholder-gray-400"
-                                autoComplete="current-password"
-                            />
+                            <div className="relative">
+                                <input
+                                    type={showPassword ? "text" : "password"}
+                                    value={formData.password}
+                                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                                    placeholder="Enter your password"
+                                    className="w-full px-4 py-3 pr-12 rounded-xl border-2 border-gray-200 focus:border-blue-500 focus:outline-none transition-colors text-gray-800 placeholder-gray-400"
+                                    autoComplete="current-password"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                                    aria-label={showPassword ? "Hide password" : "Show password"}
+                                >
+                                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                                </button>
+                            </div>
                         </div>
 
                         <button
@@ -149,6 +170,50 @@ const StudentLogin = () => {
                     </p>
                 </div>
             </motion.div>
+
+            {events.length > 0 && (
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3 }}
+                    className="w-full bg-white rounded-2xl shadow-xl overflow-hidden"
+                >
+                    <div className="bg-gradient-to-r from-purple-500 to-pink-500 p-4 text-white">
+                        <h3 className="font-bold flex items-center gap-2">
+                            <Calendar size={18} /> Upcoming Events
+                        </h3>
+                    </div>
+                    <div className="divide-y divide-gray-100">
+                        {events.slice(0, 4).map((event) => {
+                            const dt = new Date(event.event_date);
+                            return (
+                                <div key={event.id} className="p-4 flex gap-3 hover:bg-gray-50 transition-colors">
+                                    <div className="flex-shrink-0 w-14 text-center">
+                                        <div className="text-xs text-purple-600 font-semibold uppercase">
+                                            {dt.toLocaleString('en-NG', { month: 'short' })}
+                                        </div>
+                                        <div className="text-2xl font-bold text-gray-800">
+                                            {dt.getDate()}
+                                        </div>
+                                    </div>
+                                    <div className="flex-1 min-w-0">
+                                        <h4 className="font-semibold text-gray-800 text-sm line-clamp-1">{event.title}</h4>
+                                        <p className="text-xs text-gray-500 mt-0.5">
+                                            {dt.toLocaleString('en-NG', { weekday: 'short', hour: '2-digit', minute: '2-digit' })}
+                                        </p>
+                                        {event.location && (
+                                            <p className="text-xs text-gray-500 mt-0.5 flex items-center gap-1">
+                                                <MapPin size={11} /> {event.location}
+                                            </p>
+                                        )}
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </motion.div>
+            )}
+            </div>
         </div>
     );
 };
