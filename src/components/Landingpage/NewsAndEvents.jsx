@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import { fetchAllContent } from '../../service/auth'; // ✅ Changed from fetchAllNews
+import { useNavigate } from 'react-router-dom';
+import { fetchAllContent } from '../../service/auth';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Calendar, User, ChevronDown, ChevronUp, Newspaper, Play } from 'lucide-react';
+import { Calendar, User, Newspaper, Play, ArrowRight } from 'lucide-react';
 
 const formatDate = (isoString) => {
   try {
@@ -17,11 +18,24 @@ const formatDate = (isoString) => {
   }
 };
 
+// Plain-text snippet from rich HTML or legacy text.
+const stripHtml = (html) => {
+  if (!html) return '';
+  return html
+    .replace(/<[^>]*>/g, ' ')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/\s+/g, ' ')
+    .trim();
+};
+
 const NewsAndEvents = () => {
-  const [content, setContent] = useState([]); // ✅ Changed from news
-  const [expanded, setExpanded] = useState({});
+  const [content, setContent] = useState([]);
   const [selectedFilter, setSelectedFilter] = useState('all');
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   const cardColors = ['#1F3B6B', '#3B82F6', '#E85D5D', '#F9D89C'];
 
@@ -29,8 +43,7 @@ const NewsAndEvents = () => {
     const loadContent = async () => {
       setLoading(true);
       try {
-        const allContent = await fetchAllContent(); // ✅ Fetch ALL content types
-        console.log('Content loaded:', allContent);
+        const allContent = await fetchAllContent();
         setContent(allContent || []);
       } catch (error) {
         console.error('Error fetching content:', error.message);
@@ -42,16 +55,14 @@ const NewsAndEvents = () => {
     loadContent();
   }, []);
 
-  const toggleDescription = (id) => {
-    setExpanded((prev) => ({ ...prev, [id]: !prev[id] }));
+  const openArticle = (item) => {
+    navigate(`/news/${item.id}`, { state: { item } });
   };
 
-  // Filter content by type
   const filteredContent = selectedFilter === 'all'
     ? content
-    : content.filter(item => item.content_type === selectedFilter);
+    : content.filter((item) => item.content_type === selectedFilter);
 
-  // Loading skeleton
   if (loading) {
     return (
       <motion.section
@@ -98,7 +109,7 @@ const NewsAndEvents = () => {
             <span className="text-[#3B82F6] font-semibold text-sm uppercase tracking-wider">Updates</span>
           </div>
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#1F3B6B] mb-4">
-            News & Events
+            News &amp; Events
           </h1>
           <p className="text-gray-600 text-lg max-w-2xl mx-auto">
             Stay updated with the latest happenings and announcements from MOLEK Schools
@@ -146,8 +157,8 @@ const NewsAndEvents = () => {
           >
             {filteredContent.map((item, idx) => {
               const accentColor = cardColors[idx % cardColors.length];
-              const isExpanded = expanded[item.id];
-              
+              const snippet = stripHtml(item.description);
+
               return (
                 <motion.article
                   key={item.id}
@@ -156,7 +167,8 @@ const NewsAndEvents = () => {
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.9 }}
                   transition={{ duration: 0.3, delay: idx * 0.05 }}
-                  className="group bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden transform hover:-translate-y-2"
+                  onClick={() => openArticle(item)}
+                  className="group bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden transform hover:-translate-y-2 cursor-pointer flex flex-col"
                 >
                   {/* Media Section */}
                   {item.media_url && (
@@ -176,28 +188,20 @@ const NewsAndEvents = () => {
                         <div className="relative w-full h-full">
                           <video
                             className="w-full h-full object-cover"
-                            controls
                             preload="metadata"
                             poster={`${item.media_url}#t=0.1`}
                           >
                             <source src={item.media_url} type="video/mp4" />
-                            Your browser does not support the video tag.
                           </video>
-                          <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity">
+                          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                             <div className="bg-white/20 backdrop-blur-sm p-4 rounded-full">
                               <Play className="w-8 h-8 text-white" />
                             </div>
                           </div>
                         </div>
                       ) : null}
-                      
-                      {/* Accent Bar */}
-                      <div
-                        className="absolute top-0 left-0 right-0 h-1.5"
-                        style={{ backgroundColor: accentColor }}
-                      />
 
-                      {/* Content Type Badge */}
+                      <div className="absolute top-0 left-0 right-0 h-1.5" style={{ backgroundColor: accentColor }} />
                       <div
                         className="absolute top-4 right-4 px-3 py-1 rounded-full text-white text-xs font-bold uppercase backdrop-blur-sm shadow-lg"
                         style={{ backgroundColor: accentColor }}
@@ -208,25 +212,19 @@ const NewsAndEvents = () => {
                   )}
 
                   {/* Content Section */}
-                  <div className={`p-6 ${!item.media_url ? 'border-t-4' : ''}`} style={{ borderColor: !item.media_url ? accentColor : 'transparent' }}>
-                    {/* Title */}
+                  <div
+                    className={`p-6 flex flex-col flex-1 ${!item.media_url ? 'border-t-4' : ''}`}
+                    style={{ borderColor: !item.media_url ? accentColor : 'transparent' }}
+                  >
                     <h3 className="text-xl font-bold text-[#1F3B6B] mb-3 line-clamp-2 min-h-[3.5rem] group-hover:text-[#3B82F6] transition-colors">
                       {item.title}
                     </h3>
 
-                    {/* Description */}
-                    <motion.div
-                      initial={false}
-                      animate={{ height: isExpanded ? 'auto' : '4.5rem' }}
-                      className="overflow-hidden mb-4"
-                    >
-                      <p className="text-gray-600 text-sm leading-relaxed">
-                        {isExpanded ? item.description : `${item.description?.substring(0, 120)}...`}
-                      </p>
-                    </motion.div>
+                    <p className="text-gray-600 text-sm leading-relaxed mb-4 line-clamp-3">
+                      {snippet ? `${snippet.substring(0, 160)}${snippet.length > 160 ? '…' : ''}` : ''}
+                    </p>
 
-                    {/* Meta Info */}
-                    <div className="flex flex-wrap gap-3 text-xs text-gray-500 mb-4">
+                    <div className="flex flex-wrap gap-3 text-xs text-gray-500 mb-4 mt-auto">
                       <div className="flex items-center gap-1.5">
                         <Calendar className="w-3.5 h-3.5" />
                         <span>{formatDate(item.publish_date || item.created_at)}</span>
@@ -237,29 +235,17 @@ const NewsAndEvents = () => {
                       </div>
                     </div>
 
-                    {/* Action Buttons */}
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() => toggleDescription(item.id)}
-                        className="flex-1 py-3 rounded-xl font-semibold text-white transition-all duration-300 shadow-md hover:shadow-lg relative overflow-hidden group/btn"
-                        style={{ backgroundColor: accentColor }}
-                      >
-                        <span className="relative z-10 flex items-center justify-center gap-2">
-                          {isExpanded ? (
-                            <>
-                              <ChevronUp className="w-4 h-4" />
-                              Show Less
-                            </>
-                          ) : (
-                            <>
-                              <ChevronDown className="w-4 h-4" />
-                              Read More
-                            </>
-                          )}
-                        </span>
-                        <div className="absolute inset-0 bg-white/20 transform scale-x-0 group-hover/btn:scale-x-100 transition-transform origin-left duration-300" />
-                      </button>
-                    </div>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        openArticle(item);
+                      }}
+                      className="w-full py-3 rounded-xl font-semibold text-white transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2"
+                      style={{ backgroundColor: accentColor }}
+                    >
+                      Read Full Story
+                      <ArrowRight className="w-4 h-4" />
+                    </button>
                   </div>
                 </motion.article>
               );

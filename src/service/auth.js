@@ -158,3 +158,30 @@ export const fetchContentByType = async (contentType) => {
     return [];
   }
 };
+// ============================================
+// 📰 FETCH SINGLE CONTENT ITEM BY ID (for NewsDetail page)
+// Tries the public-detail endpoint first; falls back to scanning the
+// public list so it still works before the backend endpoint is deployed.
+// ============================================
+export const fetchContentById = async (id) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/content/${id}/public-detail/`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    });
+    if (response.ok) {
+      return await response.json();
+    }
+  } catch (error) {
+    console.error('public-detail fetch failed, falling back to list:', error.message);
+  }
+
+  // Fallback: find it within the public list.
+  try {
+    const all = await fetchAllContent();
+    return all.find((c) => String(c.id) === String(id)) || null;
+  } catch (error) {
+    console.error('Error fetching content by id:', error.message);
+    return null;
+  }
+};

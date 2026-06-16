@@ -4,6 +4,7 @@ import Academics from "./pages/Academics.jsx";
 import ContactUs from "./pages/ContactUs.jsx";
 import Admissions from './pages/Admissions.jsx';
 import News from "./pages/News.jsx"
+import NewsDetail from "./pages/NewsDetail.jsx";
 import Gallery from "./pages/Gallery.jsx";
 
 // Student Portal Imports
@@ -43,6 +44,10 @@ const routes = [
     {
         path: '/news',
         element: <News />,
+    },
+    {
+        path: '/news/:id',
+        element: <NewsDetail />,
     },
     {
         path: '/gallery',
