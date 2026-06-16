@@ -170,52 +170,69 @@ const NewsAndEvents = () => {
                   onClick={() => openArticle(item)}
                   className="group bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden transform hover:-translate-y-2 cursor-pointer flex flex-col"
                 >
-                  {/* Media Section */}
-                  {item.media_url && (
-                    <div className="relative h-56 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
-                      {item.content_type === 'image' ? (
-                        <>
-                          <img
-                            src={item.media_url}
-                            alt={item.title}
-                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                            loading="lazy"
-                            onError={(e) => (e.target.src = '/excel.webp')}
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                        </>
-                      ) : item.content_type === 'video' ? (
-                        <div className="relative w-full h-full">
-                          <video
-                            className="w-full h-full object-cover"
-                            preload="metadata"
-                            poster={`${item.media_url}#t=0.1`}
-                          >
-                            <source src={item.media_url} type="video/mp4" />
-                          </video>
-                          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                            <div className="bg-white/20 backdrop-blur-sm p-4 rounded-full">
-                              <Play className="w-8 h-8 text-white" />
-                            </div>
+                  {/* Media Section (image / video / news placeholder) */}
+                  <div className="relative h-56 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
+                    {item.media_url && item.content_type === 'image' ? (
+                      <>
+                        <img
+                          src={item.media_url}
+                          alt={item.title}
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                          loading="lazy"
+                          onError={(e) => (e.target.src = '/excel.webp')}
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                      </>
+                    ) : item.media_url && item.content_type === 'video' ? (
+                      <div className="relative w-full h-full">
+                        <video
+                          className="w-full h-full object-cover"
+                          preload="metadata"
+                          poster={`${item.media_url}#t=0.1`}
+                        >
+                          <source src={item.media_url} type="video/mp4" />
+                        </video>
+                        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                          <div className="bg-white/20 backdrop-blur-sm p-4 rounded-full">
+                            <Play className="w-8 h-8 text-white" />
                           </div>
                         </div>
-                      ) : null}
-
-                      <div className="absolute top-0 left-0 right-0 h-1.5" style={{ backgroundColor: accentColor }} />
-                      <div
-                        className="absolute top-4 right-4 px-3 py-1 rounded-full text-white text-xs font-bold uppercase backdrop-blur-sm shadow-lg"
-                        style={{ backgroundColor: accentColor }}
-                      >
-                        {item.content_type}
                       </div>
+                    ) : (
+                      /* Placeholder for items with no media (news articles) */
+                      <div
+                        className="w-full h-full flex flex-col items-center justify-center gap-2"
+                        style={{ background: `linear-gradient(135deg, ${accentColor}14, ${accentColor}2e)` }}
+                      >
+                        <div
+                          className="flex items-center justify-center w-20 h-20 rounded-2xl shadow-sm"
+                          style={{ backgroundColor: '#ffffff' }}
+                        >
+                          <Newspaper className="w-10 h-10" style={{ color: accentColor }} />
+                        </div>
+                        <span
+                          className="text-xs font-bold uppercase tracking-widest"
+                          style={{ color: accentColor }}
+                        >
+                          News
+                        </span>
+                      </div>
+                    )}
+
+                    {/* Accent Bar */}
+                    <div className="absolute top-0 left-0 right-0 h-1.5" style={{ backgroundColor: accentColor }} />
+
+                    {/* Content Type Badge */}
+                    <div
+                      className="absolute top-4 right-4 px-3 py-1 rounded-full text-white text-xs font-bold uppercase backdrop-blur-sm shadow-lg"
+                      style={{ backgroundColor: accentColor }}
+                    >
+                      {item.content_type}
                     </div>
-                  )}
+                  </div>
 
                   {/* Content Section */}
-                  <div
-                    className={`p-6 flex flex-col flex-1 ${!item.media_url ? 'border-t-4' : ''}`}
-                    style={{ borderColor: !item.media_url ? accentColor : 'transparent' }}
-                  >
+                  <div className="p-6 flex flex-col flex-1">
                     <h3 className="text-xl font-bold text-[#1F3B6B] mb-3 line-clamp-2 min-h-[3.5rem] group-hover:text-[#3B82F6] transition-colors">
                       {item.title}
                     </h3>
