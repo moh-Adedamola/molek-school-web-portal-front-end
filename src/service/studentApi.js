@@ -9,6 +9,14 @@ if (!API_BASE_URL) {
     throw new Error('VITE_API_BASE_URL is not defined in .env');
 }
 
+import { authFetch, storeStudentTokens, clearStudentTokens } from './tokenAuth';
+
+// Phase B: route every request in this module through the token-aware
+// wrapper. It attaches Authorization: Bearer <access> on student-portal
+// URLs, transparently refreshes once on 401 (redirecting to login when the
+// session is truly over), and passes public endpoints through untouched.
+const fetch = authFetch;
+
 // ============================================
 // 🔧 HELPERS
 // ============================================
@@ -77,6 +85,11 @@ export const studentLogin = async (admission_number, password) => {
         localStorage.setItem('studentAdmissionNumber', data.student.admission_number);
     }
 
+    // Phase B: persist the student JWTs issued by the backend (Phase A).
+    if (data.access && data.refresh) {
+        storeStudentTokens({ access: data.access, refresh: data.refresh });
+    }
+
     return data;
 };
 
@@ -86,6 +99,7 @@ export const studentLogin = async (admission_number, password) => {
 export const studentLogout = () => {
     localStorage.removeItem('studentAdmissionNumber');
     localStorage.removeItem('studentData');
+    clearStudentTokens();
 };
 
 // ============================================
