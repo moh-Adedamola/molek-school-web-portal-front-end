@@ -146,6 +146,19 @@ const Grade = () => {
         return Math.round(sum / validGrades.length);
     }, []);
 
+    // Cumulative average across the session (mean of each subject's cumulative
+    // score = average of that subject's term totals). Matches the school's
+    // broadsheet exactly. Falls back to the term average before cumulatives
+    // are available (e.g. first term).
+    const calculateCumulative = useCallback((gradesArray) => {
+        if (!gradesArray || gradesArray.length === 0) return null;
+        const cums = gradesArray
+            .map(g => parseFloat(g.cumulative_score))
+            .filter(v => !isNaN(v));
+        if (cums.length === 0) return null;
+        return Math.round(cums.reduce((a, b) => a + b, 0) / cums.length);
+    }, []);
+
     // Nigerian grading scale colors
     const getGradeColor = (score) => {
         const numScore = parseFloat(score) || 0;
@@ -375,18 +388,6 @@ const Grade = () => {
                                             </div>
                                         </div>
 
-                                        {/* Position Table below chart */}
-                                        {currentTermGrades.some(g => g.position) && (
-                                            <div className="mt-4 pt-4 border-t border-gray-100">
-                                                <div className="flex flex-wrap gap-2">
-                                                    {currentTermGrades.filter(g => g.position).map((g, i) => (
-                                                        <span key={i} className="text-[10px] sm:text-xs text-gray-500 bg-gray-50 px-2 py-1 rounded">
-                                                            {g.subject_name}: {g.position}/{g.total_students}
-                                                        </span>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        )}
                                     </div>
 
                                     {/* Term Summary */}
@@ -407,9 +408,9 @@ const Grade = () => {
                                             </div>
                                             <div className="text-center">
                                                 <div className="text-2xl sm:text-3xl font-bold text-purple-600">
-                                                    {currentTermGrades[0]?.overall_position || '-'}{currentTermGrades[0]?.overall_total_students ? `/${currentTermGrades[0].overall_total_students}` : ''}
+                                                    {calculateCumulative(currentTermGrades) !== null ? `${calculateCumulative(currentTermGrades)}%` : '-'}
                                                 </div>
-                                                <p className="text-xs text-gray-500 mt-1">Overall Position</p>
+                                                <p className="text-xs text-gray-500 mt-1">Cumulative Average</p>
                                             </div>
                                             <div className="text-center">
                                                 <div className="text-2xl sm:text-3xl font-bold text-green-600">
@@ -477,7 +478,6 @@ const Grade = () => {
                                                             <th className="text-center py-2 sm:py-3 px-2 font-semibold text-gray-700 text-xs">Theory</th>
                                                             <th className="text-center py-2 sm:py-3 px-2 font-semibold text-gray-700 text-xs">Total</th>
                                                             <th className="text-center py-2 sm:py-3 px-3 font-semibold text-gray-700 text-xs">Grade</th>
-                                                            <th className="text-center py-2 sm:py-3 px-3 font-semibold text-gray-700 text-xs">Pos</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -493,9 +493,6 @@ const Grade = () => {
                                                                     <span className={`${getGradeBadgeClass(grade.total_score)} px-2 py-0.5 rounded-full text-xs font-medium`}>
                                                                         {grade.grade}
                                                                     </span>
-                                                                </td>
-                                                                <td className="py-2 sm:py-3 px-3 text-center text-gray-600 text-xs sm:text-sm">
-                                                                    {grade.position ? `${grade.position}/${grade.total_students}` : '-'}
                                                                 </td>
                                                             </tr>
                                                         ))}
@@ -535,11 +532,6 @@ const Grade = () => {
                                                                 <div className="font-bold text-blue-700">{grade.total_score}</div>
                                                             </div>
                                                         </div>
-                                                        {grade.position && (
-                                                            <div className="text-xs text-gray-500 mt-2 text-right">
-                                                                Position: {grade.position}/{grade.total_students}
-                                                            </div>
-                                                        )}
                                                     </div>
                                                 ))}
                                             </div>

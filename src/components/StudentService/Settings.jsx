@@ -278,6 +278,21 @@ const Settings = () => {
             }));
         }
 
+        // Overall average as a percentage (replaces class position on the
+        // student's report). For a session report it's the mean of each
+        // subject's cumulative %, which matches the school broadsheet; for a
+        // term report it's the term average.
+        if (isCumulative) {
+            const _cp = subjects
+                .map(x => parseFloat(x.cumulativePercent))
+                .filter(v => !isNaN(v));
+            summary.cumulativeAverage = _cp.length
+                ? Math.round(_cp.reduce((a, b) => a + b, 0) / _cp.length)
+                : (parseFloat(summary.averageScore) || 0);
+        } else {
+            summary.cumulativeAverage = parseFloat(summary.averageScore) || 0;
+        }
+
         // Convert logo to embeddable format for print
         const logoUrl = window.location.origin + '/logo.webp';
 
@@ -575,15 +590,14 @@ const Settings = () => {
             <thead>
                 <tr>
                     <th rowspan="3" style="width:18%; min-width:100px;">SUBJECTS</th>
-                    <th colspan="6" class="group-header">CURRENT TERM</th>
-                    <th colspan="10" class="group-header">CUMULATIVE ASSESSMENT</th>
+                    <th colspan="5" class="group-header">CURRENT TERM</th>
+                    <th colspan="9" class="group-header">CUMULATIVE ASSESSMENT</th>
                 </tr>
                 <tr>
                     <th rowspan="2">CA 1<br><span class="sub-max">15</span></th>
                     <th rowspan="2">CA 2<br><span class="sub-max">15</span></th>
                     <th rowspan="2">EXAM<br><span class="sub-max">70</span></th>
                     <th rowspan="2">TOTAL<br><span class="sub-max">100</span></th>
-                    <th rowspan="2">POS.</th>
                     <th rowspan="2">GRADE</th>
                     <th rowspan="2">1ST TERM<br>B/F<br><span class="sub-max">100</span></th>
                     <th rowspan="2">2ND TERM<br>B/F<br><span class="sub-max">100</span></th>
@@ -591,7 +605,6 @@ const Settings = () => {
                     <th rowspan="2">TOTAL</th>
                     <th rowspan="2">CUMULATIVE %</th>
                     <th colspan="2">AVERAGE SCORE</th>
-                    <th rowspan="2">POS.</th>
                     <th rowspan="2">GRADE</th>
                     <th rowspan="2">REMARKS</th>
                 </tr>
@@ -619,7 +632,6 @@ const Settings = () => {
                     <td>${ca2}</td>
                     <td>${exam}</td>
                     <td class="bold-val">${termTotal}</td>
-                    <td>${s.position || '-'}</td>
                     <td>${termGrade}</td>
                     <td>${s.firstTerm}</td>
                     <td>${s.secondTerm}</td>
@@ -628,13 +640,12 @@ const Settings = () => {
                     <td>${s.cumulativePercent}%</td>
                     <td>${s.avgStudent}</td>
                     <td>${s.classAverage}</td>
-                    <td>${s.position || '-'}${s.totalStudents ? '/' + s.totalStudents : ''}</td>
                     <td><strong>${s.grade}</strong></td>
                     <td style="font-size:9px;">${s.remark}</td>
                 </tr>`;
                 }).join('') : `
                 <tr>
-                    <td colspan="17" style="padding: 25px; color: #888;">No results available for this session</td>
+                    <td colspan="15" style="padding: 25px; color: #888;">No results available for this session</td>
                 </tr>`}
             </tbody>
         </table>
@@ -648,7 +659,6 @@ const Settings = () => {
                     <th rowspan="2">EXAM<br><span class="sub-max">70</span></th>
                     <th rowspan="2">TOTAL<br><span class="sub-max">100</span></th>
                     <th rowspan="2">GRADE</th>
-                    <th rowspan="2">POSITION</th>
                     <th rowspan="2">CLASS<br>AVG</th>
                     <th rowspan="2">REMARKS</th>
                 </tr>
@@ -666,13 +676,12 @@ const Settings = () => {
                     <td>${s.exam}</td>
                     <td class="bold-val">${s.total}</td>
                     <td><strong>${s.grade}</strong></td>
-                    <td>${s.position}${s.totalStudents ? '/' + s.totalStudents : ''}</td>
                     <td>${s.classAverage}</td>
                     <td style="font-size:10px;">${s.remark}</td>
                 </tr>
                 `).join('') : `
                 <tr>
-                    <td colspan="9" style="padding: 25px; color: #888;">No results available for this term</td>
+                    <td colspan="8" style="padding: 25px; color: #888;">No results available for this term</td>
                 </tr>
                 `}
             </tbody>
@@ -708,8 +717,8 @@ const Settings = () => {
                 <div class="label">Overall Grade</div>
             </div>
             <div class="summary-box">
-                <div class="value" style="color: #7c3aed">${summary.overallPosition || '-'}${summary.overallTotalStudents ? '/' + summary.overallTotalStudents : ''}</div>
-                <div class="label">Overall Position</div>
+                <div class="value" style="color: #7c3aed">${summary.cumulativeAverage != null ? summary.cumulativeAverage + '%' : '-'}</div>
+                <div class="label">Overall Average</div>
             </div>
         </div>
 
