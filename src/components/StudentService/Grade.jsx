@@ -34,6 +34,7 @@ const Grade = () => {
     const [selectedSession, setSelectedSession] = useState(null);
     const [selectedTerm, setSelectedTerm] = useState(null);
     const [reportData, setReportData] = useState(null);
+    const [promotionStatus, setPromotionStatus] = useState(null);
     const [loadingReport, setLoadingReport] = useState(false);
     const printRef = useRef();
 
@@ -64,6 +65,7 @@ const Grade = () => {
             const sessionsArray = sessionsData.sessions || sessionsData.results || [];
             const termsArray = termsData.terms || termsData.results || [];
             const gradesArray = gradesData.grades || gradesData.results || [];
+            setPromotionStatus(gradesData.promotion || null);
 
             setSessions(sessionsArray);
             setTerms(termsArray);
@@ -218,6 +220,17 @@ const Grade = () => {
                 </div>
             </div>
 
+
+            {promotionStatus?.promoted && (
+                <div className="mb-4 flex items-center gap-3 rounded-xl border border-green-300 bg-green-50 px-4 py-3">
+                    <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-green-600 text-white tracking-wide">PROMOTED</span>
+                    <p className="text-sm text-green-900">
+                        Congratulations! You have been promoted to <strong>{promotionStatus.to_class}</strong>
+                        {promotionStatus.session ? <> for <strong>{promotionStatus.session}</strong></> : null}.
+                        Your results below are from {promotionStatus.from_class}.
+                    </p>
+                </div>
+            )}
 
             {/* Tabs - Mobile Optimized */}
             <div className="flex flex-wrap gap-2 mb-4 sm:mb-6">
@@ -725,6 +738,11 @@ const Grade = () => {
                                             </div>
 
                                             {/* Behavioral Assessment Grid */}
+                                            {reportData && !reportData.behavioral && (
+                                                <div className="mt-6 rounded-lg border border-dashed border-gray-300 bg-gray-50 px-4 py-3 text-sm text-gray-500">
+                                                    No behavioral assessment has been uploaded for this term yet.
+                                                </div>
+                                            )}
                                             {reportData?.behavioral && (
                                                 <div className="mt-6 border-2 border-gray-300 rounded-lg overflow-hidden">
                                                     <h3 className="bg-blue-700 text-white px-3 py-2 text-sm font-bold uppercase tracking-wide">Behavioral Assessment</h3>
