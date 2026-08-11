@@ -221,16 +221,80 @@ const Grade = () => {
             </div>
 
 
-            {promotionStatus?.promoted && (
-                <div className="mb-4 flex items-center gap-3 rounded-xl border border-green-300 bg-green-50 px-4 py-3">
-                    <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-green-600 text-white tracking-wide">PROMOTED</span>
-                    <p className="text-sm text-green-900">
-                        Congratulations! You have been promoted to <strong>{promotionStatus.to_class}</strong>
-                        {promotionStatus.session ? <> for <strong>{promotionStatus.session}</strong></> : null}.
-                        Your results below are from {promotionStatus.from_class}.
-                    </p>
-                </div>
-            )}
+            {/* ----------------------------------------------------------------
+                PROMOTION OUTCOME STAMP
+
+                Wording below is the SCHOOL'S to set — change the text here and
+                nowhere else. Amber (not red) for repeating is deliberate: this
+                is a factual statement about a child, read by their parent, and
+                red reads as an alarm.
+
+                No stamp is shown when no decision has been recorded. That
+                blank is intentional: an absent record can mean promotions have
+                not been run yet, or that the student lacks three terms of
+                results, so guessing "repeating" would be wrong and visible.
+               ---------------------------------------------------------------- */}
+            {(() => {
+                const OUTCOME_STAMPS = {
+                    promoted: {
+                        label: 'PROMOTED',
+                        wrap: 'border-green-300 bg-green-50',
+                        chip: 'bg-green-600',
+                        text: 'text-green-900',
+                        message: (s) => (
+                            <>
+                                Congratulations! You have been promoted to <strong>{s.to_class}</strong>
+                                {s.session ? <> for <strong>{s.session}</strong></> : null}.
+                                Your results below are from {s.from_class}.
+                            </>
+                        ),
+                    },
+                    repeating: {
+                        label: 'REPEATING',
+                        wrap: 'border-amber-300 bg-amber-50',
+                        chip: 'bg-amber-600',
+                        text: 'text-amber-900',
+                        message: (s) => (
+                            <>
+                                You will be repeating <strong>{s.from_class}</strong>
+                                {s.session ? <> for <strong>{s.session}</strong></> : null}.
+                                Please speak with your class teacher if you have any questions.
+                            </>
+                        ),
+                    },
+                    graduated: {
+                        label: 'GRADUATED',
+                        wrap: 'border-blue-300 bg-blue-50',
+                        chip: 'bg-blue-600',
+                        text: 'text-blue-900',
+                        message: (s) => (
+                            <>
+                                Congratulations! You have completed <strong>{s.from_class}</strong> and graduated
+                                {s.session ? <> in <strong>{s.session}</strong></> : null}.
+                            </>
+                        ),
+                    },
+                };
+
+                if (!promotionStatus) return null;
+                // Fall back to the old boolean so this renders correctly even
+                // if the backend has not yet been updated to send 'status'.
+                const key = promotionStatus.status
+                    || (promotionStatus.promoted ? 'promoted' : null);
+                const stamp = key ? OUTCOME_STAMPS[key] : null;
+                if (!stamp) return null;
+
+                return (
+                    <div className={`mb-4 flex items-center gap-3 rounded-xl border px-4 py-3 ${stamp.wrap}`}>
+                        <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold text-white tracking-wide ${stamp.chip}`}>
+                            {stamp.label}
+                        </span>
+                        <p className={`text-sm ${stamp.text}`}>
+                            {stamp.message(promotionStatus)}
+                        </p>
+                    </div>
+                );
+            })()}
 
             {/* Tabs - Mobile Optimized */}
             <div className="flex flex-wrap gap-2 mb-4 sm:mb-6">
