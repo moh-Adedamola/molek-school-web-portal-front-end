@@ -1,13 +1,11 @@
-import Header from "../components/Landingpage/Header.jsx";
-import Footer from "../components/Footer.jsx";
+import usePageTitle from '../hooks/usePageTitle.js';
 import AdmissionRequirements from "../components/Admissions/AdmissionRequirements.jsx";
 
 const Admissions = () => {
+    usePageTitle('Admissions');
     return(
         <>
-            <Header />
             <AdmissionRequirements />
-            <Footer />
         </>
     )
 }

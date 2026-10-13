@@ -1,34 +1,27 @@
 import PolicyPage from '../components/Policy/PolicyPage.jsx';
 
-// Keep "Known problems today" honest: remove each item as the redesign fixes it.
+// Keep "Known problems today" honest: list any problem we know about, and re-check after each change.
 const sections = [
     {
         heading: 'Our goal',
         paragraphs: ['We are working towards the Web Content Accessibility Guidelines (WCAG) 2.2 at level AA.'],
     },
     {
-        heading: 'What we are improving',
-        paragraphs: ['Our current redesign brings:'],
+        heading: 'What we have improved',
+        paragraphs: ['Recent changes to the website and student portal include:'],
         bullets: [
             'larger, easier-to-read text and stronger colour contrast;',
             'a clear label on every form field, so screen readers announce it;',
             'every button and link reachable with a keyboard, with a visible outline showing where you are;',
             'no text that moves or changes on its own;',
             'pages that fit small phone screens without scrolling sideways;',
-            'results in a plain table that prints cleanly.',
+            'results in a plain table, and a report card that prints on one page.',
         ],
     },
     {
         heading: 'Known problems today',
-        paragraphs: ['We know about these and are fixing them:'],
-        bullets: [
-            'Some buttons and labels have low colour contrast.',
-            'Most form fields are not announced properly by screen readers.',
-            'The About and News pages scroll sideways on small phones.',
-            'The address banner scrolls and the news headline changes every 5 seconds; neither can be paused on a touch screen.',
-            'Some news cards cannot be opened with a keyboard, and the photo viewer does not hold keyboard focus.',
-            'The results chart uses very small text.',
-            'Two pages have no main heading, which makes them harder to move around with a screen reader.',
+        paragraphs: [
+            'In our latest check (October 2026), every page passed an automated accessibility test with no serious problems. Automated tests cannot catch everything, so if any part of the site is hard for you to use, please tell us.',
         ],
     },
     {

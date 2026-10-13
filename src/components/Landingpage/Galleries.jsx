@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 import { X, ChevronLeft, ChevronRight, ZoomIn, Calendar, User, Image as ImageIcon } from 'lucide-react';
 import { fetchAllGalleries } from '../../service/auth';
 
@@ -12,170 +13,83 @@ const formatDate = (isoString) => {
   }
 };
 
-// Modern Gallery Modal with smooth animations
+// Photo viewer: Headless UI Dialog (focus stays inside, Escape closes,
+// the page behind doesn't scroll). Arrow keys move between photos.
 const GalleryModal = ({ isOpen, onClose, mediaUrls, title, description }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  
-  // ✅ ALWAYS call hooks - use conditions inside
+  const total = mediaUrls?.length || 0;
+
   useEffect(() => {
-    if (isOpen) {
-      // Reset index when modal opens
-      setCurrentIndex(0);
-    }
+    if (isOpen) setCurrentIndex(0);
   }, [isOpen]);
-
-  // ✅ ALWAYS call keyboard navigation hook
-  useEffect(() => {
-    if (!isOpen) return; // Early return is OK, hook still called
-    
-    const handleKeyPress = (e) => {
-      const total = mediaUrls?.length || 0;
-      if (e.key === 'ArrowRight' && currentIndex < total - 1) {
-        setCurrentIndex(prev => prev + 1);
-      }
-      if (e.key === 'ArrowLeft' && currentIndex > 0) {
-        setCurrentIndex(prev => prev - 1);
-      }
-      if (e.key === 'Escape') {
-        onClose();
-      }
-    };
-    
-    window.addEventListener('keydown', handleKeyPress);
-    return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [isOpen, currentIndex, mediaUrls, onClose]);
-
-  // Early return AFTER all hooks
-  if (!isOpen || !mediaUrls?.length) return null;
-
-  const total = mediaUrls.length;
-  const currentMedia = mediaUrls[currentIndex];
-  const isVideo = currentMedia?.match(/\.(mp4|mov|avi|webm)$/i);
 
   const goNext = () => setCurrentIndex((prev) => Math.min(prev + 1, total - 1));
   const goPrev = () => setCurrentIndex((prev) => Math.max(prev - 1, 0));
+  const onKeyDown = (e) => {
+    if (e.key === 'ArrowRight') goNext();
+    if (e.key === 'ArrowLeft') goPrev();
+  };
+
+  const currentMedia = mediaUrls?.[currentIndex];
+  const isVideo = currentMedia?.match(/\.(mp4|mov|avi|webm)$/i);
+  const navBtn = 'absolute top-1/2 -translate-y-1/2 inline-flex h-12 w-12 items-center justify-center rounded-full bg-white text-[#1F3B6B] shadow-lg disabled:opacity-40 focus-visible:outline focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-white';
 
   return (
-    <AnimatePresence>
-      <div>
-        {/* Backdrop */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 z-50 bg-black/95 backdrop-blur-sm"
-          onClick={onClose}
-        />
+    <Dialog open={isOpen && total > 0} onClose={onClose} onKeyDown={onKeyDown} className="relative z-50">
+      <div className="fixed inset-0 bg-black/90" aria-hidden="true" />
+      <div className="fixed inset-0 flex items-center justify-center p-4">
+        <DialogPanel className="relative w-full max-w-6xl">
+          <button type="button" onClick={onClose}
+            className="absolute -top-14 right-0 inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 min-h-11 font-semibold text-[#1F3B6B] focus-visible:outline focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-white">
+            <X aria-hidden="true" className="w-5 h-5" /> Close
+          </button>
 
-        {/* Modal Content */}
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none">
-          <motion.div
-            initial={{ scale: 0.9, opacity: 0, y: 20 }}
-            animate={{ scale: 1, opacity: 1, y: 0 }}
-            exit={{ scale: 0.9, opacity: 0, y: 20 }}
-            transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="relative max-w-6xl w-full pointer-events-auto"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Close Button */}
-            <button
-              onClick={onClose}
-              className="absolute -top-12 right-0 text-white/80 hover:text-white transition-colors z-10 flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full"
-            >
-              <X className="w-5 h-5" />
-              <span className="text-sm font-medium">Close (ESC)</span>
-            </button>
-
-            {/* Media Container */}
-            <div className="relative bg-black rounded-2xl overflow-hidden shadow-2xl">
-              <div className="relative aspect-[16/10] flex items-center justify-center bg-gradient-to-br from-gray-900 to-black">
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={currentIndex}
-                    initial={{ opacity: 0, x: 100 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -100 }}
-                    transition={{ duration: 0.3 }}
-                    className="absolute inset-0 flex items-center justify-center"
-                  >
-                    {isVideo ? (
-                      <video
-                        src={currentMedia}
-                        controls
-                        className="max-h-full max-w-full object-contain"
-                        controlsList="nodownload"
-                      >
-                        Your browser doesn't support video.
-                      </video>
-                    ) : (
-                      <img
-                        src={currentMedia}
-                        alt={`${title} - ${currentIndex + 1}`}
-                        className="max-h-full max-w-full object-contain"
-                        loading="lazy"
-                        onError={(e) => { e.target.src = '/excel.webp'; }}
-                      />
-                    )}
-                  </motion.div>
-                </AnimatePresence>
-              </div>
-
-              {/* Navigation Arrows */}
-              {total > 1 && (
-                <>
-                  <button
-                    onClick={goPrev}
-                    disabled={currentIndex === 0}
-                    className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-md hover:bg-white/30 text-white p-3 rounded-full transition-all shadow-lg group disabled:opacity-30 disabled:cursor-not-allowed"
-                  >
-                    <ChevronLeft className="w-6 h-6 group-hover:scale-110 transition-transform" />
-                  </button>
-                  <button
-                    onClick={goNext}
-                    disabled={currentIndex === total - 1}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-md hover:bg-white/30 text-white p-3 rounded-full transition-all shadow-lg group disabled:opacity-30 disabled:cursor-not-allowed"
-                  >
-                    <ChevronRight className="w-6 h-6 group-hover:scale-110 transition-transform" />
-                  </button>
-                </>
-              )}
-
-              {/* Bottom Info Bar */}
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent p-6">
-                <div className="flex items-center justify-between">
-                  <div className="flex-1">
-                    <h3 className="text-white font-bold text-xl mb-1">{title}</h3>
-                    {description && (
-                      <p className="text-white/80 text-sm line-clamp-2">{description}</p>
-                    )}
-                  </div>
-                  <div className="ml-4 text-white/90 text-sm font-medium bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full">
-                    {currentIndex + 1} / {total}
-                  </div>
-                </div>
-              </div>
-
-              {/* Dot Indicators */}
-              {total > 1 && total <= 10 && (
-                <div className="absolute bottom-20 left-1/2 -translate-x-1/2 flex gap-2">
-                  {mediaUrls.map((_, i) => (
-                    <button
-                      key={i}
-                      onClick={() => setCurrentIndex(i)}
-                      className={`transition-all rounded-full ${
-                        i === currentIndex
-                          ? 'w-8 h-2 bg-white'
-                          : 'w-2 h-2 bg-white/40 hover:bg-white/60'
-                      }`}
-                    />
-                  ))}
-                </div>
+          <div className="relative bg-black rounded-2xl overflow-hidden shadow-2xl">
+            <div className="relative aspect-[16/10] flex items-center justify-center">
+              {isVideo ? (
+                <video key={currentMedia} src={currentMedia} controls controlsList="nodownload" className="max-h-full max-w-full object-contain">
+                  Your browser doesn't support video.
+                </video>
+              ) : (
+                <img key={currentMedia} src={currentMedia} alt={`${title} - ${currentIndex + 1}`}
+                  className="max-h-full max-w-full object-contain" onError={(e) => { e.target.src = '/excel.webp'; }} />
               )}
             </div>
-          </motion.div>
-        </div>
+
+            {total > 1 && (
+              <>
+                <button type="button" onClick={goPrev} disabled={currentIndex === 0} aria-label="Previous photo" className={`${navBtn} left-4`}>
+                  <ChevronLeft aria-hidden="true" className="w-6 h-6" />
+                </button>
+                <button type="button" onClick={goNext} disabled={currentIndex === total - 1} aria-label="Next photo" className={`${navBtn} right-4`}>
+                  <ChevronRight aria-hidden="true" className="w-6 h-6" />
+                </button>
+              </>
+            )}
+
+            <div className="bg-black/85 p-5 sm:p-6 flex items-start justify-between gap-4">
+              <div className="flex-1 min-w-0">
+                <DialogTitle className="text-white font-bold text-xl mb-1">{title}</DialogTitle>
+                {description && <p className="text-white/90 line-clamp-2">{description}</p>}
+              </div>
+              <p className="text-white font-medium bg-white/15 px-4 py-2 rounded-full whitespace-nowrap" aria-live="polite">
+                {currentIndex + 1} / {total}
+              </p>
+            </div>
+          </div>
+
+          {total > 1 && total <= 10 && (
+            <div className="mt-4 flex justify-center gap-2">
+              {mediaUrls.map((_, i) => (
+                <button key={i} type="button" onClick={() => setCurrentIndex(i)}
+                  aria-label={`Photo ${i + 1} of ${total}`} aria-current={i === currentIndex ? 'true' : undefined}
+                  className={`h-3 rounded-full transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white ${i === currentIndex ? 'w-8 bg-white' : 'w-3 bg-white/50'}`} />
+              ))}
+            </div>
+          )}
+        </DialogPanel>
       </div>
-    </AnimatePresence>
+    </Dialog>
   );
 };
 
@@ -242,11 +156,11 @@ const Galleries = () => {
         <div className="max-w-2xl mx-auto text-center">
           <div className="bg-red-50 rounded-2xl p-12 border border-red-200">
             <div className="text-6xl mb-6">📷</div>
-            <h2 className="text-3xl font-bold text-[#E85D5D] mb-4">Oops! Galleries Unavailable</h2>
+            <h2 className="text-3xl font-bold text-red-700 mb-4">Oops! Galleries Unavailable</h2>
             <p className="text-gray-600 mb-8">{error}</p>
             <button
               onClick={() => window.location.reload()}
-              className="bg-[#3B82F6] text-white px-8 py-3 rounded-full hover:bg-[#2563EB] transition-all shadow-lg hover:shadow-xl font-medium"
+              className="bg-[#1F3B6B] text-white px-8 py-3 rounded-full hover:bg-[#2563EB] transition-all shadow-lg hover:shadow-xl font-medium"
             >
               Try Again
             </button>
@@ -271,8 +185,8 @@ const Galleries = () => {
           className="text-center mb-16"
         >
           <div className="inline-flex items-center gap-3 bg-[#3B82F6]/10 px-6 py-2 rounded-full mb-4">
-            <ImageIcon className="w-5 h-5 text-[#3B82F6]" />
-            <span className="text-[#3B82F6] font-semibold text-sm uppercase tracking-wider">Gallery</span>
+            <ImageIcon className="w-5 h-5 text-[#2563EB]" />
+            <span className="text-[#2563EB] font-semibold text-sm uppercase tracking-wider">Gallery</span>
           </div>
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#1F3B6B] mb-4">
             School Moments
@@ -322,8 +236,7 @@ const Galleries = () => {
                   <div className="absolute top-0 left-0 right-0 h-1.5" style={{ backgroundColor: accentColor }} />
                   
                   <div
-                    className="absolute top-4 right-4 px-4 py-2 rounded-full text-white text-sm font-bold shadow-lg backdrop-blur-sm"
-                    style={{ backgroundColor: accentColor }}
+                    className="absolute top-4 right-4 px-4 py-2 rounded-full bg-white text-[#1F3B6B] text-sm font-bold shadow-lg"
                   >
                     {gallery.media_count || 0} {gallery.media_count === 1 ? 'photo' : 'photos'}
                   </div>
@@ -347,16 +260,13 @@ const Galleries = () => {
                   </div>
 
                   <button
+                    type="button"
                     onClick={() => setSelectedGallery(gallery)}
                     disabled={!gallery.media_urls?.length}
-                    className="w-full py-3.5 rounded-xl font-semibold text-white transition-all duration-300 shadow-md hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden group"
-                    style={{ backgroundColor: accentColor }}
+                    className="w-full py-3.5 min-h-12 rounded-xl font-semibold text-white bg-[#1F3B6B] shadow-md hover:bg-[#2D2D2D] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 focus-visible:outline focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[#1F3B6B]"
                   >
-                    <span className="relative z-10 flex items-center justify-center gap-2">
-                      <ZoomIn className="w-5 h-5" />
-                      View Gallery
-                    </span>
-                    <div className="absolute inset-0 bg-white/20 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300" />
+                    <ZoomIn aria-hidden="true" className="w-5 h-5" />
+                    View Gallery<span className="sr-only">: {gallery.title}</span>
                   </button>
                 </div>
               </motion.div>

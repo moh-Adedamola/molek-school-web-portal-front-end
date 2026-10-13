@@ -1,21 +1,20 @@
-import { 
-    FaSchool, FaUserGraduate, FaBookOpen, FaClock,
-    FaBaby, FaChild, FaGraduationCap, FaTools, FaUsers, FaChartLine
-} from "react-icons/fa";
-import { AcademicCapIcon, SparklesIcon, TrophyIcon, BeakerIcon } from '@heroicons/react/24/outline';
+import { Baby, BookOpen, ChartLine, Clock, FlaskConical, GraduationCap, PersonStanding, School, Sparkles, Trophy, Users, Wrench } from 'lucide-react';
+// Accent colours stay on icons; text uses a readable version of each (existing colours only).
+const textColour = (c) => ({ '#3B82F6': '#2563EB', '#E85D5D': '#B91C1C', '#F9D89C': '#1F3B6B' }[String(c).toUpperCase()] || c);
+
 
 const AcademicOverview = () => {
     const stats = [
-        { icon: FaUserGraduate, value: "95%", label: "WAEC Pass Rate", color: "#1F3B6B" },
-        { icon: FaBookOpen, value: "18+", label: "Subjects Offered", color: "#3B82F6" },
-        { icon: FaSchool, value: "20-25", label: "Class Size", color: "#E85D5D" },
-        { icon: FaClock, value: "40hrs", label: "Weekly Hours", color: "#F9D89C" },
+        { icon: GraduationCap, value: "95%", label: "WAEC Pass Rate", color: "#1F3B6B" },
+        { icon: BookOpen, value: "18+", label: "Subjects Offered", color: "#3B82F6" },
+        { icon: School, value: "20-25", label: "Class Size", color: "#E85D5D" },
+        { icon: Clock, value: "40hrs", label: "Weekly Hours", color: "#F9D89C" },
     ];
 
     const programs = [
         {
             id: "kindergarten",
-            icon: FaChild,
+            icon: PersonStanding,
             title: "Kindergarten Programme",
             duration: "Ages 2-5",
             color: "#F9D89C",
@@ -30,7 +29,7 @@ const AcademicOverview = () => {
         },
         {
             id: "nursery",
-            icon: FaBaby,
+            icon: Baby,
             title: "Nursery Programme",
             duration: "Ages 2-4",
             color: "#E85D5D",
@@ -45,7 +44,7 @@ const AcademicOverview = () => {
         },
         {
             id: "primary",
-            icon: FaGraduationCap,
+            icon: GraduationCap,
             title: "Primary School",
             duration: "Primary 1-5 | Ages 6-11",
             color: "#1F3B6B",
@@ -65,7 +64,7 @@ const AcademicOverview = () => {
         },
         {
             id: "jss",
-            icon: FaSchool,
+            icon: School,
             title: "Junior Secondary School (JSS)",
             duration: "JSS 1-3 | Ages 10-13",
             color: "#3B82F6",
@@ -78,7 +77,7 @@ const AcademicOverview = () => {
         },
         {
             id: "sss",
-            icon: FaUserGraduate,
+            icon: GraduationCap,
             title: "Senior Secondary School (SSS)",
             duration: "SSS 1-3 | Ages 13-16",
             color: "#E85D5D",
@@ -105,8 +104,8 @@ const AcademicOverview = () => {
 
                 <header className="text-center mb-16">
                     <div className="inline-flex items-center gap-3 bg-[#3B82F6]/10 px-6 py-2 rounded-full mb-4">
-                        <AcademicCapIcon className="w-5 h-5 text-[#3B82F6]" />
-                        <span className="text-[#3B82F6] font-semibold text-sm uppercase tracking-wider">Academic Excellence</span>
+                        <GraduationCap className="w-5 h-5 text-[#2563EB]" />
+                        <span className="text-[#2563EB] font-semibold text-sm uppercase tracking-wider">Academic Excellence</span>
                     </div>
                     <h1 className="text-4xl md:text-5xl font-bold text-[#1F3B6B] mb-4">
                         Academic Programs Overview
@@ -125,7 +124,7 @@ const AcademicOverview = () => {
                                 <div className="p-3 rounded-full w-fit mx-auto mb-3" style={{ backgroundColor: `${stat.color}15` }}>
                                     <Icon className="w-8 h-8" style={{ color: stat.color }} />
                                 </div>
-                                <h3 className="text-3xl font-bold mb-1" style={{ color: stat.color }}>{stat.value}</h3>
+                                <h3 className="text-3xl font-bold mb-1" style={{ color: textColour(stat.color) }}>{stat.value}</h3>
                                 <p className="text-gray-600 font-medium">{stat.label}</p>
                             </article>
                         );
@@ -155,13 +154,13 @@ const AcademicOverview = () => {
                                     {program.objectives && (
                                         <div>
                                             <h4 className="font-bold text-[#1F3B6B] mb-4 flex items-center gap-2">
-                                                <SparklesIcon className="w-6 h-6 text-[#3B82F6]" />
+                                                <Sparkles className="w-6 h-6 text-[#2563EB]" />
                                                 Key Objectives
                                             </h4>
                                             <ul className="space-y-3">
                                                 {program.objectives.map((obj, i) => (
                                                     <li key={i} className="flex items-start gap-3 text-gray-700">
-                                                        <span className="text-[#3B82F6] mt-1">✓</span>
+                                                        <span className="text-[#2563EB] mt-1">✓</span>
                                                         <span>{obj}</span>
                                                     </li>
                                                 ))}
@@ -171,11 +170,11 @@ const AcademicOverview = () => {
 
                                     {program.features && (
                                         <div className="bg-blue-50 rounded-2xl p-6 border-2 border-[#3B82F6]">
-                                            <h4 className="font-bold text-[#3B82F6] mb-4">Program Features</h4>
+                                            <h4 className="font-bold text-[#2563EB] mb-4">Program Features</h4>
                                             <ul className="space-y-2">
                                                 {program.features.map((feat, i) => (
                                                     <li key={i} className="flex items-center gap-3 text-gray-700">
-                                                        <TrophyIcon className="w-5 h-5 text-[#3B82F6]" />
+                                                        <Trophy className="w-5 h-5 text-[#2563EB]" />
                                                         <span>{feat}</span>
                                                     </li>
                                                 ))}
@@ -189,7 +188,7 @@ const AcademicOverview = () => {
                                             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                                                 {program.subjects.map((subj, i) => (
                                                     <div key={i} className="flex items-center gap-2 text-gray-700">
-                                                        <BeakerIcon className="w-5 h-5 text-[#3B82F6]" />
+                                                        <FlaskConical className="w-5 h-5 text-[#2563EB]" />
                                                         <span>{subj}</span>
                                                     </div>
                                                 ))}
@@ -203,11 +202,11 @@ const AcademicOverview = () => {
                                             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                                                 {program.streams.map((stream, i) => (
                                                     <div key={i} className="bg-gray-50 rounded-2xl p-6 border-t-4" style={{ borderTopColor: stream.color }}>
-                                                        <h5 className="font-bold text-lg mb-4" style={{ color: stream.color }}>{stream.name}</h5>
+                                                        <h5 className="font-bold text-lg mb-4" style={{ color: textColour(stream.color) }}>{stream.name}</h5>
                                                         <ul className="space-y-2">
                                                             {stream.subjects.map((subj, j) => (
                                                                 <li key={j} className="flex items-center gap-2 text-gray-700 text-sm">
-                                                                    <span style={{ color: stream.color }}>•</span>
+                                                                    <span style={{ color: textColour(stream.color) }}>•</span>
                                                                     <span>{subj}</span>
                                                                 </li>
                                                             ))}
@@ -220,11 +219,11 @@ const AcademicOverview = () => {
 
                                     {program.additional && (
                                         <div className="bg-blue-50 rounded-2xl p-6 border-2 border-[#3B82F6]">
-                                            <h4 className="font-bold text-[#3B82F6] mb-4">Additional Studies</h4>
+                                            <h4 className="font-bold text-[#2563EB] mb-4">Additional Studies</h4>
                                             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                                                 {program.additional.map((study, i) => (
                                                     <div key={i} className="flex items-center gap-2 text-gray-700 text-sm">
-                                                        <span className="text-[#3B82F6]">•</span>
+                                                        <span className="text-[#2563EB]">•</span>
                                                         <span>{study}</span>
                                                     </div>
                                                 ))}
@@ -236,13 +235,13 @@ const AcademicOverview = () => {
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                             <div className="bg-gray-50 rounded-2xl p-6">
                                                 <h4 className="font-bold text-[#1F3B6B] mb-4 flex items-center gap-2">
-                                                    <FaUsers className="text-[#3B82F6]" />
+                                                    <Users className="text-[#2563EB]" />
                                                     Programme Goals
                                                 </h4>
                                                 <ul className="space-y-2">
                                                     {program.goals.map((goal, i) => (
                                                         <li key={i} className="flex items-start gap-3 text-gray-700 text-sm">
-                                                            <span className="text-[#3B82F6] mt-1">✓</span>
+                                                            <span className="text-[#2563EB] mt-1">✓</span>
                                                             <span>{goal}</span>
                                                         </li>
                                                     ))}
@@ -250,13 +249,13 @@ const AcademicOverview = () => {
                                             </div>
                                             <div className="bg-gray-50 rounded-2xl p-6">
                                                 <h4 className="font-bold text-[#1F3B6B] mb-4 flex items-center gap-2">
-                                                    <FaChartLine className="text-[#3B82F6]" />
+                                                    <ChartLine className="text-[#2563EB]" />
                                                     Available Programs
                                                 </h4>
                                                 <ul className="space-y-2">
                                                     {program.programs.map((prog, i) => (
                                                         <li key={i} className="flex items-center gap-3 text-gray-700 text-sm">
-                                                            <span className="text-[#3B82F6]">•</span>
+                                                            <span className="text-[#2563EB]">•</span>
                                                             <span>{prog}</span>
                                                         </li>
                                                     ))}

@@ -1,13 +1,11 @@
-import Header from "../components/Landingpage/Header.jsx";
-import Footer from "../components/Footer.jsx";
+import usePageTitle from '../hooks/usePageTitle.js';
 import NewsAndEvents from "../components/Landingpage/NewsAndEvents.jsx";
 
 const News = () => {
+    usePageTitle('News & Events');
     return(
         <>
-            <Header />
             <NewsAndEvents />
-            <Footer />
         </>
     )
 }

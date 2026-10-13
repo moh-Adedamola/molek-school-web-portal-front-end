@@ -7,8 +7,8 @@ const AboutSchool = () => {
 
         <header className="text-center mb-16">
           <div className="inline-flex items-center gap-3 bg-[#3B82F6]/10 px-6 py-2 rounded-full mb-4">
-            <School className="w-5 h-5 text-[#3B82F6]" />
-            <span className="text-[#3B82F6] font-semibold text-sm uppercase tracking-wider">
+            <School className="w-5 h-5 text-[#2563EB]" />
+            <span className="text-[#2563EB] font-semibold text-sm uppercase tracking-wider">
               About Us
             </span>
           </div>
@@ -20,7 +20,7 @@ const AboutSchool = () => {
 
         <article className="bg-white rounded-3xl shadow-xl p-8 md:p-12 mb-12 border border-gray-100">
           <p className="text-lg md:text-xl text-gray-700 leading-relaxed text-center max-w-4xl mx-auto">
-            MOLEK Schools are a group of schools offering both <strong className="text-[#3B82F6]">Western and Islamic education</strong> from Pre-Nursery through Primary to the Secondary Classes. The school is co-educational, and admits children of all religious faiths, who are ready to abide by the school Rules and Regulations in line with Islamic way of life.
+            MOLEK Schools are a group of schools offering both <strong className="text-[#2563EB]">Western and Islamic education</strong> from Pre-Nursery through Primary to the Secondary Classes. The school is co-educational, and admits children of all religious faiths, who are ready to abide by the school Rules and Regulations in line with Islamic way of life.
           </p>
           
           <aside className="mt-8 bg-[#F9D89C]/20 border-l-4 border-[#3B82F6] p-6 rounded-r-2xl">

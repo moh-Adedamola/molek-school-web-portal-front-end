@@ -1,12 +1,15 @@
+import { Baby, BookOpen, ClipboardCheck, FileText, GraduationCap, PersonStanding, TriangleAlert, UserCheck } from 'lucide-react';
 import { useNavigate } from "react-router-dom";
-import { FaBaby, FaChild, FaBookOpen, FaGraduationCap, FaExclamationTriangle, FaClipboardCheck, FaUserCheck, FaFileAlt } from "react-icons/fa";
+// Accent colours stay on borders and icons; text uses a readable version (existing colours only).
+const textColour = (c) => ({ '#3B82F6': '#2563EB', '#E85D5D': '#B91C1C', '#F9D89C': '#1F3B6B' }[String(c).toUpperCase()] || c);
+
 
 const AdmissionRequirements = () => {
     const navigate = useNavigate();
     const sections = [
         {
             title: "Nursery Section",
-            icon: FaBaby,
+            icon: Baby,
             color: "#E85D5D",
             classes: [
                 { name: "Creche", age: "Below 2 years", requirement: "For babies below two years of age", admissionBy: "Age only" },
@@ -16,7 +19,7 @@ const AdmissionRequirements = () => {
         },
         {
             title: "Primary Section",
-            icon: FaBookOpen,
+            icon: BookOpen,
             color: "#1F3B6B",
             classes: [
                 { name: "Primary 1-4", age: "5+ years for Primary 1", requirement: "Only children who have attained the age of 5 years are considered for Primary 1", admissionBy: "Competitive written test" }
@@ -25,7 +28,7 @@ const AdmissionRequirements = () => {
         },
         {
             title: "Secondary Section",
-            icon: FaGraduationCap,
+            icon: GraduationCap,
             color: "#3B82F6",
             classes: [
                 { name: "JSS 1-2", requirement: "Open for admission", admissionBy: "Highly competitive written test" },
@@ -37,16 +40,16 @@ const AdmissionRequirements = () => {
     ];
 
     const generalPolicies = [
-        { icon: FaExclamationTriangle, title: "No Examination Classes", description: "Students are NOT admitted into examination classes: Primary 5, JSS 3, and SSS 3.", color: "#E85D5D" },
-        { icon: FaFileAlt, title: "Application Process", description: "Admission into all classes requires an Application form which attracts a fee.", color: "#1F3B6B" },
-        { icon: FaUserCheck, title: "Class Suitability", description: "A child found unsuitable for the applied class may be considered for a lower class in consultation with parents.", color: "#3B82F6" },
-        { icon: FaClipboardCheck, title: "Admission Completion", description: "A formal admission letter is issued after the process, followed by an Admission Acceptance form.", color: "#F9D89C" }
+        { icon: TriangleAlert, title: "No Examination Classes", description: "Students are NOT admitted into examination classes: Primary 5, JSS 3, and SSS 3.", color: "#E85D5D" },
+        { icon: FileText, title: "Application Process", description: "Admission into all classes requires an Application form which attracts a fee.", color: "#1F3B6B" },
+        { icon: UserCheck, title: "Class Suitability", description: "A child found unsuitable for the applied class may be considered for a lower class in consultation with parents.", color: "#3B82F6" },
+        { icon: ClipboardCheck, title: "Admission Completion", description: "A formal admission letter is issued after the process, followed by an Admission Acceptance form.", color: "#F9D89C" }
     ];
 
     return (
         <section className="bg-white px-6 md:px-12 lg:px-24 py-16 pt-[150px]">
             <header className="text-center mb-12">
-                <h2 className="text-3xl font-bold mb-4 text-[#3B82F6]">Admission Requirements</h2>
+                <h1 className="text-3xl font-bold mb-4 text-[#2563EB]">Admission Requirements</h1>
                 <p className="text-[#2D2D2D] max-w-3xl mx-auto text-lg">
                     Pupils/Students are admitted into various classes based on age, ability, and availability of space.
                 </p>
@@ -72,7 +75,7 @@ const AdmissionRequirements = () => {
                                         <h4 className="font-bold text-[#1F3B6B] mb-2">{classItem.name}</h4>
                                         <p className="text-sm text-gray-600 mb-2"><strong>Age:</strong> {classItem.age}</p>
                                         <p className="text-sm text-gray-700 mb-2">{classItem.requirement}</p>
-                                        <p className="text-sm font-medium" style={{ color: section.color }}>
+                                        <p className="text-sm font-medium" style={{ color: textColour(section.color) }}>
                                             Admission by: {classItem.admissionBy}
                                         </p>
                                     </div>
@@ -80,13 +83,13 @@ const AdmissionRequirements = () => {
 
                                 {section.restrictions && (
                                     <div className="bg-[#E85D5D]/10 border-2 border-[#E85D5D] p-4 rounded-xl">
-                                        <h5 className="font-semibold text-[#E85D5D] mb-2 flex items-center gap-2">
-                                            <FaExclamationTriangle /> Restrictions
+                                        <h5 className="font-semibold text-red-700 mb-2 flex items-center gap-2">
+                                            <TriangleAlert /> Restrictions
                                         </h5>
                                         <ul className="text-sm text-[#2D2D2D] space-y-1">
                                             {section.restrictions.map((r, k) => (
                                                 <li key={k} className="flex items-start gap-2">
-                                                    <span className="text-[#E85D5D] mt-1">•</span>
+                                                    <span className="text-red-700 mt-1">•</span>
                                                     {r}
                                                 </li>
                                             ))}
@@ -113,7 +116,7 @@ const AdmissionRequirements = () => {
                                         <Icon className="text-xl" />
                                     </div>
                                     <div>
-                                        <h4 className="font-semibold text-[#3B82F6] mb-2">{policy.title}</h4>
+                                        <h4 className="font-semibold text-[#2563EB] mb-2">{policy.title}</h4>
                                         <p className="text-sm text-[#2D2D2D]">{policy.description}</p>
                                     </div>
                                 </div>
@@ -126,7 +129,7 @@ const AdmissionRequirements = () => {
             <aside className="text-center bg-[#1F3B6B] text-white p-8 rounded-2xl shadow-lg">
                 <h4 className="text-xl font-bold mb-2">Ready to Apply?</h4>
                 <p className="mb-4 text-blue-100">Contact us for application forms and detailed admission procedures.</p>
-                <button type="button" onClick={() => navigate('/contact')} className="bg-[#3B82F6] text-white px-8 py-3 rounded-full font-medium hover:bg-[#2563EB] transition-colors shadow-md">
+                <button type="button" onClick={() => navigate('/contact')} className="bg-[#1F3B6B] text-white px-8 py-3 rounded-full font-medium hover:bg-[#2563EB] transition-colors shadow-md">
                     Get Application Form
                 </button>
             </aside>

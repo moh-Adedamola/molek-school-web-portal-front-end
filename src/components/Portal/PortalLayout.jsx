@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { Home, FileText, UserRound, LogOut } from 'lucide-react';
@@ -66,7 +67,10 @@ const PortalLayout = () => {
             </header>
 
             <main id="portal-main" className="md:ml-64 px-4 sm:px-8 py-6 sm:py-8 pb-28 md:pb-10 max-w-6xl">
-                <Outlet />
+                {/* Menu stays put while a page's code loads */}
+                <Suspense fallback={<p role="status" className="py-16 text-center">Loading…</p>}>
+                    <Outlet />
+                </Suspense>
             </main>
 
             {/* Phone bottom tab bar */}

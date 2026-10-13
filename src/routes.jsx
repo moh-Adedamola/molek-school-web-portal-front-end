@@ -1,20 +1,23 @@
-import About from './pages/About';
 import Homepage from "./pages/Homepage.jsx";
-import Academics from "./pages/Academics.jsx";
-import ContactUs from "./pages/ContactUs.jsx";
-import Admissions from './pages/Admissions.jsx';
-import News from "./pages/News.jsx"
-import NewsDetail from "./pages/NewsDetail.jsx";
-import Gallery from "./pages/Gallery.jsx";
-import Privacy from "./pages/Privacy.jsx";
-import Terms from "./pages/Terms.jsx";
-import Accessibility from "./pages/Accessibility.jsx";
 import NotFound from "./pages/NotFound.jsx";
+import PublicLayout from "./components/Landingpage/PublicLayout.jsx";
 import { Navigate } from "react-router-dom";
 
 // Student Portal Imports
-import StudentLogin from './pages/StudentLogin.jsx';
 import { lazy } from 'react';
+// Homepage and 404 load immediately; every other page loads when it is opened,
+// so a first visit downloads only what the homepage needs.
+const About = lazy(() => import('./pages/About'));
+const Academics = lazy(() => import('./pages/Academics.jsx'));
+const ContactUs = lazy(() => import('./pages/ContactUs.jsx'));
+const Admissions = lazy(() => import('./pages/Admissions.jsx'));
+const News = lazy(() => import('./pages/News.jsx'));
+const NewsDetail = lazy(() => import('./pages/NewsDetail.jsx'));
+const Gallery = lazy(() => import('./pages/Gallery.jsx'));
+const Privacy = lazy(() => import('./pages/Privacy.jsx'));
+const Terms = lazy(() => import('./pages/Terms.jsx'));
+const Accessibility = lazy(() => import('./pages/Accessibility.jsx'));
+const StudentLogin = lazy(() => import('./pages/StudentLogin.jsx'));
 // The portal loads only when someone opens it, so homepage visitors on slow
 // connections don't download the charts, forms and report card code.
 const PortalLayout = lazy(() => import('./components/Portal/PortalLayout.jsx'));
@@ -25,57 +28,26 @@ const StudentPayment = lazy(() => import('./components/StudentService/Payment.js
 import ProtectedStudentRoute from './components/ProtectedRoute.jsx';
 
 const routes = [
-    // ============================================
-    // PUBLIC ROUTES (Main Website)
-    // ============================================
+    // Every public page shares one header and footer (PublicLayout)
     {
         path: '/',
-        element: <Homepage />,
-    },
-    {
-        path: '/about',
-        element: <About />,
-    },
-    {
-        path: '/admissions',
-        element: <Admissions />,
-    },
-    {
-        path: '/academics',
-        element: <Academics />,
-    },
-    {
-        path: '/contact',
-        element: <ContactUs />,
-    },
-    {
-        path: '/news',
-        element: <News />,
-    },
-    {
-        path: '/news/:id',
-        element: <NewsDetail />,
-    },
-    {
-        path: '/gallery',
-        element: <Gallery />,
-    },
-    {
-        path: '/privacy',
-        element: <Privacy />,
-    },
-    {
-        path: '/terms',
-        element: <Terms />,
-    },
-    {
-        path: '/accessibility',
-        element: <Accessibility />,
+        element: <PublicLayout />,
+        children: [
+            { index: true, element: <Homepage /> },
+            { path: 'about', element: <About /> },
+            { path: 'admissions', element: <Admissions /> },
+            { path: 'academics', element: <Academics /> },
+            { path: 'contact', element: <ContactUs /> },
+            { path: 'news', element: <News /> },
+            { path: 'news/:id', element: <NewsDetail /> },
+            { path: 'gallery', element: <Gallery /> },
+            { path: 'privacy', element: <Privacy /> },
+            { path: 'terms', element: <Terms /> },
+            { path: 'accessibility', element: <Accessibility /> },
+            { path: '*', element: <NotFound /> },
+        ],
     },
 
-    // ============================================
-    // STUDENT PORTAL ROUTES
-    // ============================================
     {
         path: '/student/login',
         element: <StudentLogin />,
@@ -114,11 +86,6 @@ const routes = [
         ],
     },
 
-    // Anything else: a real "page not found" instead of a blank screen
-    {
-        path: '*',
-        element: <NotFound />,
-    },
 ];
 
 export default routes;

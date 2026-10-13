@@ -83,8 +83,8 @@ const SchoolHistory = () => {
           className="text-center mb-16"
         >
           <div className="inline-flex items-center gap-3 bg-[#3B82F6]/10 px-6 py-2 rounded-full mb-4">
-            <Clock className="w-5 h-5 text-[#3B82F6]" />
-            <span className="text-[#3B82F6] font-semibold text-sm uppercase tracking-wider">
+            <Clock className="w-5 h-5 text-[#2563EB]" />
+            <span className="text-[#2563EB] font-semibold text-sm uppercase tracking-wider">
               Our Journey
             </span>
           </div>
@@ -112,7 +112,7 @@ const SchoolHistory = () => {
               <h3 className="text-2xl font-bold text-[#1F3B6B]">Foundation Story</h3>
             </div>
             <p className="text-gray-800 text-lg mb-4 leading-relaxed">
-              <span className="font-bold text-[#3B82F6]">MOLEK Schools</span> - derived from ADEMOLA and AYANLEKAN (the Proprietors). 
+              <span className="font-bold text-[#2563EB]">MOLEK Schools</span> - derived from ADEMOLA and AYANLEKAN (the Proprietors). 
               The journey began with a special prayer on Sunday, September 2nd, 2007, followed by the 
               official commencement on Monday, September 3rd, 2007.
             </p>
@@ -136,8 +136,8 @@ const SchoolHistory = () => {
               return (
                 <motion.div
                   key={index}
-                  initial={{ x: isEven ? -50 : 50, opacity: 0 }}
-                  whileInView={{ x: 0, opacity: 1 }}
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   viewport={{ once: true }}
                   className={`relative flex items-center ${isEven ? 'md:flex-row' : 'md:flex-row-reverse'} gap-6 md:gap-12`}

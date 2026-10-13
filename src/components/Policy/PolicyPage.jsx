@@ -1,6 +1,4 @@
 import { useEffect } from 'react';
-import Header from '../Landingpage/Header.jsx';
-import Footer from '../Footer.jsx';
 
 /**
  * Shared layout for the Privacy, Terms and Accessibility pages.
@@ -13,8 +11,7 @@ const PolicyPage = ({ title, updated, intro, sections, contact = true }) => {
 
     return (
         <>
-            <Header />
-            <main className="bg-white">
+            <div className="bg-white">
                 <article className="max-w-3xl mx-auto px-4 sm:px-6 py-12 text-[17px] leading-relaxed text-gray-800">
                     <h1 className="text-3xl sm:text-4xl font-bold text-[#1F3B6B]">{title}</h1>
                     <p className="mt-2 text-sm text-gray-600">Last updated: {updated}</p>
@@ -54,8 +51,7 @@ const PolicyPage = ({ title, updated, intro, sections, contact = true }) => {
                         </section>
                     )}
                 </article>
-            </main>
-            <Footer />
+            </div>
         </>
     );
 };

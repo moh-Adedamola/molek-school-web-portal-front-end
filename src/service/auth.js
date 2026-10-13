@@ -46,6 +46,24 @@ export const fetchAllContent = async () => {
 };
 
 // ============================================
+// 📰 FETCH ONE PAGE OF CONTENT (News page "Load more")
+// The API returns 25 items per page. We ask by page number rather than
+// following the API's absolute "next" link, which can come back as http://
+// behind the hosting proxy and be blocked on an https:// site.
+// ============================================
+export const fetchContentPage = async (page = 1) => {
+  const response = await fetch(`${API_BASE_URL}/api/content/public/?page=${page}`, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  });
+  if (response.status === 404) return { items: [], hasMore: false }; // past the last page
+  if (!response.ok) throw new Error(`Failed to fetch content: ${response.status}`);
+  const data = await response.json();
+  if (Array.isArray(data)) return { items: data, hasMore: false };
+  return { items: data.results || [], hasMore: Boolean(data.next) };
+};
+
+// ============================================
 // 📰 FETCH NEWS ONLY (for LatestNews component)
 // ============================================
 export const fetchAllNews = async () => {

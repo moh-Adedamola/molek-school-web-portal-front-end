@@ -1,24 +1,17 @@
 import { Link } from "react-router-dom";
-import { 
-  AcademicCapIcon, 
-  UserGroupIcon, 
-  TrophyIcon,
-  SparklesIcon,
-  BookOpenIcon,
-  HeartIcon
-} from "@heroicons/react/24/outline";
+import { BookOpen, GraduationCap, Heart, Sparkles, Trophy, Users } from 'lucide-react';
 
 const Excellence = () => {
     const stats = [
-        { value: "17+", label: "Years of Excellence", color: "#1F3B6B", icon: SparklesIcon },
-        { value: "900+", label: "Active Students", color: "#3B82F6", icon: UserGroupIcon },
-        { value: "95%", label: "WAEC/NECO Pass Rate", color: "#E85D5D", icon: TrophyIcon },
+        { value: `${new Date().getFullYear() - 2007}+`, label: "Years of Excellence", color: "#1F3B6B", icon: Sparkles },
+        { value: "900+", label: "Active Students", color: "#3B82F6", icon: Users },
+        { value: "95%", label: "WAEC/NECO Pass Rate", color: "#E85D5D", icon: Trophy },
     ];
 
     const features = [
-        { title: "95% Exam Success", desc: "Consistent excellent pass rate in WAEC, NECO, and BECE examinations since our first students in 2013-2016.", color: "#1F3B6B", icon: TrophyIcon },
-        { title: "Montessori-Inspired Learning", desc: "We identify young talents, develop and modify them through active participation and discovery-based learning.", color: "#3B82F6", icon: BookOpenIcon },
-        { title: "Holistic Islamic Education", desc: "Complete curriculum including Arabic Studies, Islamic Studies, Tahafeez (Quran Memorization), and conventional subjects.", color: "#E85D5D", icon: HeartIcon },
+        { title: "95% Exam Success", desc: "Consistent excellent pass rate in WAEC, NECO, and BECE examinations since our first students in 2013-2016.", color: "#1F3B6B", icon: Trophy },
+        { title: "Montessori-Inspired Learning", desc: "We identify young talents, develop and modify them through active participation and discovery-based learning.", color: "#3B82F6", icon: BookOpen },
+        { title: "Holistic Islamic Education", desc: "Complete curriculum including Arabic Studies, Islamic Studies, Tahafeez (Quran Memorization), and conventional subjects.", color: "#E85D5D", icon: Heart },
     ];
 
     return (
@@ -30,37 +23,33 @@ const Excellence = () => {
                 {/* Hero */}
                 <header className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center mb-16 lg:mb-24">
                     <figure className="relative order-2 lg:order-1">
-                        <img src="/excel.webp" alt="MOLEK Schools Excellence" className="w-full rounded-3xl overflow-hidden shadow-2xl object-cover transition-transform duration-700 hover:scale-105" />
-                        <figcaption className="absolute -top-4 -right-4 bg-gradient-to-br from-[#3B82F6] to-[#1F3B6B] text-white px-6 py-3 rounded-2xl shadow-xl">
+                        <img src="/excel.webp" alt="MOLEK Schools Excellence" width="816" height="459" fetchPriority="high" className="w-full h-auto rounded-3xl shadow-2xl object-cover" />
+                        <figcaption className="absolute top-3 right-3 bg-[#1F3B6B] text-white px-5 py-2.5 rounded-2xl shadow-xl">
                             <span className="text-sm font-semibold">Est. 2007</span>
                         </figcaption>
                     </figure>
 
                     <article className="order-1 lg:order-2">
                         <div className="inline-flex items-center gap-2 bg-[#3B82F6]/10 px-4 py-2 rounded-full mb-4">
-                            <AcademicCapIcon className="w-5 h-5 text-[#3B82F6]" />
-                            <span className="text-[#3B82F6] font-semibold text-sm uppercase tracking-wider">Our Mission</span>
+                            <GraduationCap aria-hidden="true" className="w-5 h-5 text-[#1F3B6B]" />
+                            <span className="text-[#1F3B6B] font-semibold text-sm uppercase tracking-wider">Our Mission</span>
                         </div>
                         
                         <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1F3B6B] mb-6 leading-tight">
-                            Excellence in <span className="text-[#3B82F6]">Holistic Education</span>
+                            Excellence in <span className="text-[#2563EB]">Holistic Education</span>
                         </h1>
                         
                         <p className="text-gray-700 text-lg leading-relaxed mb-8">
                             Building <strong className="text-[#1F3B6B]">GOD-FEARING</strong> future leaders through quality education that combines Islamic values 
-                            with modern academic excellence. From Creche to Senior Secondary, we nurture the <strong className="text-[#3B82F6]">TOTAL CHILD</strong> with Montessori Method of Teaching.
+                            with modern academic excellence. From Creche to Senior Secondary, we nurture the <strong className="text-[#2563EB]">TOTAL CHILD</strong> with Montessori Method of Teaching.
                         </p>
                         
                         <div className="flex flex-col sm:flex-row gap-4">
-                            <Link to="/admissions" className="text-center">
-                                <button className="w-full sm:w-auto bg-gradient-to-r from-[#3B82F6] to-[#1F3B6B] text-white px-8 py-4 rounded-full hover:shadow-xl transition-all shadow-lg font-semibold hover:scale-105 active:scale-95">
-                                    Apply for Admission
-                                </button>
+                            <Link to="/admissions" className="text-center w-full sm:w-auto bg-[#1F3B6B] text-white px-8 py-4 rounded-full shadow-lg font-semibold hover:bg-[#2D2D2D] focus-visible:outline focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[#1F3B6B]">
+                                Apply for Admission
                             </Link>
-                            <Link to="/about" className="text-center">
-                                <button className="w-full sm:w-auto border-2 border-[#3B82F6] text-[#3B82F6] px-8 py-4 rounded-full hover:bg-[#3B82F6] hover:text-white transition-all font-semibold hover:scale-105 active:scale-95">
-                                    Learn More
-                                </button>
+                            <Link to="/about" className="text-center w-full sm:w-auto border-2 border-[#1F3B6B] text-[#1F3B6B] px-8 py-4 rounded-full font-semibold hover:bg-[#FAFAFA] focus-visible:outline focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[#1F3B6B]">
+                                Learn More
                             </Link>
                         </div>
                     </article>
@@ -109,7 +98,7 @@ const Excellence = () => {
                             From 19 Pupils to Nearly 900 Students
                         </h2>
                         <p className="text-gray-700 text-lg max-w-3xl mx-auto leading-relaxed">
-                            Recognized and approved by <strong className="text-[#3B82F6]">Osun State Government</strong> across all three sections: 
+                            Recognized and approved by <strong className="text-[#2563EB]">Osun State Government</strong> across all three sections: 
                             Nursery (2008), Primary (2012), and Secondary (2013). A testament to our commitment to excellence in Islamic education.
                         </p>
                     </div>

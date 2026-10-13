@@ -1,119 +1,104 @@
 import { motion } from "framer-motion";
+import { Disclosure, DisclosureButton } from "@headlessui/react";
+import { BookOpen, Calculator, ChevronDown, CircleCheck, Cog, FlaskConical, Globe, GraduationCap, Hand, Heart, Landmark, Sparkles, Star, Trophy, Users } from 'lucide-react';
 import { useNavigate } from "react-router-dom";
-import {
-    AcademicCapIcon,
-    CheckCircleIcon,
-    UserGroupIcon,
-    BookOpenIcon,
-    BeakerIcon,
-    CalculatorIcon,
-    SparklesIcon,
-    TrophyIcon,
-    HeartIcon,
-    BuildingLibraryIcon,
-    HandRaisedIcon,
-    CogIcon,
-    StarIcon,
-    GlobeAltIcon,
-    AcademicCapIcon as GraduationIcon
-} from '@heroicons/react/24/outline';
 
 const features = [
     {
         title: "Complete Education Journey",
         description: "From Nursery to SSS - comprehensive programs covering ages 2-16 with seamless transitions between levels.",
-        icon: AcademicCapIcon,
+        icon: GraduationCap,
         color: "#1F3B6B"
     },
     {
         title: "WAEC & NECO Excellence", 
         description: "Consistent 95%+ pass rates with dedicated examination preparation and proven academic track record.",
-        icon: CheckCircleIcon,
+        icon: CircleCheck,
         color: "#3B82F6"
     },
     {
         title: "Islamic & Moral Foundation",
         description: "Strong emphasis on Islamic values, moral development, and character building alongside academic excellence.",
-        icon: HeartIcon,
+        icon: Heart,
         color: "#E85D5D"
     },
     {
         title: "MOLEK Tradition",
         description: "Established tradition of qualitative, participatory education fostering cooperation and positive competition.",
-        icon: BuildingLibraryIcon,
+        icon: Landmark,
         color: "#F9D89C"
     },
     {
         title: "Multi-Stream Specialization",
         description: "Science, Arts/Humanity, and Commercial streams with Arabic, French, and specialized subject offerings.",
-        icon: BookOpenIcon,
+        icon: BookOpen,
         color: "#1F3B6B"
     },
     {
         title: "Practical Skills Development",
         description: "Vocational training in Catering, Dress Making, Hair Dressing, and Soap Making for entrepreneurship.",
-        icon: CogIcon,
+        icon: Cog,
         color: "#3B82F6"
     },
     {
         title: "Science Excellence",
         description: "Well-equipped laboratories for Physics, Chemistry, and Biology with hands-on practical sessions.",
-        icon: BeakerIcon,
+        icon: FlaskConical,
         color: "#E85D5D"
     },
     {
         title: "Small Class Advantage",
         description: "20-25 students in Secondary, under 20 in Nursery/Primary, ensuring personalized attention and quality interaction.",
-        icon: UserGroupIcon,
+        icon: Users,
         color: "#F9D89C"
     },
     {
         title: "Early Childhood Care",
         description: "Quality nursery and kindergarten programs supporting working parents with comprehensive child development.",
-        icon: SparklesIcon,
+        icon: Sparkles,
         color: "#1F3B6B"
     },
     {
         title: "Examination Preparation",
         description: "Specialized preparation for National Common Entrance, WAEC, NECO and other external examinations.",
-        icon: CalculatorIcon,
+        icon: Calculator,
         color: "#3B82F6"
     },
     {
         title: "Self-Employment Focus",
         description: "Vocational programs designed to create future entrepreneurs and employers of labour in various industries.",
-        icon: HandRaisedIcon,
+        icon: Hand,
         color: "#E85D5D"
     },
     {
         title: "Holistic Achievement",
         description: "40 hours weekly of comprehensive education including academics, sports, religious studies, and character development.",
-        icon: TrophyIcon,
+        icon: Trophy,
         color: "#F9D89C"
     },
 ];
 
 const successStories = [
     {
-        icon: TrophyIcon,
+        icon: Trophy,
         title: "Outstanding Results",
         description: "Consistently recording excellent results with many distinction grades in all certificate examinations.",
         color: "#3B82F6"
     },
     {
-        icon: GlobeAltIcon,
+        icon: Globe,
         title: "Tertiary Success",
         description: "Students gaining admission to top institutions within and outside Nigeria, many with scholarships.",
         color: "#1F3B6B"
     },
     {
-        icon: GraduationIcon,
+        icon: GraduationCap,
         title: "Professional Excellence",
         description: "Graduates excelling in Engineering, Medicine, Law, Accounting, Education, Nursing, and more.",
         color: "#E85D5D"
     },
     {
-        icon: StarIcon,
+        icon: Star,
         title: "Competition Champions",
         description: "Multiple medals and certificates in various inter-school competitions, demonstrating total excellence.",
         color: "#F9D89C"
@@ -138,14 +123,14 @@ const WhyChooseUs = () => {
                     viewport={{ once: true }}
                 >
                     <div className="inline-flex items-center gap-2 bg-[#3B82F6]/10 px-4 py-2 rounded-full mb-4">
-                        <StarIcon className="w-5 h-5 text-[#3B82F6]" />
-                        <span className="text-[#3B82F6] font-semibold text-sm uppercase tracking-wider">
+                        <Star className="w-5 h-5 text-[#2563EB]" />
+                        <span className="text-[#2563EB] font-semibold text-sm uppercase tracking-wider">
                             Our Advantages
                         </span>
                     </div>
                     
                     <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1F3B6B] mb-6">
-                        Why Choose <span className="text-[#3B82F6]">MOLEK Schools?</span>
+                        Why Choose <span className="text-[#2563EB]">MOLEK Schools?</span>
                     </h2>
                     
                     <p className="text-gray-700 text-lg max-w-3xl mx-auto leading-relaxed">
@@ -154,45 +139,33 @@ const WhyChooseUs = () => {
                     </p>
                 </motion.div>
 
-                {/* Features Grid */}
-                <motion.div 
-                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-20"
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true }}
-                    variants={{
-                        hidden: { opacity: 0 },
-                        visible: {
-                            opacity: 1,
-                            transition: { staggerChildren: 0.08 }
-                        }
-                    }}
-                >
-                    {features.map(({ title, description, icon: Icon, color }, index) => (
-                        <motion.div
-                            key={index}
-                            className="group bg-white rounded-2xl p-6 lg:p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100"
-                            variants={{
-                                hidden: { opacity: 0, y: 30 },
-                                visible: { opacity: 1, y: 0 }
-                            }}
-                            whileHover={{ y: -8 }}
-                        >
-                            <div 
-                                className="mb-5 p-4 rounded-xl w-fit group-hover:scale-110 transition-transform duration-300"
-                                style={{ backgroundColor: `${color}15` }}
-                            >
-                                <Icon className="w-8 h-8" style={{ color }} />
+                {/* Features: all 16 kept; six show first, the rest behind "Show all" (Headless UI Disclosure) */}
+                <Disclosure as="div" className="mb-20">
+                    {({ open }) => (
+                        <>
+                            <div id="why-choose-us-list" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+                                {(open ? features : features.slice(0, 6)).map(({ title, description, icon: Icon, color }) => (
+                                    <div key={title} className="bg-white rounded-2xl p-6 lg:p-8 shadow-lg border border-gray-100">
+                                        <div className="mb-5 p-4 rounded-xl w-fit" style={{ backgroundColor: `${color}15` }}>
+                                            <Icon aria-hidden="true" className="w-8 h-8" style={{ color }} />
+                                        </div>
+                                        <h3 className="text-xl font-bold text-[#1F3B6B] mb-3">{title}</h3>
+                                        <p className="text-gray-700 leading-relaxed">{description}</p>
+                                    </div>
+                                ))}
                             </div>
-                            <h3 className="text-xl font-bold text-[#1F3B6B] mb-3 group-hover:text-[#3B82F6] transition-colors">
-                                {title}
-                            </h3>
-                            <p className="text-gray-700 leading-relaxed">
-                                {description}
-                            </p>
-                        </motion.div>
-                    ))}
-                </motion.div>
+                            {features.length > 6 && (
+                                <div className="mt-8 text-center">
+                                    <DisclosureButton aria-controls="why-choose-us-list"
+                                        className="inline-flex items-center gap-2 rounded-full border-2 border-[#1F3B6B] bg-white px-6 py-3 min-h-12 font-semibold text-[#1F3B6B] hover:bg-[#FAFAFA] focus-visible:outline focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[#1F3B6B]">
+                                        {open ? 'Show fewer' : `Show all ${features.length} reasons`}
+                                        <ChevronDown aria-hidden="true" className={`h-5 w-5 transition-transform ${open ? 'rotate-180' : ''}`} />
+                                    </DisclosureButton>
+                                </div>
+                            )}
+                        </>
+                    )}
+                </Disclosure>
 
                 {/* Success Stories Section */}
                 <motion.div
@@ -211,9 +184,9 @@ const WhyChooseUs = () => {
                             viewport={{ once: true }}
                         >
                             <div className="inline-flex items-center gap-3 mb-6">
-                                <TrophyIcon className="w-10 h-10 text-[#3B82F6]" />
+                                <Trophy className="w-10 h-10 text-[#2563EB]" />
                                 <h2 className="text-3xl sm:text-4xl font-bold text-[#1F3B6B]">
-                                    Our <span className="text-[#3B82F6]">Success Story</span>
+                                    Our <span className="text-[#2563EB]">Success Story</span>
                                 </h2>
                             </div>
                             <p className="text-gray-700 text-lg max-w-3xl mx-auto">
@@ -259,7 +232,7 @@ const WhyChooseUs = () => {
                                     <story.icon className="w-8 h-8" style={{ color: story.color }} />
                                 </div>
                                 
-                                <h3 className="text-xl font-bold text-[#1F3B6B] mb-3 group-hover:text-[#3B82F6] transition-colors">
+                                <h3 className="text-xl font-bold text-[#1F3B6B] mb-3 group-hover:text-[#2563EB] transition-colors">
                                     {story.title}
                                 </h3>
                                 
@@ -297,10 +270,10 @@ const WhyChooseUs = () => {
                                 onClick={() => navigate('/admissions')}
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
-                                className="inline-flex items-center gap-2 bg-white text-[#3B82F6] px-8 py-4 rounded-full font-bold text-lg shadow-xl hover:shadow-2xl transition-all"
+                                className="inline-flex items-center gap-2 bg-white text-[#2563EB] px-8 py-4 rounded-full font-bold text-lg shadow-xl hover:shadow-2xl transition-all"
                             >
                                 <span>Start Your Journey Today</span>
-                                <GraduationIcon className="w-6 h-6" />
+                                <GraduationCap className="w-6 h-6" />
                             </motion.button>
                         </div>
                     </div>

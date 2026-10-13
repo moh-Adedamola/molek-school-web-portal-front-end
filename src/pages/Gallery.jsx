@@ -1,13 +1,11 @@
-import Header from "../components/Landingpage/Header.jsx";
-import Footer from "../components/Footer.jsx";
+import usePageTitle from '../hooks/usePageTitle.js';
 import Galleries from "../components/Landingpage/Galleries.jsx";
 
 const News = () => {
+    usePageTitle('Gallery');
     return(
         <>
-            <Header />
             <Galleries />
-            <Footer />
         </>
     )
 }

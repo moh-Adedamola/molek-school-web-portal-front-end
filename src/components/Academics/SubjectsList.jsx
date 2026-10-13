@@ -1,10 +1,8 @@
+import { Banknote, Book, BookOpen, Calculator, Earth, FileText, FlaskConical, GraduationCap, History, Languages, Laptop, Microscope, Palette, PenTool, PersonStanding, Scale, Sprout } from 'lucide-react';
 import { motion } from "framer-motion";
-import {
-    FaCalculator, FaPenFancy, FaFlask, FaMicroscope, FaLaptop, FaPalette,
-    FaRunning, FaGlobeAfrica, FaBook, FaBalanceScale, FaHistory, FaMoneyBill,
-    FaFileAlt, FaLanguage, FaSeedling
-} from "react-icons/fa";
-import { BookOpenIcon, AcademicCapIcon } from "@heroicons/react/24/outline";
+// Accent colours stay on icons; text uses a readable version of each (existing colours only).
+const textColour = (c) => ({ '#3B82F6': '#2563EB', '#E85D5D': '#B91C1C', '#F9D89C': '#1F3B6B' }[String(c).toUpperCase()] || c);
+
 
 const subjectData = [
     {
@@ -12,7 +10,7 @@ const subjectData = [
         level: "Both",
         type: "Core",
         exam: "WAEC/NECO",
-        icon: FaCalculator,
+        icon: Calculator,
         color: "#E85D5D"
     },
     {
@@ -20,7 +18,7 @@ const subjectData = [
         level: "Both",
         type: "Core",
         exam: "WAEC/NECO",
-        icon: FaPenFancy,
+        icon: PenTool,
         color: "#1F3B6B"
     },
     {
@@ -28,7 +26,7 @@ const subjectData = [
         level: "JSS",
         type: "Core",
         exam: "BECE",
-        icon: FaMicroscope,
+        icon: Microscope,
         color: "#3B82F6"
     },
     {
@@ -36,7 +34,7 @@ const subjectData = [
         level: "SSS",
         type: "Elective",
         exam: "WAEC/NECO",
-        icon: FaMicroscope,
+        icon: Microscope,
         color: "#F9D89C"
     },
     {
@@ -44,7 +42,7 @@ const subjectData = [
         level: "SSS",
         type: "Elective",
         exam: "WAEC/NECO",
-        icon: FaFlask,
+        icon: FlaskConical,
         color: "#E85D5D"
     },
     {
@@ -52,7 +50,7 @@ const subjectData = [
         level: "SSS",
         type: "Elective",
         exam: "WAEC/NECO",
-        icon: FaGlobeAfrica,
+        icon: Earth,
         color: "#1F3B6B"
     },
     {
@@ -60,7 +58,7 @@ const subjectData = [
         level: "SSS",
         type: "Elective",
         exam: "WAEC/NECO",
-        icon: FaBook,
+        icon: Book,
         color: "#3B82F6"
     },
     {
@@ -68,7 +66,7 @@ const subjectData = [
         level: "SSS",
         type: "Elective",
         exam: "WAEC/NECO",
-        icon: FaBalanceScale,
+        icon: Scale,
         color: "#F9D89C"
     },
     {
@@ -76,7 +74,7 @@ const subjectData = [
         level: "SSS",
         type: "Elective",
         exam: "WAEC/NECO",
-        icon: FaHistory,
+        icon: History,
         color: "#E85D5D"
     },
     {
@@ -84,7 +82,7 @@ const subjectData = [
         level: "SSS",
         type: "Elective",
         exam: "WAEC/NECO",
-        icon: FaMoneyBill,
+        icon: Banknote,
         color: "#1F3B6B"
     },
     {
@@ -92,7 +90,7 @@ const subjectData = [
         level: "SSS",
         type: "Elective",
         exam: "WAEC/NECO",
-        icon: FaFileAlt,
+        icon: FileText,
         color: "#3B82F6"
     },
     {
@@ -100,7 +98,7 @@ const subjectData = [
         level: "Both",
         type: "Core",
         exam: "WAEC/NECO",
-        icon: FaLaptop,
+        icon: Laptop,
         color: "#F9D89C"
     },
     {
@@ -108,7 +106,7 @@ const subjectData = [
         level: "JSS",
         type: "Core",
         exam: "BECE",
-        icon: FaPalette,
+        icon: Palette,
         color: "#E85D5D"
     },
     {
@@ -116,7 +114,7 @@ const subjectData = [
         level: "Both",
         type: "Core",
         exam: "WAEC/NECO",
-        icon: FaRunning,
+        icon: PersonStanding,
         color: "#1F3B6B"
     },
     {
@@ -124,7 +122,7 @@ const subjectData = [
         level: "JSS",
         type: "Core",
         exam: "BECE",
-        icon: FaLanguage,
+        icon: Languages,
         color: "#3B82F6"
     },
     {
@@ -132,7 +130,7 @@ const subjectData = [
         level: "JSS",
         type: "Core",
         exam: "BECE",
-        icon: FaSeedling,
+        icon: Sprout,
         color: "#F9D89C"
     },
 ];
@@ -154,14 +152,14 @@ const SubjectsList = () => {
                     viewport={{ once: true }}
                 >
                     <div className="inline-flex items-center gap-2 bg-[#3B82F6]/10 px-4 py-2 rounded-full mb-4">
-                        <BookOpenIcon className="w-5 h-5 text-[#3B82F6]" />
-                        <span className="text-[#3B82F6] font-semibold text-sm uppercase tracking-wider">
+                        <BookOpen className="w-5 h-5 text-[#2563EB]" />
+                        <span className="text-[#2563EB] font-semibold text-sm uppercase tracking-wider">
                             Curriculum
                         </span>
                     </div>
                     
                     <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1F3B6B] mb-4">
-                        Subjects <span className="text-[#3B82F6]">Offered</span>
+                        Subjects <span className="text-[#2563EB]">Offered</span>
                     </h2>
                     
                     <p className="text-gray-700 text-lg max-w-3xl mx-auto leading-relaxed">
@@ -206,7 +204,7 @@ const SubjectsList = () => {
                                     />
                                 </div>
                                 <div className="flex-1 min-w-0">
-                                    <h3 className="text-lg font-bold text-[#1F3B6B] group-hover:text-[#3B82F6] transition-colors leading-tight">
+                                    <h3 className="text-lg font-bold text-[#1F3B6B] group-hover:text-[#2563EB] transition-colors leading-tight">
                                         {subject.name}
                                     </h3>
                                 </div>
@@ -242,7 +240,7 @@ const SubjectsList = () => {
                             >
                                 <p 
                                     className="text-xs font-semibold text-center"
-                                    style={{ color: subject.color }}
+                                    style={{ color: textColour(subject.color) }}
                                 >
                                     {subject.type} Subject
                                 </p>
@@ -260,17 +258,17 @@ const SubjectsList = () => {
                     className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6"
                 >
                     <div className="bg-gradient-to-br from-[#1F3B6B] to-[#3B82F6] text-white rounded-2xl p-6 text-center">
-                        <AcademicCapIcon className="w-12 h-12 mx-auto mb-3" />
+                        <GraduationCap className="w-12 h-12 mx-auto mb-3" />
                         <h4 className="text-2xl font-bold mb-2">16+</h4>
                         <p className="text-sm text-blue-100">Total Subjects</p>
                     </div>
                     <div className="bg-gradient-to-br from-[#3B82F6] to-[#E85D5D] text-white rounded-2xl p-6 text-center">
-                        <BookOpenIcon className="w-12 h-12 mx-auto mb-3" />
+                        <BookOpen className="w-12 h-12 mx-auto mb-3" />
                         <h4 className="text-2xl font-bold mb-2">Core + Elective</h4>
                         <p className="text-sm text-blue-100">Subject Types</p>
                     </div>
                     <div className="bg-gradient-to-br from-[#E85D5D] to-[#F9D89C] text-white rounded-2xl p-6 text-center">
-                        <FaCalculator className="text-5xl mx-auto mb-3" />
+                        <Calculator className="text-5xl mx-auto mb-3" />
                         <h4 className="text-2xl font-bold mb-2">WAEC/NECO</h4>
                         <p className="text-sm text-red-100">Approved Exams</p>
                     </div>

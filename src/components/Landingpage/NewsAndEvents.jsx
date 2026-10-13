@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { fetchAllContent } from '../../service/auth';
+import { Link } from 'react-router-dom';
+import { fetchContentPage } from '../../service/auth';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Calendar, User, Newspaper, Play, ArrowRight } from 'lucide-react';
 
@@ -35,7 +35,10 @@ const NewsAndEvents = () => {
   const [content, setContent] = useState([]);
   const [selectedFilter, setSelectedFilter] = useState('all');
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [loadError, setLoadError] = useState(false);
 
   const cardColors = ['#1F3B6B', '#3B82F6', '#E85D5D', '#F9D89C'];
 
@@ -43,11 +46,12 @@ const NewsAndEvents = () => {
     const loadContent = async () => {
       setLoading(true);
       try {
-        const allContent = await fetchAllContent();
-        setContent(allContent || []);
-      } catch (error) {
-        console.error('Error fetching content:', error.message);
+        const { items, hasMore: more } = await fetchContentPage(1);
+        setContent(items);
+        setHasMore(more);
+      } catch {
         setContent([]);
+        setLoadError(true);
       } finally {
         setLoading(false);
       }
@@ -55,9 +59,24 @@ const NewsAndEvents = () => {
     loadContent();
   }, []);
 
-  const openArticle = (item) => {
-    navigate(`/news/${item.id}`, { state: { item } });
+  const loadMore = async () => {
+    setLoadingMore(true);
+    try {
+      const next = page + 1;
+      const { items, hasMore: more } = await fetchContentPage(next);
+      setContent((prev) => [...prev, ...items.filter((i) => !prev.some((p) => p.id === i.id))]);
+      setPage(next);
+      setHasMore(more);
+    } catch {
+      setLoadError(true);
+    } finally {
+      setLoadingMore(false);
+    }
   };
+
+  // Cloudinary videos have a matching .jpg still; other videos show their first frame.
+  const videoPoster = (url) => (/res\.cloudinary\.com\/.+\/video\/upload\//.test(url || '')
+    ? url.replace(/\.(mp4|mov|webm|m4v)(\?.*)?$/i, '.jpg') : undefined);
 
   const filteredContent = selectedFilter === 'all'
     ? content
@@ -105,8 +124,8 @@ const NewsAndEvents = () => {
           className="text-center mb-12"
         >
           <div className="inline-flex items-center gap-3 bg-[#3B82F6]/10 px-6 py-2 rounded-full mb-4">
-            <Newspaper className="w-5 h-5 text-[#3B82F6]" />
-            <span className="text-[#3B82F6] font-semibold text-sm uppercase tracking-wider">Updates</span>
+            <Newspaper className="w-5 h-5 text-[#2563EB]" />
+            <span className="text-[#2563EB] font-semibold text-sm uppercase tracking-wider">Updates</span>
           </div>
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#1F3B6B] mb-4">
             News &amp; Events
@@ -123,7 +142,7 @@ const NewsAndEvents = () => {
           transition={{ delay: 0.2 }}
           className="flex justify-center mb-12"
         >
-          <div className="inline-flex bg-white rounded-full p-1.5 shadow-lg">
+          <div className="flex flex-wrap justify-center gap-1 bg-white rounded-3xl sm:rounded-full p-1.5 shadow-lg max-w-full" role="group" aria-label="Show">
             {[
               { value: 'all', label: 'All' },
               { value: 'news', label: 'News' },
@@ -132,11 +151,13 @@ const NewsAndEvents = () => {
             ].map((filter) => (
               <button
                 key={filter.value}
+                type="button"
+                aria-pressed={selectedFilter === filter.value}
                 onClick={() => setSelectedFilter(filter.value)}
-                className={`px-6 py-2.5 rounded-full font-semibold text-sm transition-all duration-300 ${
+                className={`px-4 sm:px-6 py-2.5 min-h-11 rounded-full font-semibold transition-colors focus-visible:outline focus-visible:outline-3 focus-visible:outline-[#1F3B6B] ${
                   selectedFilter === filter.value
-                    ? 'bg-[#3B82F6] text-white shadow-md'
-                    : 'text-gray-600 hover:text-[#3B82F6]'
+                    ? 'bg-[#1F3B6B] text-white shadow-md'
+                    : 'text-[#1F3B6B] hover:bg-[#FAFAFA]'
                 }`}
               >
                 {filter.label}
@@ -160,15 +181,9 @@ const NewsAndEvents = () => {
               const snippet = stripHtml(item.description);
 
               return (
-                <motion.article
+                <article
                   key={item.id}
-                  layout
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  transition={{ duration: 0.3, delay: idx * 0.05 }}
-                  onClick={() => openArticle(item)}
-                  className="group bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden transform hover:-translate-y-2 cursor-pointer flex flex-col"
+                  className="group relative bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-shadow overflow-hidden flex flex-col"
                 >
                   {/* Media Section (image / video / news placeholder) */}
                   <div className="relative h-56 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
@@ -177,7 +192,7 @@ const NewsAndEvents = () => {
                         <img
                           src={item.media_url}
                           alt={item.title}
-                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                          className="w-full h-full object-cover"
                           loading="lazy"
                           onError={(e) => (e.target.src = '/excel.webp')}
                         />
@@ -188,10 +203,13 @@ const NewsAndEvents = () => {
                         <video
                           className="w-full h-full object-cover"
                           preload="metadata"
-                          poster={`${item.media_url}#t=0.1`}
-                        >
-                          <source src={item.media_url} type="video/mp4" />
-                        </video>
+                          muted
+                          playsInline
+                          aria-hidden="true"
+                          tabIndex={-1}
+                          poster={videoPoster(item.media_url)}
+                          src={`${item.media_url}#t=0.1`}
+                        />
                         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                           <div className="bg-white/20 backdrop-blur-sm p-4 rounded-full">
                             <Play className="w-8 h-8 text-white" />
@@ -210,10 +228,7 @@ const NewsAndEvents = () => {
                         >
                           <Newspaper className="w-10 h-10" style={{ color: accentColor }} />
                         </div>
-                        <span
-                          className="text-xs font-bold uppercase tracking-widest"
-                          style={{ color: accentColor }}
-                        >
+                        <span className="text-sm font-bold uppercase tracking-widest text-[#1F3B6B]">
                           News
                         </span>
                       </div>
@@ -223,25 +238,22 @@ const NewsAndEvents = () => {
                     <div className="absolute top-0 left-0 right-0 h-1.5" style={{ backgroundColor: accentColor }} />
 
                     {/* Content Type Badge */}
-                    <div
-                      className="absolute top-4 right-4 px-3 py-1 rounded-full text-white text-xs font-bold uppercase backdrop-blur-sm shadow-lg"
-                      style={{ backgroundColor: accentColor }}
-                    >
+                    <div className="absolute top-4 right-4 px-3 py-1 rounded-full bg-white text-[#1F3B6B] text-sm font-bold uppercase shadow-lg">
                       {item.content_type}
                     </div>
                   </div>
 
                   {/* Content Section */}
                   <div className="p-6 flex flex-col flex-1">
-                    <h3 className="text-xl font-bold text-[#1F3B6B] mb-3 line-clamp-2 min-h-[3.5rem] group-hover:text-[#3B82F6] transition-colors">
+                    <h3 className="text-xl font-bold text-[#1F3B6B] mb-3 line-clamp-2 min-h-[3.5rem]">
                       {item.title}
                     </h3>
 
-                    <p className="text-gray-600 text-sm leading-relaxed mb-4 line-clamp-3">
+                    <p className="text-gray-700 leading-relaxed mb-4 line-clamp-3">
                       {snippet ? `${snippet.substring(0, 160)}${snippet.length > 160 ? '…' : ''}` : ''}
                     </p>
 
-                    <div className="flex flex-wrap gap-3 text-xs text-gray-500 mb-4 mt-auto">
+                    <div className="flex flex-wrap gap-3 text-sm text-gray-600 mb-4 mt-auto">
                       <div className="flex items-center gap-1.5">
                         <Calendar className="w-3.5 h-3.5" />
                         <span>{formatDate(item.publish_date || item.created_at)}</span>
@@ -252,25 +264,38 @@ const NewsAndEvents = () => {
                       </div>
                     </div>
 
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        openArticle(item);
-                      }}
-                      className="w-full py-3 rounded-xl font-semibold text-white transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2"
-                      style={{ backgroundColor: accentColor }}
+                    {/* A real link; its ::after covers the card so the whole card is clickable */}
+                    <Link
+                      to={`/news/${item.id}`}
+                      state={{ item }}
+                      className="w-full py-3 rounded-xl font-semibold text-white bg-[#1F3B6B] shadow-md flex items-center justify-center gap-2 after:absolute after:inset-0 after:content-[''] focus-visible:outline focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[#1F3B6B]"
                     >
                       Read Full Story
-                      <ArrowRight className="w-4 h-4" />
-                    </button>
+                      <ArrowRight aria-hidden="true" className="w-4 h-4" />
+                      <span className="sr-only">: {item.title}</span>
+                    </Link>
                   </div>
-                </motion.article>
+                </article>
               );
             })}
           </motion.div>
         </AnimatePresence>
 
         {/* Empty State */}
+        {loadError && (
+          <p role="alert" className="mt-8 text-center font-semibold text-red-700">
+            We couldn't load more news. Check your internet connection and try again.
+          </p>
+        )}
+        {hasMore && (
+          <div className="mt-10 text-center">
+            <button type="button" onClick={loadMore} disabled={loadingMore}
+              className="inline-flex items-center gap-2 rounded-full bg-[#1F3B6B] px-8 py-3 min-h-12 font-semibold text-white disabled:opacity-60 focus-visible:outline focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[#1F3B6B]">
+              {loadingMore ? 'Loading…' : 'Load more'}
+            </button>
+          </div>
+        )}
+
         {filteredContent.length === 0 && !loading && (
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
