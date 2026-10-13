@@ -14,12 +14,14 @@ import { Navigate } from "react-router-dom";
 
 // Student Portal Imports
 import StudentLogin from './pages/StudentLogin.jsx';
-import StudentLayout from './components/StudentService/Layout.jsx';
-import StudentDashboard from './components/StudentService/Dashboard.jsx';
-import StudentGrade from './components/StudentService/Grade.jsx';
-import StudentPayment from './components/StudentService/Payment.jsx';
-import StudentSettings from './components/StudentService/Settings.jsx';
-import StudentProfile from './components/StudentService/StudentProfile.jsx';
+import { lazy } from 'react';
+// The portal loads only when someone opens it, so homepage visitors on slow
+// connections don't download the charts, forms and report card code.
+const PortalLayout = lazy(() => import('./components/Portal/PortalLayout.jsx'));
+const PortalHome = lazy(() => import('./pages/portal/Home.jsx'));
+const PortalResults = lazy(() => import('./pages/portal/Results.jsx'));
+const MyDetails = lazy(() => import('./pages/portal/MyDetails.jsx'));
+const StudentPayment = lazy(() => import('./components/StudentService/Payment.jsx'));
 import ProtectedStudentRoute from './components/ProtectedRoute.jsx';
 
 const routes = [
@@ -82,34 +84,33 @@ const routes = [
         path: '/student',
         element: (
             <ProtectedStudentRoute>
-                <StudentLayout />
+                <PortalLayout />
             </ProtectedStudentRoute>
         ),
         children: [
+            // Three pages: Home, Results, My details (+ the payments preview)
             {
                 index: true,
-                element: <Navigate to="dashboard" replace />,
+                element: <PortalHome />,
             },
             {
-                path: 'dashboard',
-                element: <StudentDashboard />,
+                path: 'results',
+                element: <PortalResults />,
             },
             {
-                path: 'grades',
-                element: <StudentGrade />,
+                path: 'details',
+                element: <MyDetails />,
             },
             {
                 path: 'payment',
                 element: <StudentPayment />,
             },
-            {
-                path: 'settings',
-                element: <StudentSettings />,
-            },
-            {
-                path: 'profile',
-                element: <StudentProfile />,
-            },
+            // Old addresses keep working for anyone with a bookmark
+            { path: 'dashboard', element: <Navigate to="/student" replace /> },
+            { path: 'grades', element: <Navigate to="/student/results" replace /> },
+            { path: 'profile', element: <Navigate to="/student/details" replace /> },
+            { path: 'settings', element: <Navigate to="/student/details" replace /> },
+            { path: 'payments', element: <Navigate to="/student/payment" replace /> },
         ],
     },
 

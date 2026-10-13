@@ -57,3 +57,40 @@ html {
 /*body {*/
 /*    overflow-x: hidden;*/
 /*}*/
+
+/* ------------------------------------------------------------------
+   Report card printing: only the report card prints, on A4.
+   "Download PDF" uses the same layout through the browser's
+   Save as PDF option, so screen, paper and PDF always match.
+   ------------------------------------------------------------------ */
+@media print {
+  @page { size: A4; margin: 12mm; }
+  body * { visibility: hidden !important; }
+  .report-print-area, .report-print-area * { visibility: visible !important; }
+  .report-print-area {
+    position: absolute; left: 0; top: 0; width: 100%;
+    margin: 0 !important; padding: 0 !important;
+    border: none !important; box-shadow: none !important;
+    font-size: 11pt; color: #000;
+  }
+  .report-print-area .no-print { display: none !important; }
+  #portal-main { margin: 0 !important; padding: 0 !important; max-width: none !important; }
+  .report-print-area { font-size: 9pt; line-height: 1.25; }
+  .report-print-area th, .report-print-area td { padding: 2px 5px !important; }
+  .report-print-area header img { height: 48px !important; }
+  .report-print-area header { padding-bottom: 6px !important; }
+  .report-print-area dl { row-gap: 4px !important; }
+  .report-print-area .mt-6 { margin-top: 10px !important; }
+  .report-print-area .mt-8 { margin-top: 22px !important; }
+  .report-print-area .p-4 { padding: 6px 10px !important; }
+  .report-print-area table { page-break-inside: auto; }
+  .report-print-area tr { page-break-inside: avoid; }
+}
+
+/* School calendar (react-calendar): readable size, event days marked
+   with existing MOLEK colours. */
+.molek-calendar .react-calendar__tile { padding: 0.9em 0.3em; font-size: 1rem; }
+.molek-calendar .react-calendar__tile.has-event { background: #F9D89C; color: #1F3B6B; font-weight: 700; border-radius: 0.5rem; }
+.molek-calendar .react-calendar__tile--active,
+.molek-calendar .react-calendar__tile--active:enabled:focus { background: #1F3B6B; color: #fff; border-radius: 0.5rem; }
+.molek-calendar .react-calendar__navigation button { font-size: 1.05rem; min-height: 48px; }

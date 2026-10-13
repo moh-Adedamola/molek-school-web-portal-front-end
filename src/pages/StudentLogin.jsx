@@ -1,213 +1,123 @@
-import { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { Eye, EyeOff, Calendar, MapPin } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+import { Eye, EyeOff, Calendar, MapPin, Phone } from 'lucide-react';
 import { useStudentAuth } from '../context/StudentAuthContext';
 import { getUpcomingEvents } from '../service/studentApi';
+import { friendlyLoginError } from '../lib/loginErrors.js';
+import logo from '/logo.webp';
+
+// The server decides whether a password is right; we only check the boxes are filled.
+const schema = yup.object({
+    admission_number: yup.string().trim().required('Enter the admission number, for example MOL/2024/015'),
+    password: yup.string().required('Enter the password'),
+});
+
 
 const StudentLogin = () => {
     const navigate = useNavigate();
-    const { login } = useStudentAuth();
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
+    const { login, isAuthenticated } = useStudentAuth();
     const [showPassword, setShowPassword] = useState(false);
     const [events, setEvents] = useState([]);
-    const [formData, setFormData] = useState({
-        admission_number: '',
-        password: '',
-    });
+    const { register, handleSubmit, setError, formState: { errors, isSubmitting } } = useForm({ resolver: yupResolver(schema) });
 
     useEffect(() => {
-        getUpcomingEvents()
-            .then((data) => setEvents(data.results || []))
-            .catch(() => setEvents([]));
+        getUpcomingEvents().then((d) => setEvents(d.results || [])).catch(() => setEvents([]));
     }, []);
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setError('');
-        setLoading(true);
+    if (isAuthenticated) return <Navigate to="/student" replace />;
 
-        if (!formData.admission_number || !formData.password) {
-            setError('Please fill in all fields');
-            setLoading(false);
-            return;
-        }
-
+    const onSubmit = async ({ admission_number, password }) => {
         try {
-            await login(formData.admission_number, formData.password);
-            navigate('/student/dashboard');
+            await login(admission_number.trim().toUpperCase(), password);
+            navigate('/student', { replace: true });
         } catch (err) {
-            console.error('Login error:', err);
-            setError(err.message || 'Invalid admission number or password');
-        } finally {
-            setLoading(false);
+            setError('root', { message: friendlyLoginError(err) });
         }
     };
 
+    const field = (err) => `w-full min-h-12 rounded-xl border-2 ${err ? 'border-red-700' : 'border-gray-300'} px-4 py-3 text-[17px] focus-visible:outline focus-visible:outline-3 focus-visible:outline-[#1F3B6B]`;
+
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-blue-100 to-indigo-200 flex flex-col items-center justify-center p-4 py-8">
-            <div className="w-full max-w-md flex flex-col items-center gap-6">
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                className="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden"
-            >
-                {/* Header Section */}
-                <div className="bg-gradient-to-r from-blue-500 to-indigo-600 p-8 text-white text-center">
-                    <Link to="/" className="inline-block mb-4">
-                        <img
-                            src="/logo.webp"
-                            alt="Molek Schools"
-                            className="h-20 w-20 mx-auto rounded-full ring-4 ring-white/30 object-cover"
-                        />
-                    </Link>
-                    <h1 className="text-2xl font-bold mb-2">MOLEK Schools</h1>
-                    <p className="text-blue-100 text-sm">Student Portal Login</p>
-                </div>
+        <div className="min-h-screen bg-[#FAFAFA] text-[#2D2D2D] flex flex-col items-center justify-center p-4 py-8 text-[17px]">
+            <main className="w-full max-w-md flex flex-col items-center gap-6">
+                <div className="bg-white rounded-3xl border border-gray-200 w-full overflow-hidden">
+                    <div className="bg-[#1F3B6B] p-8 text-white text-center">
+                        <Link to="/" className="inline-block mb-3 rounded-xl bg-white p-2">
+                            <img src={logo} alt="MOLEK Schools home" className="h-20 w-auto object-contain" />
+                        </Link>
+                        <h1 className="text-2xl font-bold">Student portal</h1>
+                        <p className="mt-1 text-white/90">Sign in to see results and report cards</p>
+                    </div>
 
-                {/* Login Form */}
-                <div className="p-8">
-                    {error && (
-                        <motion.div
-                            initial={{ opacity: 0, y: -10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-xl text-sm flex items-start gap-2"
-                        >
-                            <svg className="h-5 w-5 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-                            </svg>
-                            <span>{error}</span>
-                        </motion.div>
-                    )}
-
-                    <form onSubmit={handleSubmit} className="space-y-5">
+                    <form noValidate onSubmit={handleSubmit(onSubmit)} className="p-6 sm:p-8 space-y-5">
+                        {errors.root && (
+                            <p role="alert" className="rounded-xl border-2 border-red-700 bg-red-50 p-4 font-semibold text-red-800">{errors.root.message}</p>
+                        )}
                         <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                Admission Number
-                            </label>
-                            <input
-                                type="text"
-                                value={formData.admission_number}
-                                onChange={(e) => setFormData({ ...formData, admission_number: e.target.value.toUpperCase() })}
-                                placeholder="Enter your admission number"
-                                className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-blue-500 focus:outline-none transition-colors text-gray-800 placeholder-gray-400"
-                                autoComplete="username"
-                            />
+                            <label htmlFor="admission_number" className="block font-semibold mb-1">Admission number</label>
+                            <input id="admission_number" type="text" autoComplete="username" autoCapitalize="characters" spellCheck="false"
+                                placeholder="MOL/2024/015" aria-invalid={Boolean(errors.admission_number)}
+                                aria-describedby={errors.admission_number ? 'admission_number-error' : undefined}
+                                className={`${field(errors.admission_number)} uppercase`} {...register('admission_number')} />
+                            {errors.admission_number && <p id="admission_number-error" className="mt-1 font-semibold text-red-700">{errors.admission_number.message}</p>}
                         </div>
-
                         <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                Password
-                            </label>
+                            <label htmlFor="password" className="block font-semibold mb-1">Password</label>
                             <div className="relative">
-                                <input
-                                    type={showPassword ? "text" : "password"}
-                                    value={formData.password}
-                                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                                    placeholder="Enter your password"
-                                    className="w-full px-4 py-3 pr-12 rounded-xl border-2 border-gray-200 focus:border-blue-500 focus:outline-none transition-colors text-gray-800 placeholder-gray-400"
-                                    autoComplete="current-password"
-                                />
-                                <button
-                                    type="button"
-                                    onClick={() => setShowPassword(!showPassword)}
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
-                                    aria-label={showPassword ? "Hide password" : "Show password"}
-                                >
-                                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                                <input id="password" type={showPassword ? 'text' : 'password'} autoComplete="current-password"
+                                    aria-invalid={Boolean(errors.password)} aria-describedby={errors.password ? 'password-error' : undefined}
+                                    className={`${field(errors.password)} pr-14`} {...register('password')} />
+                                <button type="button" onClick={() => setShowPassword((v) => !v)}
+                                    aria-label={showPassword ? 'Hide password' : 'Show password'} aria-pressed={showPassword}
+                                    className="absolute right-1 top-1/2 -translate-y-1/2 h-11 w-11 inline-flex items-center justify-center rounded-lg text-[#1F3B6B] focus-visible:outline focus-visible:outline-3 focus-visible:outline-[#1F3B6B]">
+                                    {showPassword ? <EyeOff aria-hidden="true" className="h-5 w-5" /> : <Eye aria-hidden="true" className="h-5 w-5" />}
                                 </button>
                             </div>
+                            {errors.password && <p id="password-error" className="mt-1 font-semibold text-red-700">{errors.password.message}</p>}
                         </div>
-
-                        <button
-                            type="submit"
-                            disabled={loading}
-                            className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                        >
-                            {loading ? (
-                                <>
-                                    <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
-                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                                    </svg>
-                                    <span>Signing In...</span>
-                                </>
-                            ) : (
-                                <span>Sign In to Portal</span>
-                            )}
+                        <button type="submit" disabled={isSubmitting}
+                            className="w-full min-h-12 rounded-full bg-[#1F3B6B] py-3 font-semibold text-white hover:bg-[#2D2D2D] disabled:opacity-60 focus-visible:outline focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[#1F3B6B]">
+                            {isSubmitting ? 'Signing in...' : 'Sign in'}
                         </button>
-                    </form>
-
-                    {/* Help Links */}
-                    <div className="mt-6 text-center space-y-2">
-                        <p className="text-sm text-gray-600">
-                            Forgot your password? Contact the school office.
+                        <p className="text-center">
+                            Forgotten your password?{' '}
+                            <a href="tel:+2347066277945" className="inline-flex items-center gap-1 font-semibold text-[#2563EB] underline underline-offset-2">
+                                <Phone aria-hidden="true" className="h-4 w-4" /> Call the school office
+                            </a>
                         </p>
-                        <Link
-                            to="/"
-                            className="text-sm text-blue-600 hover:text-blue-700 font-medium inline-flex items-center gap-1 group"
-                        >
-                            <svg className="h-4 w-4 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                            </svg>
-                            <span>Back to Homepage</span>
-                        </Link>
-                    </div>
+                        <p className="text-center"><Link to="/" className="text-[#2563EB] underline underline-offset-2">Back to the school website</Link></p>
+                    </form>
                 </div>
 
-                {/* Footer */}
-                <div className="bg-gray-50 px-8 py-4 border-t border-gray-100">
-                    <p className="text-xs text-gray-500 text-center">
-                        © 2025 MOLEK Schools • Excellence in Islamic Education
-                    </p>
-                </div>
-            </motion.div>
-
-            {events.length > 0 && (
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3 }}
-                    className="w-full bg-white rounded-2xl shadow-xl overflow-hidden"
-                >
-                    <div className="bg-gradient-to-r from-purple-500 to-pink-500 p-4 text-white">
-                        <h3 className="font-bold flex items-center gap-2">
-                            <Calendar size={18} /> Upcoming Events
-                        </h3>
-                    </div>
-                    <div className="divide-y divide-gray-100">
-                        {events.slice(0, 4).map((event) => {
-                            const dt = new Date(event.event_date);
-                            return (
-                                <div key={event.id} className="p-4 flex gap-3 hover:bg-gray-50 transition-colors">
-                                    <div className="flex-shrink-0 w-14 text-center">
-                                        <div className="text-xs text-purple-600 font-semibold uppercase">
-                                            {dt.toLocaleString('en-NG', { month: 'short' })}
+                {events.length > 0 && (
+                    <section className="bg-white rounded-3xl border border-gray-200 w-full overflow-hidden" aria-labelledby="events-heading">
+                        <h2 id="events-heading" className="flex items-center gap-2 px-6 pt-5 font-bold text-[#1F3B6B]">
+                            <Calendar aria-hidden="true" className="h-5 w-5" /> Upcoming events
+                        </h2>
+                        <ul className="divide-y divide-gray-100 mt-2">
+                            {events.slice(0, 4).map((event) => {
+                                const dt = new Date(event.event_date);
+                                return (
+                                    <li key={event.id} className="px-6 py-4 flex gap-4">
+                                        <div className="w-14 text-center" aria-hidden="true">
+                                            <div className="text-sm font-semibold uppercase text-[#1F3B6B]">{dt.toLocaleString('en-NG', { month: 'short' })}</div>
+                                            <div className="text-2xl font-bold">{dt.getDate()}</div>
                                         </div>
-                                        <div className="text-2xl font-bold text-gray-800">
-                                            {dt.getDate()}
+                                        <div className="min-w-0">
+                                            <p className="font-semibold">{event.title}</p>
+                                            <p className="text-gray-600">{dt.toLocaleString('en-NG', { weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' })}</p>
+                                            {event.location && <p className="text-gray-600 flex items-center gap-1"><MapPin aria-hidden="true" className="h-4 w-4" /> {event.location}</p>}
                                         </div>
-                                    </div>
-                                    <div className="flex-1 min-w-0">
-                                        <h4 className="font-semibold text-gray-800 text-sm line-clamp-1">{event.title}</h4>
-                                        <p className="text-xs text-gray-500 mt-0.5">
-                                            {dt.toLocaleString('en-NG', { weekday: 'short', hour: '2-digit', minute: '2-digit' })}
-                                        </p>
-                                        {event.location && (
-                                            <p className="text-xs text-gray-500 mt-0.5 flex items-center gap-1">
-                                                <MapPin size={11} /> {event.location}
-                                            </p>
-                                        )}
-                                    </div>
-                                </div>
-                            );
-                        })}
-                    </div>
-                </motion.div>
-            )}
-            </div>
+                                    </li>
+                                );
+                            })}
+                        </ul>
+                    </section>
+                )}
+            </main>
         </div>
     );
 };
