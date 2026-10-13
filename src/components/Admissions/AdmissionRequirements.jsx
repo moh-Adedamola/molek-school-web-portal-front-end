@@ -1,6 +1,8 @@
+import { useNavigate } from "react-router-dom";
 import { FaBaby, FaChild, FaBookOpen, FaGraduationCap, FaExclamationTriangle, FaClipboardCheck, FaUserCheck, FaFileAlt } from "react-icons/fa";
 
 const AdmissionRequirements = () => {
+    const navigate = useNavigate();
     const sections = [
         {
             title: "Nursery Section",
@@ -124,7 +126,7 @@ const AdmissionRequirements = () => {
             <aside className="text-center bg-[#1F3B6B] text-white p-8 rounded-2xl shadow-lg">
                 <h4 className="text-xl font-bold mb-2">Ready to Apply?</h4>
                 <p className="mb-4 text-blue-100">Contact us for application forms and detailed admission procedures.</p>
-                <button className="bg-[#3B82F6] text-white px-8 py-3 rounded-full font-medium hover:bg-[#2563EB] transition-colors shadow-md">
+                <button type="button" onClick={() => navigate('/contact')} className="bg-[#3B82F6] text-white px-8 py-3 rounded-full font-medium hover:bg-[#2563EB] transition-colors shadow-md">
                     Get Application Form
                 </button>
             </aside>

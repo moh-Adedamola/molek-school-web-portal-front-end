@@ -308,7 +308,7 @@ const StudentProfile = () => {
                                  View All Grades
                             </a>
                             <a
-                                href="/student/payments"
+                                href="/student/payment"
                                 className="block w-full text-center bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white py-2.5 sm:py-3 px-4 rounded-lg font-semibold text-sm transition-all shadow-md hover:shadow-lg"
                             >
                                  Payment History

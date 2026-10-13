@@ -14,6 +14,11 @@ import {
 } from '../../service/studentApi';
 import logo from '/logo.webp';
 
+// Text from the school (comments, remarks) goes into a downloaded HTML file, so escape it.
+const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (c) => (
+    { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
+));
+
 const Settings = () => {
     const { student, refreshStudent } = useStudentAuth();
 
@@ -565,7 +570,7 @@ const Settings = () => {
             <div class="field"><label>Subject:</label> <span>All Subjects</span></div>
             ` : ''}
             <div class="field"><label>Name:</label> <span>${studentData.full_name || (studentData.first_name || '') + ' ' + (studentData.last_name || '')}</span></div>
-            <div class="field"><label>Class:</label> <span>${studentData.class_level_name || 'N/A'}</span></div>
+            <div class="field"><label>Class:</label> <span>${escapeHtml(data.class_name || studentData.class_level_name || 'N/A')}</span></div>
             <div class="field"><label>Term:</label> <span>${isCumulative ? 'Cumulative' : (termInfo.name || 'N/A')}</span></div>
             <div class="field"><label>Session:</label> <span>${sessionInfo.name || 'N/A'}</span></div>
             <div class="field"><label>Adm No:</label> <span>${studentData.admission_number || 'N/A'}</span></div>
@@ -775,21 +780,12 @@ const Settings = () => {
         <div class="footer">
             <div class="comment-box">
                 <strong>Class Teacher's Comment:</strong>
-                <p>${(data.behavioral && data.behavioral.class_teacher_comment) ? data.behavioral.class_teacher_comment :
-                    (parseFloat(summary.averageScore) >= 70 ? 'Excellent performance! Keep it up.' :
-                     parseFloat(summary.averageScore) >= 60 ? 'Very good performance. Continue to work hard.' :
-                     parseFloat(summary.averageScore) >= 50 ? 'Good performance. There is room for improvement.' :
-                     parseFloat(summary.averageScore) >= 40 ? 'Fair performance. More effort is needed.' :
-                     'Below average. Needs to put in much more effort.')}</p>
+                <p>${escapeHtml((data.behavioral && data.behavioral.class_teacher_comment) || 'Not yet available.')}</p>
             </div>
 
             <div class="comment-box">
                 <strong>Principal's Comment:</strong>
-                <p>${data.principal_remark ||
-                    (parseFloat(summary.averageScore) >= 75 ? 'Outstanding performance. Keep up the excellent work.' :
-                     parseFloat(summary.averageScore) >= 60 ? 'Very good performance. We are proud of you.' :
-                     parseFloat(summary.averageScore) >= 45 ? 'Acceptable performance. There is room for improvement.' :
-                     'Performance needs urgent improvement. Please consult your teachers.')}</p>
+                <p>${escapeHtml(data.principal_remark || 'Not yet available.')}</p>
             </div>
 
             <div class="signatures">

@@ -10,6 +10,7 @@ if (!API_BASE_URL) {
 }
 
 import { authFetch, storeStudentTokens, clearStudentTokens } from './tokenAuth';
+import { countPassed, passMarkOf, DEFAULT_PASS_MARK } from '../lib/grading';
 
 // Phase B: route every request in this module through the token-aware
 // wrapper. It attaches Authorization: Bearer <access> on student-portal
@@ -298,7 +299,9 @@ export const getDashboardStats = async () => {
         const highestScore = grades.length > 0
             ? Math.max(...grades.map(g => g.total_score || 0))
             : 0;
-        const passedSubjects = grades.filter(g => (g.total_score || 0) >= 40).length;
+        // Same pass mark as promotion (sent per row by the backend).
+        const passedSubjects = countPassed(grades);
+        const passMark = grades.length > 0 ? passMarkOf(grades[0]) : DEFAULT_PASS_MARK;
         const totalExams = grades.length;
 
         return {
@@ -306,6 +309,7 @@ export const getDashboardStats = async () => {
             averageScore,
             highestScore,
             passedSubjects,
+            passMark,
             totalExams,
             totalCAScores: caScores.length,
             grades,
@@ -318,6 +322,7 @@ export const getDashboardStats = async () => {
             averageScore: 0,
             highestScore: 0,
             passedSubjects: 0,
+            passMark: DEFAULT_PASS_MARK,
             totalExams: 0,
             totalCAScores: 0,
             grades: [],

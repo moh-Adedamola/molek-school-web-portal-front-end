@@ -34,12 +34,6 @@ const StudentLogin = () => {
             return;
         }
 
-        if (formData.password.length < 8) {
-            setError('Password must be at least 8 characters');
-            setLoading(false);
-            return;
-        }
-
         try {
             await login(formData.admission_number, formData.password);
             navigate('/student/dashboard');

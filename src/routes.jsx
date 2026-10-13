@@ -6,6 +6,11 @@ import Admissions from './pages/Admissions.jsx';
 import News from "./pages/News.jsx"
 import NewsDetail from "./pages/NewsDetail.jsx";
 import Gallery from "./pages/Gallery.jsx";
+import Privacy from "./pages/Privacy.jsx";
+import Terms from "./pages/Terms.jsx";
+import Accessibility from "./pages/Accessibility.jsx";
+import NotFound from "./pages/NotFound.jsx";
+import { Navigate } from "react-router-dom";
 
 // Student Portal Imports
 import StudentLogin from './pages/StudentLogin.jsx';
@@ -53,6 +58,18 @@ const routes = [
         path: '/gallery',
         element: <Gallery />,
     },
+    {
+        path: '/privacy',
+        element: <Privacy />,
+    },
+    {
+        path: '/terms',
+        element: <Terms />,
+    },
+    {
+        path: '/accessibility',
+        element: <Accessibility />,
+    },
 
     // ============================================
     // STUDENT PORTAL ROUTES
@@ -69,6 +86,10 @@ const routes = [
             </ProtectedStudentRoute>
         ),
         children: [
+            {
+                index: true,
+                element: <Navigate to="dashboard" replace />,
+            },
             {
                 path: 'dashboard',
                 element: <StudentDashboard />,
@@ -90,6 +111,12 @@ const routes = [
                 element: <StudentProfile />,
             },
         ],
+    },
+
+    // Anything else: a real "page not found" instead of a blank screen
+    {
+        path: '*',
+        element: <NotFound />,
     },
 ];
 

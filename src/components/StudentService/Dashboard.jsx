@@ -11,6 +11,7 @@ import logo from '/logo.webp';
 import { useEffect, useState, useMemo } from 'react';
 import { useStudentAuth } from '../../context/StudentAuthContext';
 import { getSchoolEvents, getDashboardStats, getUpcomingEvents } from '../../service/studentApi';
+import { isPass, passMarkOf } from '../../lib/grading';
 
 const Dashboard = () => {
     const { student } = useStudentAuth();
@@ -249,7 +250,7 @@ const Dashboard = () => {
 
                             {/* Average Score */}
                             <div className="bg-gradient-to-br from-green-50 to-green-100 p-4 rounded-xl text-center">
-                                <div className={`text-2xl font-bold ${stats?.averageScore >= 45 ? 'text-green-600' : 'text-red-600'}`}>
+                                <div className={`text-2xl font-bold ${isPass(stats?.averageScore, stats?.passMark) ? 'text-green-600' : 'text-red-600'}`}>
                                     {stats?.averageScore || 0}%
                                 </div>
                                 <p className="text-sm text-gray-600 mt-1">Average Score</p>
@@ -307,7 +308,7 @@ const Dashboard = () => {
                                     <p className="text-xs text-gray-500 mt-1">{gradeInfo.remark}</p>
                                     <div className="mt-2 h-2 bg-gray-200 rounded-full overflow-hidden">
                                         <div
-                                            className={`h-full ${grade.total_score >= 45 ? 'bg-green-500' : 'bg-red-500'}`}
+                                            className={`h-full ${isPass(grade.total_score, passMarkOf(grade)) ? 'bg-green-500' : 'bg-red-500'}`}
                                             style={{ width: `${Math.min(grade.total_score || 0, 100)}%` }}
                                         ></div>
                                     </div>

@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import {
     AcademicCapIcon,
     CheckCircleIcon,
@@ -120,6 +121,7 @@ const successStories = [
 ];
 
 const WhyChooseUs = () => {
+    const navigate = useNavigate();
     return (
         <section className="relative px-4 sm:px-6 lg:px-8 py-16 lg:py-24 bg-gradient-to-b from-white via-[#FAFAFA] to-white overflow-hidden">
             {/* Background Decorations */}
@@ -291,6 +293,8 @@ const WhyChooseUs = () => {
                                 Islamic values, and comprehensive development programs.
                             </p>
                             <motion.button
+                                type="button"
+                                onClick={() => navigate('/admissions')}
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
                                 className="inline-flex items-center gap-2 bg-white text-[#3B82F6] px-8 py-4 rounded-full font-bold text-lg shadow-xl hover:shadow-2xl transition-all"

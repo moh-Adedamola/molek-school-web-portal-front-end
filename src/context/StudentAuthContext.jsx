@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { studentLogin as apiStudentLogin, getStudentProfile } from '../service/studentApi';
+import { clearStudentTokens } from '../service/tokenAuth';
 
 const StudentAuthContext = createContext(null);
 
@@ -69,6 +70,8 @@ export const StudentAuthProvider = ({ children }) => {
         setIsAuthenticated(false);
         localStorage.removeItem('studentAdmissionNumber');
         localStorage.removeItem('studentData');
+        // Also drop the login tokens, so a shared phone or PC is really signed out.
+        clearStudentTokens();
     };
 
     const updateStudent = (updatedData) => {

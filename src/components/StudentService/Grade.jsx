@@ -23,6 +23,7 @@ import logo from '/logo.webp';
 import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { useStudentAuth } from '../../context/StudentAuthContext';
 import { getStudentGrades, getAcademicSessions, getTerms, getReportCard } from '../../service/studentApi';
+import { countPassed } from '../../lib/grading';
 
 const Grade = () => {
     const { student } = useStudentAuth();
@@ -491,7 +492,7 @@ const Grade = () => {
                                             </div>
                                             <div className="text-center">
                                                 <div className="text-2xl sm:text-3xl font-bold text-green-600">
-                                                    {currentTermGrades.filter(g => parseFloat(g.total_score) >= 45).length}/{currentTermGrades.length}
+                                                    {countPassed(currentTermGrades)}/{currentTermGrades.length}
                                                 </div>
                                                 <p className="text-xs text-gray-500 mt-1">Subjects Passed</p>
                                             </div>
@@ -631,7 +632,7 @@ const Grade = () => {
                                             </div>
                                             <div className="bg-white rounded-lg sm:rounded-xl p-3 sm:p-4 text-center">
                                                 <div className="text-xl sm:text-2xl font-bold text-purple-600">
-                                                    {allGrades.filter(g => parseFloat(g.total_score) >= 45).length}
+                                                    {countPassed(allGrades)}
                                                 </div>
                                                 <p className="text-xs sm:text-sm text-gray-600">Subjects Passed</p>
                                             </div>
@@ -687,7 +688,7 @@ const Grade = () => {
                                         </div>
                                         <div>
                                             <span className="text-gray-500 text-xs">Class:</span>
-                                            <p className="font-semibold">{student?.class_level_name}</p>
+                                            <p className="font-semibold">{reportData?.class_name || student?.class_level_name}</p>
                                         </div>
                                         <div>
                                             <span className="text-gray-500 text-xs">Term:</span>
@@ -749,8 +750,8 @@ const Grade = () => {
                                                             <th className="border border-gray-300 px-2 py-2 text-left font-semibold">Subject</th>
                                                             <th className="border border-gray-300 px-2 py-2 text-center font-semibold">CA1<br/><span className="font-normal text-xs">(15)</span></th>
                                                             <th className="border border-gray-300 px-2 py-2 text-center font-semibold">CA2<br/><span className="font-normal text-xs">(15)</span></th>
-                                                            <th className="border border-gray-300 px-2 py-2 text-center font-semibold">OBJ<br/><span className="font-normal text-xs">(30)</span></th>
-                                                            <th className="border border-gray-300 px-2 py-2 text-center font-semibold">Theory<br/><span className="font-normal text-xs">(40)</span></th>
+                                                            <th className="border border-gray-300 px-2 py-2 text-center font-semibold">OBJ<br/><span className="font-normal text-xs">(exam)</span></th>
+                                                            <th className="border border-gray-300 px-2 py-2 text-center font-semibold">Theory<br/><span className="font-normal text-xs">(exam)</span></th>
                                                             <th className="border border-gray-300 px-2 py-2 text-center font-semibold">Total<br/><span className="font-normal text-xs">(100)</span></th>
                                                             <th className="border border-gray-300 px-2 py-2 text-center font-semibold">Grade</th>
                                                             <th className="border border-gray-300 px-2 py-2 text-center font-semibold">Remark</th>
@@ -790,7 +791,7 @@ const Grade = () => {
                                                 <div className="bg-orange-50 rounded-lg p-3 text-center">
                                                     <p className="text-xs text-gray-600">Subjects Passed</p>
                                                     <p className="text-lg sm:text-xl font-bold text-orange-700">
-                                                        {currentTermGrades.filter(g => parseFloat(g.total_score) >= 45).length}/{currentTermGrades.length}
+                                                        {countPassed(currentTermGrades)}/{currentTermGrades.length}
                                                     </p>
                                                 </div>
                                             </div>
@@ -798,6 +799,7 @@ const Grade = () => {
                                             {/* Grading Key */}
                                             <div className="mt-4 sm:mt-6 p-3 bg-gray-50 rounded-lg text-xs">
                                                 <p className="font-semibold mb-1">Grading Key:</p>
+                                                <p>CA1 15 • CA2 15 • OBJ + Theory 70 combined • Total 100</p>
                                                 <p>A (75-100) Excellent • B (70-74) Very Good • C (60-69) Good • D (50-59) Pass • E (45-49) Fair • F (0-44) Fail</p>
                                             </div>
 
@@ -867,18 +869,13 @@ const Grade = () => {
                                                 <div className="border border-gray-300 rounded-lg p-3 bg-blue-50">
                                                     <p className="text-xs font-bold text-blue-900 uppercase mb-1">Class Teacher's Comment</p>
                                                     <p className="text-sm text-gray-700">
-                                                        {reportData?.behavioral?.class_teacher_comment ||
-                                                            (calculateAverage(currentTermGrades) >= 70 ? 'Excellent performance! Keep it up.' :
-                                                             calculateAverage(currentTermGrades) >= 60 ? 'Very good performance. Continue to work hard.' :
-                                                             calculateAverage(currentTermGrades) >= 50 ? 'Good performance. There is room for improvement.' :
-                                                             calculateAverage(currentTermGrades) >= 40 ? 'Fair performance. More effort is needed.' :
-                                                             'Below average. Needs to put in much more effort.')}
+                                                        {reportData?.behavioral?.class_teacher_comment || 'Not yet available.'}
                                                     </p>
                                                 </div>
                                                 <div className="border border-gray-300 rounded-lg p-3 bg-purple-50">
                                                     <p className="text-xs font-bold text-purple-900 uppercase mb-1">Principal's Comment</p>
                                                     <p className="text-sm text-gray-700">
-                                                        {reportData?.principal_remark || 'Comment will appear once results are finalized.'}
+                                                        {reportData?.principal_remark || 'Not yet available.'}
                                                     </p>
                                                 </div>
                                             </div>

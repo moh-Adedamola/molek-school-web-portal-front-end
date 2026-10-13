@@ -43,7 +43,9 @@ const Payment = () => {
     const downloadReceipt = (receiptId, item, amount, date) => {
         const receiptContent = `
 MOLEK SCHOOLS
-Official Payment Receipt
+*** SAMPLE - NOT A VALID RECEIPT ***
+Online payment (Paystack) is coming soon.
+No money was taken. Do not use this as proof of payment.
 ================================
 
 Receipt Number: ${receiptId}
@@ -57,14 +59,14 @@ Payment Date: ${date}
 ================================
 Thank you for your payment!
 
-This is an official receipt from MOLEK Schools.
-For inquiries, contact: info@molekschool.com
+SAMPLE ONLY - not an official receipt from MOLEK Schools.
+For inquiries, contact: info@molekschools.com
     `;
         const blob = new Blob([receiptContent], { type: 'text/plain' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `${receiptId}_${student?.admission_number}.txt`;
+        a.download = `SAMPLE_${receiptId}_${String(student?.admission_number || '').replace(/\//g, '-')}.txt`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -93,6 +95,15 @@ For inquiries, contact: info@molekschool.com
                     <h1 className="text-2xl md:text-3xl font-bold text-gray-800">Payments</h1>
                     <p className="text-sm text-gray-600">Manage your school fees and payments</p>
                 </div>
+            </div>
+
+            {/* Preview notice: this page is a placeholder until Paystack goes live */}
+            <div role="note" className="mb-6 rounded-xl border-2 border-amber-400 bg-amber-50 p-4 text-amber-900">
+                <p className="font-bold">Online payment is coming soon (Paystack).</p>
+                <p className="text-sm mt-1">
+                    This page is a preview. No money is taken here, and any receipt it gives is a SAMPLE,
+                    not proof of payment. Until online payment goes live, pay fees as the school's bursary directs.
+                </p>
             </div>
 
             {/* Success Message */}

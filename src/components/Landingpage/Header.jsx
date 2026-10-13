@@ -82,7 +82,7 @@ const Header = () => {
               <span className="text-white/60">•</span>
               <span className="flex items-center gap-2">
                 <span className="hidden sm:inline">📧</span>
-                <span>info@molekschool.com</span>
+                <span>info@molekschools.com</span>
               </span>
             </span>
                     </div>
