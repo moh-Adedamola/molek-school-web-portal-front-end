@@ -56,6 +56,8 @@ const withAuth = (init, access) => {
 
 // Single-flight refresh: concurrent 401s await the same request.
 let refreshInFlight = null;
+// Why the last refresh failed, so the sign-in page can explain it (e.g. 'fees').
+let endReason = null;
 
 const refreshAccess = (origin) => {
     if (!refreshInFlight) {
@@ -68,7 +70,13 @@ const refreshAccess = (origin) => {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ refresh }),
                 });
-                if (!res.ok) return null;
+                if (!res.ok) {
+                    if (res.status === 403) {
+                        const body = await res.json().catch(() => null);
+                        if (body && body.reason === 'fees') endReason = 'fees';
+                    }
+                    return null;
+                }
                 const data = await res.json().catch(() => null);
                 if (data && data.access) {
                     localStorage.setItem(ACCESS_KEY, data.access);
@@ -90,8 +98,10 @@ const endSession = () => {
         localStorage.removeItem('studentAdmissionNumber');
         localStorage.removeItem('studentData');
     } catch { /* storage unavailable */ }
+    const reason = endReason;
+    endReason = null;
     if (typeof window !== 'undefined' && window.location && typeof window.location.assign === 'function') {
-        window.location.assign(LOGIN_ROUTE);
+        window.location.assign(reason ? `${LOGIN_ROUTE}?reason=${reason}` : LOGIN_ROUTE);
     }
 };
 

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate, useSearchParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -20,6 +20,8 @@ const StudentLogin = () => {
     const navigate = useNavigate();
     const { login, isAuthenticated } = useStudentAuth();
     const [showPassword, setShowPassword] = useState(false);
+    const [params] = useSearchParams();
+    const signedOutForFees = params.get('reason') === 'fees';
     const [events, setEvents] = useState([]);
     const { register, handleSubmit, setError, formState: { errors, isSubmitting } } = useForm({ resolver: yupResolver(schema) });
 
@@ -53,6 +55,12 @@ const StudentLogin = () => {
                     </div>
 
                     <form noValidate onSubmit={handleSubmit(onSubmit)} className="p-6 sm:p-8 space-y-5">
+                        {signedOutForFees && !errors.root && (
+                            <div role="status" className="rounded-xl border-2 border-amber-600 bg-amber-50 p-4 text-amber-900">
+                                <p className="font-semibold">You have been signed out.</p>
+                                <p className="mt-1">Outstanding fees. Please contact the bursary to clear your fees before accessing your account.</p>
+                            </div>
+                        )}
                         {errors.root && (
                             <p role="alert" className="rounded-xl border-2 border-red-700 bg-red-50 p-4 font-semibold text-red-800">{errors.root.message}</p>
                         )}
