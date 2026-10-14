@@ -24,3 +24,7 @@ dist-ssr
 *.sln
 *.sw?
 *.sh
+
+# Browser test output
+test-results/
+playwright-report/

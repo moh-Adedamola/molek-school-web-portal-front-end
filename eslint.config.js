@@ -31,7 +31,7 @@ export default defineConfig([
         },
     },
     {
-        files: ['**/*.test.js'],
+        files: ['**/*.test.js', 'e2e/**/*.js', 'playwright.config.js'],
         languageOptions: { globals: globals.node },
     },
 ])
