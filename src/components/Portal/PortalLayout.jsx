@@ -5,7 +5,7 @@ import { Home, FileText, UserRound, LogOut } from 'lucide-react';
 import { useStudentAuth } from '../../context/StudentAuthContext';
 import { clearPortalCache, fullName } from '../../lib/portalData.js';
 import { Avatar } from './ui.jsx';
-import logo from '/logo.webp';
+import logo from '/logo-160.webp'; // small copy; the report card prints the full logo
 
 const NAV = [
     { to: '/student', label: 'Home', icon: Home, end: true },

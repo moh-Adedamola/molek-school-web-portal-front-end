@@ -6,7 +6,7 @@ class ErrorBoundary extends Component {
         this.state = { hasError: false };
     }
 
-    static getDerivedStateFromError(error) {
+    static getDerivedStateFromError() {
         return { hasError: true };
     }
 
@@ -17,13 +17,17 @@ class ErrorBoundary extends Component {
     render() {
         if (this.state.hasError) {
             return (
-                <div className="min-h-screen flex items-center justify-center bg-red-50 p-6 text-center">
+                <div role="alert" className="min-h-screen flex items-center justify-center bg-[#FAFAFA] p-6 text-center text-[17px] text-[#2D2D2D]">
                     <div className="max-w-md">
-                        <h2 className="text-2xl font-bold text-red-800 mb-4">Something went wrong.</h2>
-                        <p className="text-red-700 mb-6">We're sorry — our team has been notified.</p>
+                        <h1 className="text-2xl font-bold text-[#1F3B6B] mb-4">Something went wrong.</h1>
+                        <p className="mb-6">
+                            Please refresh the page. If it keeps happening, call the school office on{' '}
+                            <a href="tel:+2347066277945" className="font-semibold text-[#2563EB] underline underline-offset-2">0706 627 7945</a>.
+                        </p>
                         <button
+                            type="button"
                             onClick={() => window.location.reload()}
-                            className="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition-colors"
+                            className="bg-[#1F3B6B] text-white px-6 py-3 min-h-12 rounded-full font-semibold hover:bg-[#2D2D2D] focus-visible:outline focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[#1F3B6B]"
                         >
                             Refresh Page
                         </button>

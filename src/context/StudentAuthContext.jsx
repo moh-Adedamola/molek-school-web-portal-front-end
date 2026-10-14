@@ -121,6 +121,8 @@ export const StudentAuthProvider = ({ children }) => {
     );
 };
 
+// The hook lives beside its provider on purpose.
+// eslint-disable-next-line react-refresh/only-export-components
 export const useStudentAuth = () => {
     const context = useContext(StudentAuthContext);
     if (!context) {

@@ -1,8 +1,4 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-
-if (!API_BASE_URL) {
-  throw new Error('API_BASE_URL is not defined in .env');
-}
+import { API_BASE_URL } from './apiBase.js';
 
 // Fallback news item
 const fallbackNews = {
@@ -17,33 +13,6 @@ const fallbackNews = {
 // ============================================
 // 📰 FETCH ALL CONTENT (News, Images, Videos)
 // ============================================
-export const fetchAllContent = async () => {
-  try {
-    const response = await fetch(`${API_BASE_URL}/api/content/public/`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    
-    if (!response.ok) {
-      console.error(`HTTP ${response.status}: ${response.statusText}`);
-      throw new Error(`Failed to fetch content: ${response.status}`);
-    }
-    
-    const data = await response.json();
-    
-    // Handle both paginated and non-paginated responses
-    if (data.results && Array.isArray(data.results)) {
-      return data.results;
-    }
-    
-    return Array.isArray(data) ? data : [];
-  } catch (error) {
-    console.error('Error fetching all content:', error.message);
-    return [];
-  }
-};
 
 // ============================================
 // 📰 FETCH ONE PAGE OF CONTENT (News page "Load more")
@@ -147,35 +116,6 @@ export const fetchAllGalleries = async () => {
 // ============================================
 // 📚 FETCH SPECIFIC CONTENT TYPE
 // ============================================
-export const fetchContentByType = async (contentType) => {
-  try {
-    const response = await fetch(
-      `${API_BASE_URL}/api/content/public/?content_type=${contentType}`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    );
-    
-    if (!response.ok) {
-      console.error(`HTTP ${response.status}: ${response.statusText}`);
-      throw new Error(`Failed to fetch ${contentType}: ${response.status}`);
-    }
-    
-    const data = await response.json();
-    
-    if (data.results && Array.isArray(data.results)) {
-      return data.results;
-    }
-    
-    return Array.isArray(data) ? data : [];
-  } catch (error) {
-    console.error(`Error fetching ${contentType}:`, error.message);
-    return [];
-  }
-};
 // ============================================
 // 📰 FETCH SINGLE CONTENT ITEM BY ID (for NewsDetail page)
 // Tries the public-detail endpoint first; falls back to scanning the
@@ -194,10 +134,15 @@ export const fetchContentById = async (id) => {
     console.error('public-detail fetch failed, falling back to list:', error.message);
   }
 
-  // Fallback: find it within the public list.
+  // Fallback: look for it in the public list, a page at a time (25 per page).
   try {
-    const all = await fetchAllContent();
-    return all.find((c) => String(c.id) === String(id)) || null;
+    for (let page = 1; page <= 20; page += 1) {
+      const { items, hasMore } = await fetchContentPage(page);
+      const found = items.find((c) => String(c.id) === String(id));
+      if (found) return found;
+      if (!hasMore) break;
+    }
+    return null;
   } catch (error) {
     console.error('Error fetching content by id:', error.message);
     return null;

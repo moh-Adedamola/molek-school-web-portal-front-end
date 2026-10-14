@@ -30,35 +30,35 @@ const Header = () => {
                 </p>
             </div>
 
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex items-center justify-between gap-3 h-16 lg:h-20">
-                    <Link to="/" className={`flex items-center gap-2 sm:gap-3 rounded-lg ${focusRing}`}>
-                        <img src="/logo.webp" alt="" width="474" height="600" className="h-11 sm:h-14 w-auto object-contain" />
-                        <span className="flex flex-col">
-                            <span className="text-lg sm:text-xl lg:text-2xl font-bold text-[#1F3B6B]">MOLEK Schools</span>
+            <div className="container mx-auto px-3 sm:px-6 lg:px-8">
+                <div className="flex items-center justify-between gap-2 sm:gap-3 h-16 lg:h-20">
+                    <Link to="/" className={`flex min-w-0 xl:min-w-max items-center gap-2 sm:gap-3 rounded-lg ${focusRing}`}>
+                        <img src="/logo-160.webp" alt="" width="126" height="160" className="h-10 sm:h-14 w-auto flex-shrink-0 object-contain" />
+                        <span className="flex min-w-0 flex-col">
+                            <span className="text-base leading-tight xl:whitespace-nowrap min-[400px]:text-lg sm:text-xl lg:text-2xl font-bold text-[#1F3B6B] max-[359px]:sr-only">MOLEK Schools</span>
                             <span className="text-xs text-gray-600 font-medium hidden sm:block">Excellence in Islamic Education</span>
                         </span>
                     </Link>
 
-                    <nav className="hidden lg:flex items-center gap-1" aria-label="Main">
+                    <nav className="hidden xl:flex items-center gap-0.5 2xl:gap-1" aria-label="Main">
                         {navLinks.map(({ href, label, icon: Icon }) => (
                             <NavLink key={href} to={href}
-                                className={({ isActive }) => `flex items-center gap-2 px-3 xl:px-4 py-2 rounded-full font-semibold text-[#1F3B6B] hover:bg-[#FAFAFA] ${focusRing} ${isActive ? 'bg-[#F9D89C]' : ''}`}>
-                                <Icon aria-hidden="true" className="h-4 w-4 xl:h-5 xl:w-5" />
+                                className={({ isActive }) => `flex items-center gap-2 whitespace-nowrap px-3 py-2 rounded-full font-semibold text-[#1F3B6B] hover:bg-[#FAFAFA] ${focusRing} ${isActive ? 'bg-[#F9D89C]' : ''}`}>
+                                <Icon aria-hidden="true" className="hidden 2xl:block h-5 w-5" />
                                 <span>{label}</span>
                             </NavLink>
                         ))}
                     </nav>
 
-                    <div className="flex items-center gap-2">
-                        {/* Always visible, phones included: the way into results */}
+                    <div className="flex flex-shrink-0 items-center gap-1 sm:gap-2">
+                        {/* Always visible, phones included: the way into results. Never wraps. */}
                         <Link to="/student/login"
-                            className={`flex items-center gap-2 rounded-full bg-[#1F3B6B] px-4 py-2.5 min-h-11 font-semibold text-white hover:bg-[#2D2D2D] ${focusRing}`}>
-                            <CircleUserRound aria-hidden="true" className="h-5 w-5" />
+                            className={`flex items-center gap-1.5 sm:gap-2 whitespace-nowrap rounded-full bg-[#1F3B6B] px-3.5 sm:px-4 py-2.5 min-h-11 text-[15px] sm:text-base font-semibold text-white hover:bg-[#2D2D2D] ${focusRing}`}>
+                            <CircleUserRound aria-hidden="true" className="hidden min-[400px]:block h-5 w-5" />
                             <span>Student Portal</span>
                         </Link>
                         <button type="button" onClick={() => setMenuOpen(true)} aria-label="Open menu"
-                            className={`lg:hidden inline-flex h-11 w-11 items-center justify-center rounded-xl text-[#1F3B6B] hover:bg-[#FAFAFA] ${focusRing}`}>
+                            className={`xl:hidden inline-flex h-11 w-11 items-center justify-center rounded-xl text-[#1F3B6B] hover:bg-[#FAFAFA] ${focusRing}`}>
                             <Menu aria-hidden="true" className="h-6 w-6" />
                         </button>
                     </div>
@@ -66,12 +66,12 @@ const Header = () => {
             </div>
 
             {/* Phone menu: Headless UI Dialog (focus stays inside, Escape closes, page doesn't scroll behind) */}
-            <Dialog open={menuOpen} onClose={setMenuOpen} className="relative z-50 lg:hidden">
+            <Dialog open={menuOpen} onClose={setMenuOpen} className="relative z-50 xl:hidden">
                 <div className="fixed inset-0 bg-black/60" aria-hidden="true" />
                 <DialogPanel className="fixed inset-y-0 left-0 flex w-80 max-w-[85vw] flex-col bg-white shadow-2xl">
                     <div className="flex items-center justify-between bg-[#1F3B6B] px-5 py-4">
                         <span className="flex items-center gap-3">
-                            <img src="/logo.webp" alt="" width="474" height="600" className="h-10 w-auto object-contain bg-white rounded-md p-0.5" />
+                            <img src="/logo-160.webp" alt="" width="126" height="160" className="h-10 w-auto object-contain bg-white rounded-md p-0.5" />
                             <DialogTitle className="text-lg font-bold text-white">Menu</DialogTitle>
                         </span>
                         <button type="button" onClick={() => setMenuOpen(false)} aria-label="Close menu"

@@ -17,7 +17,7 @@ const Footer = () => (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-8">
                 <div>
                     <div className="flex items-center gap-3 mb-4">
-                        <img src="/logo.webp" alt="" width="474" height="600" loading="lazy" className="h-14 w-auto object-contain bg-white rounded-lg p-1" />
+                        <img src="/logo-160.webp" alt="" width="126" height="160" loading="lazy" className="h-14 w-auto object-contain bg-white rounded-lg p-1" />
                         <div>
                             <h2 className="text-xl font-bold">MOLEK Schools</h2>
                             <p className="text-blue-100 text-sm">Excellence in Islamic Education</p>

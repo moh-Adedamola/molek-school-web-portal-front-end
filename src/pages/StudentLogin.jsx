@@ -7,7 +7,7 @@ import { Eye, EyeOff, Calendar, MapPin, Phone } from 'lucide-react';
 import { useStudentAuth } from '../context/StudentAuthContext';
 import { getUpcomingEvents } from '../service/studentApi';
 import { friendlyLoginError } from '../lib/loginErrors.js';
-import logo from '/logo.webp';
+import logo from '/logo-160.webp';
 
 // The server decides whether a password is right; we only check the boxes are filled.
 const schema = yup.object({

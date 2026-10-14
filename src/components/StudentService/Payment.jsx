@@ -1,8 +1,8 @@
 import { motion } from 'framer-motion';
-import { FaMoneyBillWave, FaReceipt, FaDownload, FaCheckCircle } from 'react-icons/fa';
+import { Banknote, CircleCheck, Download, Receipt } from 'lucide-react';
 import { useState } from 'react';
 import { useStudentAuth } from '../../context/StudentAuthContext';
-import logo from '/logo.webp';
+import logo from '/logo-160.webp';
 
 // Mock data - Will be replaced with real API data in future
 const payableItems = [
@@ -114,7 +114,7 @@ For inquiries, contact: info@molekschools.com
                     exit={{ y: -20, opacity: 0 }}
                     className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-xl mb-6 flex items-center gap-3"
                 >
-                    <FaCheckCircle className="text-green-600 text-xl" />
+                    <CircleCheck className="text-green-600 text-xl" />
                     <div>
                         <p className="font-semibold">Payment Successful!</p>
                         <p className="text-sm">Your receipt has been generated.</p>
@@ -127,7 +127,7 @@ For inquiries, contact: info@molekschools.com
                 <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-6 text-white shadow-lg">
                     <div className="flex items-center justify-between mb-2">
                         <h3 className="text-sm font-medium opacity-90">Total Pending</h3>
-                        <FaMoneyBillWave className="text-2xl opacity-80" />
+                        <Banknote className="text-2xl opacity-80" />
                     </div>
                     <p className="text-3xl font-bold">₦{totalPending.toLocaleString()}</p>
                     <p className="text-sm opacity-80 mt-1">{payableItems.length} items</p>
@@ -136,7 +136,7 @@ For inquiries, contact: info@molekschools.com
                 <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-2xl p-6 text-white shadow-lg">
                     <div className="flex items-center justify-between mb-2">
                         <h3 className="text-sm font-medium opacity-90">Total Paid</h3>
-                        <FaReceipt className="text-2xl opacity-80" />
+                        <Receipt className="text-2xl opacity-80" />
                     </div>
                     <p className="text-3xl font-bold">₦{totalPaid.toLocaleString()}</p>
                     <p className="text-sm opacity-80 mt-1">{paid.length} payments</p>
@@ -145,7 +145,7 @@ For inquiries, contact: info@molekschools.com
                 <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl p-6 text-white shadow-lg">
                     <div className="flex items-center justify-between mb-2">
                         <h3 className="text-sm font-medium opacity-90">Account Status</h3>
-                        <FaCheckCircle className="text-2xl opacity-80" />
+                        <CircleCheck className="text-2xl opacity-80" />
                     </div>
                     <p className="text-2xl font-bold">
                         {totalPending === 0 ? 'Clear' : 'Pending'}
@@ -162,7 +162,7 @@ For inquiries, contact: info@molekschools.com
                 className="bg-white rounded-2xl shadow-md p-6 mb-8 border border-gray-100"
             >
                 <h2 className="text-xl font-bold mb-6 flex items-center gap-2 text-gray-800">
-                    <FaMoneyBillWave className="text-blue-600" />
+                    <Banknote className="text-blue-600" />
                     Pending Payments
                 </h2>
 
@@ -192,7 +192,7 @@ For inquiries, contact: info@molekschools.com
                     </div>
                 ) : (
                     <div className="text-center py-12">
-                        <FaCheckCircle className="text-6xl text-green-500 mx-auto mb-4" />
+                        <CircleCheck className="text-6xl text-green-500 mx-auto mb-4" />
                         <p className="text-gray-600 text-lg">No pending payments</p>
                         <p className="text-gray-500 text-sm">All fees have been paid!</p>
                     </div>
@@ -207,7 +207,7 @@ For inquiries, contact: info@molekschools.com
                 className="bg-white rounded-2xl shadow-md p-6 border border-gray-100"
             >
                 <h2 className="text-xl font-bold mb-6 flex items-center gap-2 text-gray-800">
-                    <FaReceipt className="text-green-600" />
+                    <Receipt className="text-green-600" />
                     Payment History ({new Date().getFullYear()})
                 </h2>
 
@@ -230,7 +230,7 @@ For inquiries, contact: info@molekschools.com
                                         onClick={() => downloadReceipt(payment.receiptId, payment.item, payment.amount, payment.date)}
                                         className="flex items-center gap-2 text-blue-600 hover:text-blue-800 font-medium text-sm bg-blue-50 hover:bg-blue-100 px-4 py-2 rounded-lg transition-colors"
                                     >
-                                        <FaDownload />
+                                        <Download />
                                         Download
                                     </button>
                                 </div>
@@ -239,7 +239,7 @@ For inquiries, contact: info@molekschools.com
                     </div>
                 ) : (
                     <div className="text-center py-12">
-                        <FaReceipt className="text-6xl text-gray-300 mx-auto mb-4" />
+                        <Receipt className="text-6xl text-gray-300 mx-auto mb-4" />
                         <p className="text-gray-500 text-lg">No payment history</p>
                         <p className="text-gray-400 text-sm">Your payments will appear here</p>
                     </div>

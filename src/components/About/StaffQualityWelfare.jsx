@@ -1,6 +1,5 @@
 import { Banknote, FileText, GraduationCap, Heart, ShieldCheck, Star, Trophy, Wrench } from 'lucide-react';
 
-const teachingQualities = ["Professionalism", "Academic Excellence", "Subject Mastery", "Punctuality", "Obedience", "Dedication", "Good Behaviour", "Self-Control", "Discipline"];
 const nonTeachingRoles = ["Secretary", "Cleaner", "Gardener", "Library Assistant", "Laboratory Attendant", "Account Assistant", "Crèche Attendant/Assistant", "Gate Keeper"];
 const codeOfConductAreas = ["Discipline Standards", "Attendance Requirements", "Professional Dressing", "Inter-personal Relationships", "Staff Collaboration", "Parent Communication", "Student Interaction", "Teacher-Specific Rules"];
 const welfareIncentives = ["Competitive Remuneration", "Regular Payment Schedule", "Annual Performance Increment", "Staff Development Training", "Welfare Incentives", "Professional Growth Support"];
