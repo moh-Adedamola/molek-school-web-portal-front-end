@@ -4,9 +4,10 @@
  * from the MOLEK API, so new articles appear without anyone editing a file.
  * If the API is slow or down, it still returns the fixed pages.
  */
-import { createRequire } from 'node:module';
-
-const PAGES = createRequire(import.meta.url)('../src/seo/pages.json');
+// The fixed public pages. Kept here (not read from a file) so the function has
+// nothing to load at start-up; scripts/sitemap.test.js fails if this list ever
+// drifts from src/seo/pages.json.
+export const ROUTES = ["/", "/about", "/academics", "/admissions", "/news", "/gallery", "/contact", "/privacy", "/terms", "/accessibility", "/student/login"];
 const SITE = 'https://molekschools.com';
 const API = (process.env.VITE_API_BASE_URL || 'https://molek-school-backend-production.up.railway.app').replace(/\/+$/, '');
 
@@ -14,7 +15,7 @@ const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replac
 const day = (v) => (v && !Number.isNaN(Date.parse(v)) ? new Date(v).toISOString().slice(0, 10) : null);
 
 export function buildSitemap(articles = []) {
-    const urls = Object.keys(PAGES).map((route) => ({ loc: route === '/' ? `${SITE}/` : SITE + route }));
+    const urls = ROUTES.map((route) => ({ loc: route === '/' ? `${SITE}/` : SITE + route }));
     for (const a of articles) {
         if (a && a.id != null) urls.push({ loc: `${SITE}/news/${encodeURIComponent(a.id)}`, lastmod: day(a.updated_at || a.publish_date || a.created_at) });
     }
@@ -43,13 +44,20 @@ export async function fetchArticles({ api = API, fetchImpl = fetch, timeoutMs = 
 }
 
 export default async function handler(req, res) {
-    let articles = [];
+    let xml;
     try {
-        articles = await fetchArticles();
+        let articles = [];
+        try {
+            articles = await fetchArticles();
+        } catch {
+            articles = []; // API unavailable: still serve the fixed pages
+        }
+        xml = buildSitemap(articles);
     } catch {
-        articles = []; // API unavailable: still serve the fixed pages
+        xml = buildSitemap([]); // never fail: a sitemap of the fixed pages is always valid
     }
+    res.statusCode = 200;
     res.setHeader('Content-Type', 'application/xml; charset=utf-8');
     res.setHeader('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400');
-    res.status(200).send(buildSitemap(articles));
+    res.end(xml);
 }
