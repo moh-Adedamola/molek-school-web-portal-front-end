@@ -1,9 +1,7 @@
+# MOLEK Schools: public pages may be indexed; the signed-in student portal may not.
 User-agent: *
 Allow: /
-Disallow: /student/dashboard
-Disallow: /student/grades
-Disallow: /student/settings
-Disallow: /student/profile
-Disallow: /student/payment
+Allow: /student/login
+Disallow: /student/
 
 Sitemap: https://molekschools.com/sitemap.xml

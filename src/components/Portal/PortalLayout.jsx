@@ -1,10 +1,11 @@
-import { Suspense } from 'react';
-import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { Suspense, useEffect } from 'react';
+import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { Home, FileText, UserRound, LogOut } from 'lucide-react';
 import { useStudentAuth } from '../../context/StudentAuthContext';
 import { clearPortalCache, fullName } from '../../lib/portalData.js';
 import { Avatar } from './ui.jsx';
+import { markNoIndex } from '../../lib/seo';
 import logo from '/logo-160.webp'; // small copy; the report card prints the full logo
 
 const NAV = [
@@ -14,6 +15,8 @@ const NAV = [
 ];
 
 const PortalLayout = () => {
+    const { pathname } = useLocation();
+    useEffect(markNoIndex, [pathname]); // signed-in pages stay out of search results
     const { student, logout } = useStudentAuth();
     const navigate = useNavigate();
     const signOut = () => {

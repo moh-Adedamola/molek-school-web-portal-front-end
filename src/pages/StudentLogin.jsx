@@ -6,6 +6,7 @@ import * as yup from 'yup';
 import { Eye, EyeOff, Calendar, MapPin, Phone } from 'lucide-react';
 import { useStudentAuth } from '../context/StudentAuthContext';
 import { getUpcomingEvents } from '../service/studentApi';
+import usePageTitle from '../hooks/usePageTitle';
 import { friendlyLoginError } from '../lib/loginErrors.js';
 import logo from '/logo-160.webp';
 
@@ -17,6 +18,7 @@ const schema = yup.object({
 
 
 const StudentLogin = () => {
+    usePageTitle('Student Portal Login');
     const navigate = useNavigate();
     const { login, isAuthenticated } = useStudentAuth();
     const [showPassword, setShowPassword] = useState(false);

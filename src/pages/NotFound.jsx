@@ -1,10 +1,8 @@
-import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import usePageTitle from '../hooks/usePageTitle';
 
 const NotFound = () => {
-    useEffect(() => {
-        document.title = 'Page not found | MOLEK Schools';
-    }, []);
+    usePageTitle('Page not found', { noindex: true });
 
     return (
         <>

@@ -1,4 +1,5 @@
 import usePageTitle from '../hooks/usePageTitle.js';
+import { excerpt } from '../lib/seo';
 import { useEffect, useState } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -52,7 +53,10 @@ const NewsDetail = () => {
   const [item, setItem] = useState(location.state?.item || null);
   const [loading, setLoading] = useState(!location.state?.item);
   const [notFound, setNotFound] = useState(false);
-  usePageTitle(item?.title || (notFound ? 'Article not found' : 'News & Events'));
+  usePageTitle(item?.title || (notFound ? 'Article not found' : 'News & Events'), {
+    description: item?.description ? excerpt(item.description) : undefined,
+    noindex: notFound,
+  });
 
   useEffect(() => {
     window.scrollTo(0, 0);

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { academicYear } from '../../lib/academicYear';
 import { Link, NavLink } from 'react-router-dom';
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 import { CircleUserRound, GraduationCap, Image, Info, Menu, Newspaper, Phone, Users, X } from 'lucide-react';
@@ -24,7 +25,7 @@ const Header = () => {
                 <p className="container mx-auto flex flex-wrap justify-center gap-x-4 gap-y-0.5 text-center">
                     <span>10 Haliru Muhammed Street, Ofatedo, Osun State</span>
                     <span aria-hidden="true">•</span>
-                    <span>Academic Year 2025/2026</span>
+                    <span>Academic Year {academicYear()}</span>
                     <span aria-hidden="true" className="hidden sm:inline">•</span>
                     <a href="mailto:info@molekschools.com" className="hidden sm:inline underline underline-offset-2">info@molekschools.com</a>
                 </p>

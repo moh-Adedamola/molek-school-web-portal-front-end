@@ -1,0 +1,46 @@
+{
+  "/": {
+    "title": "MOLEK Schools | Secondary School in Osun, Nigeria",
+    "description": "MOLEK Schools, Ofatedo, Osun State: quality holistic education from Creche to Senior Secondary, combining Islamic values with academic excellence since 2007."
+  },
+  "/about": {
+    "title": "About Us | MOLEK Schools",
+    "description": "MOLEK Schools offer both Western and Islamic education from Pre-Nursery through Primary to Secondary. Our history since 2007, guiding principles and staff."
+  },
+  "/academics": {
+    "title": "Academics | MOLEK Schools",
+    "description": "From Creche to Senior Secondary: a complete educational journey blending Islamic values with modern academic excellence. Curriculum and subjects for JSS and SSS."
+  },
+  "/admissions": {
+    "title": "Admissions | MOLEK Schools",
+    "description": "How to apply to MOLEK Schools. Pupils and students are admitted into various classes based on age, ability and availability of space."
+  },
+  "/news": {
+    "title": "News & Events | MOLEK Schools",
+    "description": "Stay updated with the latest happenings and announcements from MOLEK Schools."
+  },
+  "/gallery": {
+    "title": "Gallery | MOLEK Schools",
+    "description": "Capturing memories, celebrating achievements, and sharing the joy of learning at MOLEK Schools."
+  },
+  "/contact": {
+    "title": "Contact | MOLEK Schools",
+    "description": "Contact MOLEK Schools, 10 Haliru Muhammed Street, Ofatedo, Osun State. Call 0706 627 7945 or email info@molekschools.com."
+  },
+  "/privacy": {
+    "title": "Privacy policy | MOLEK Schools",
+    "description": "How MOLEK Schools collects, uses and protects personal information on molekschools.com and the student portal."
+  },
+  "/terms": {
+    "title": "Terms of use | MOLEK Schools",
+    "description": "The terms that apply to everyone who uses molekschools.com and the MOLEK student portal."
+  },
+  "/accessibility": {
+    "title": "Accessibility statement | MOLEK Schools",
+    "description": "How we make molekschools.com and the MOLEK student portal usable for everyone, and how to report a problem."
+  },
+  "/student/login": {
+    "title": "Student Portal Login | MOLEK Schools",
+    "description": "Sign in to the MOLEK Schools student portal to see results, report cards and school details."
+  }
+}

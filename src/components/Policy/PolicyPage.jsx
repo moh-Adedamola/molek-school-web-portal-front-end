@@ -1,13 +1,11 @@
-import { useEffect } from 'react';
+import usePageTitle from '../../hooks/usePageTitle';
 
 /**
  * Shared layout for the Privacy, Terms and Accessibility pages.
  * `sections` is a list of { heading, paragraphs?, bullets?, after? }.
  */
 const PolicyPage = ({ title, updated, intro, sections, contact = true }) => {
-    useEffect(() => {
-        document.title = `${title} | MOLEK Schools`;
-    }, [title]);
+    usePageTitle(title);
 
     return (
         <>

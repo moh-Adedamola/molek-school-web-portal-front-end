@@ -1,8 +1,52 @@
 {
   "rewrites": [
     {
-      "source": "/(.*)",
-      "destination": "/index.html"
+      "source": "/sitemap.xml",
+      "destination": "/api/sitemap"
+    },
+    {
+      "source": "/about",
+      "destination": "/about/index.html"
+    },
+    {
+      "source": "/academics",
+      "destination": "/academics/index.html"
+    },
+    {
+      "source": "/admissions",
+      "destination": "/admissions/index.html"
+    },
+    {
+      "source": "/news",
+      "destination": "/news/index.html"
+    },
+    {
+      "source": "/gallery",
+      "destination": "/gallery/index.html"
+    },
+    {
+      "source": "/contact",
+      "destination": "/contact/index.html"
+    },
+    {
+      "source": "/privacy",
+      "destination": "/privacy/index.html"
+    },
+    {
+      "source": "/terms",
+      "destination": "/terms/index.html"
+    },
+    {
+      "source": "/accessibility",
+      "destination": "/accessibility/index.html"
+    },
+    {
+      "source": "/student/login",
+      "destination": "/student/login/index.html"
+    },
+    {
+      "source": "/((?!api/).*)",
+      "destination": "/spa.html"
     }
   ]
 }
